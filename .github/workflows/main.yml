@@ -7,10 +7,9 @@ jobs:
   build:
     name: Build and deploy gh-pages
     env:
-      MY_SECRET   : ${{secrets.COMMITSECRET}}
+      MY_SECRET   : ${{secrets.commitsecret}}
       USER_NAME   : nic1207
       USER_EMAIL  : nic1207@gmail.com
-      PUBLISH_DIR : client/dist
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -32,16 +31,15 @@ jobs:
         npm run export
     - name: Commit files
       run: |
-        pwd
+        cd client/dist
         ls
-        cd client
-        ls
-        cd dist
         git init
         git config --local user.name $USER_NAME
         git config --local user.email $USER_EMAIL
         git status
-        git remote add origin https://$MY_SECRET@github.com/$GITHUB_REPOSITORY.git
+        echo $MY_SECRET
+        echo $GITHUB_REPOSITORY
+        git remote add origin https://$MY_SECRET@github.com/nic1207/gbproject.git
         git checkout -b gh-pages
         git add --all
         git commit -m "deploy to Github pages"
