@@ -7,10 +7,10 @@ jobs:
   build:
     name: Build and deploy gh-pages
     env:
-      MY_SECRET   : ${{secrets.commit_secret}}
+      MY_SECRET   : ${{secrets.commitsecret}}
       USER_NAME   : githubaction
       USER_EMAIL  : nic1207@gmail.com
-      PUBLISH_DIR : ./client/dist
+      PUBLISH_DIR : client/dist
     runs-on: ubuntu-latest
     strategy:
       matrix:
