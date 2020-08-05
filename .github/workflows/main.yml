@@ -10,7 +10,7 @@ jobs:
       MY_SECRET   : ${{secrets.commit_secret}}
       USER_NAME   : githubaction
       USER_EMAIL  : nic1207@gmail.com
-      PUBLISH_DIR : ./dist
+      PUBLISH_DIR : ./client/dist
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,6 +27,7 @@ jobs:
         npm install
     - name: npm run build
       run: |
+        cd client
         npm run build
     - name: Commit files
       run: |
