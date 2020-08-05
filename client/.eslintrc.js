@@ -15,6 +15,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    "object-shorthand": 0
+    'object-shorthand': 0,
+    'no-extra-semi': 'off'
   }
 }

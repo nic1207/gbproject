@@ -5,23 +5,33 @@
       app
       dark
       permanent
-      width="140"
-      color="#312717"
+      width="10vw"
+      color="rgba(0, 0, 0, 0.8)"
     >
-      <v-img :src="mylogo" width="140" />
+      <v-img :aspect-ratio="16/10" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+        <v-row align="end" class="lightbox white--text pa-2 fill-height">
+          <v-col>
+            <div class="subheading">
+              Logo
+            </div>
+            <div class="body-1">
+              Logo
+            </div>
+          </v-col>
+        </v-row>
+      </v-img>
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
           class="red--text text-center"
         >
-          <v-list-item-content>
+          <v-list-item-content style="padding:5px">
             <v-btn
               block
               height="5vh"
               :to="item.to"
               class="text-size"
-              color="#9c7e49"
             >
               {{ item.title }}
             </v-btn>
@@ -59,6 +69,7 @@
           <v-divider />
           <v-list-item
             class="red--text text-center"
+            link
           >
             <v-list-item-content>
               <v-list-item-title class="text-size">
@@ -67,10 +78,10 @@
             </v-list-item-content>
           </v-list-item>
           <v-divider />
-          <v-list-item class="red--text text-center">
+          <v-list-item class="red--text text-center" link>
             <v-list-item-content>
               <v-list-item-title class="text-size">
-                v1.1.31
+                app-123beta
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -118,15 +129,8 @@
     >
       <setting @close="settingDialog=false" />
     </v-dialog>
-    <v-dialog
-      v-model="logoutDialog"
-      max-width="400"
-      min-width="290"
-    >
-      <logoutdialog @close="logoutDialog=false" @signout="signout" />
-    </v-dialog>
     <v-footer
-      color="#312717"
+      color="rgba(0, 0, 0, 0.8)"
       padless
       height="40px"
       inset
@@ -322,7 +326,7 @@
             <v-icon>account_circle</v-icon>
           </div>
           <div class="pa-2" style="width:75px">
-            {{ PLAYER_NAME }}
+            PLAYER_NAME
           </div>
         </div>
         <v-divider vertical />
@@ -357,16 +361,16 @@
             <v-card>
               <v-list
                 dark
-                color="#312717"
+                color="rgba(12, 10, 6, 0.8)"
               >
                 <v-subheader>
-                  <v-icon>account_circle</v-icon> &nbsp;&nbsp;&nbsp;&nbsp;{{ PLAYER_NAME }}
+                  <v-icon>account_circle</v-icon>PLAYER_NAME
                 </v-subheader>
                 <v-list-item link @click="betlogDialog=true">
                   <v-list-item-icon>
                     <v-icon>history</v-icon>
                   </v-list-item-icon>
-                  <v-list-item-content>Bet Log</v-list-item-content>
+                  <v-list-item-content>Bet Log  </v-list-item-content>
                 </v-list-item>
 
                 <v-list-item link @click="memberReportDialog=true">
@@ -392,12 +396,6 @@
                     v0.123
                   </v-list-item-action-text>
                 </v-list-item>
-                <v-list-item link @click="logoutDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>logout</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Logout</v-list-item-content>
-                </v-list-item>
               </v-list>
             </v-card>
           </v-menu>
@@ -414,19 +412,15 @@ import betLog from '@/components/bet_log'
 import memberReport from '@/components/member_report'
 import gameAgreement from '@/components/gameAgreement'
 import setting from '@/components/setting'
-import logoutdialog from '@/components/logoutdialog'
 export default {
   components: {
     betLog,
     memberReport,
     gameAgreement,
-    setting,
-    logoutdialog
+    setting
   },
   data () {
     return {
-      mylogo: 'img/logo.png',
-      PLAYER_NAME: '',
       studioSound: 50,
       gameVolume: 60,
       music: 30,
@@ -436,12 +430,16 @@ export default {
       memberReportDialog: false,
       gameAgreementDialog: false,
       settingDialog: false,
-      logoutDialog: false,
       items: [
         {
           icon: 'mdi-apps',
           title: 'BACCARAT',
           to: '/roomlist'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Other Games',
+          to: '/'
         },
         {
           icon: 'mdi-chart-bubble',
@@ -462,6 +460,7 @@ export default {
     }
   },
   computed: {
+
     toRouteName () {
       const routeArr = this.$route.name.split('-')
       if (routeArr.includes('multibet')) {
@@ -477,354 +476,6 @@ export default {
         return true
       } else {
         return false
-      }
-    }
-  },
-  loading: false,
-  mounted () {
-    this.connect()
-  },
-  methods: {
-    connect () {
-      this.$nextTick(() => {
-        // this.$nuxt.$loading.start()
-      })
-      // console.log('this.$nuxt.$loading=', this.$nuxt.$loading)
-      // const url = 'ws://121.40.165.18:8800'
-      // const url = 'ws://localhost:3333'
-      const url = 'ws://35.229.140.14:30510'
-      console.log('建立連線至...connect(url=', url, ')')
-      if (this.websocket === undefined) {
-        this.websocket = this.$initWebSocket(url)
-        // console.log('this.websocket=', this.websocket)
-        const that = this
-        this.websocket.onopen = function () {
-          that.$nextTick(() => {
-            // that.$nuxt.$loading.finish()
-          })
-          console.log('WebSocket連線成功 WebSocket connected.')
-          that.signin_by_logincode()
-          // this.send('aaa')
-        }
-        this.websocket.onmessage = function (e) {
-          // console.log('onMessage(', e.data, ')')
-          that.processMsg(e.data)
-        }
-        this.websocket.onerror = function (err) {
-          that.$nextTick(() => {
-            // that.$nuxt.$loading.finish()
-          })
-          console.error('onerror() Socket encountered error: ', err, 'Closing socket')
-          that.websocket.close()
-        }
-        this.websocket.onclose = function (e) {
-          that.$nextTick(() => {
-            // that.$nuxt.$loading.finish()
-          })
-          that.websocket = undefined
-          that.$clearWebSocket()
-          const tt = 3000
-          console.log('onclose() webSocket is closed.')
-          console.log('Reconnect will be attempted in', (tt / 1000), ' second.', e.reason)
-          setTimeout(function () {
-            that.connect()
-          }, tt)
-        }
-      }
-    },
-    // 登入
-    signin_by_logincode () {
-      const code = 'Yz8DHneE00-TGp_yQ6D5LA'
-      console.log('要求登入 signin_by_logincode()')
-      this.$nextTick(() => {
-        // this.$nuxt.$loading.start()
-      })
-      const cmd = {
-        SN: 1,
-        CID: 101,
-        SC: 1000,
-        B: {
-          LoginCode: code
-        }
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
-    // 登出
-    signout () {
-      this.logoutDialog = false
-      // this.$nuxt.$loading.start()
-      const token = this.$store.state.account.Token
-      console.log('要求登出 signout()')
-      const cmd = {
-        SN: 2,
-        CID: 199,
-        SC: 1000,
-        B: {
-          Token: token
-        }
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
-    // RESPONSE_SIGN_IN_BY_LOGIN_CODE_RESULT
-    process_201 (cmder) {
-      console.log('201處理登入回傳 process_201(', cmder, ')')
-      // this.$nuxt.$loading.finish()
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const accountinfo = cmder.B
-          console.log('accountinfo=', accountinfo)
-          this.$store.commit('setAccount', accountinfo)
-          this.PLAYER_NAME = this.$store.state.account.AccountName
-        }
-        console.log('this.$store.state.account=', this.$store.state.account)
-        // console.log(this.$store.fetchAccount)
-      } else {
-        console.log('get login data fail!')
-      }
-    },
-    // RESPONSE_RECHECK_TOKEN_RESULT
-    process_202 (cmder) {
-      console.log('202 重新檢查token回傳 process_202(', cmder, ')')
-      // this.$nuxt.$loading.finish()
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const accountinfo = cmder.B
-          console.log('accountinfo=', accountinfo)
-          this.$store.commit('setAccount', accountinfo)
-        }
-        console.log('this.$store.state.account=', this.$store.state.account)
-        // console.log(this.$store.fetchAccount)
-      } else {
-        console.log('get login data fail!')
-      }
-    },
-    // REFLASH_MEMBER_INFO
-    process_203 (cmder) {
-      console.log('203處理會員資訊 process_203(', cmder, ')')
-      // this.$nuxt.$loading.finish()
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const userinfo = cmder.B
-          console.log('userinfo=', userinfo)
-          this.$store.commit('setUser', userinfo)
-        }
-        console.log('this.$store.state.user=', this.$store.state.user)
-      } else {
-        console.log('get user data fail!')
-      }
-    },
-    // REFLASH_GAME_LOBBY_INFO
-    process_204 (cmder) {
-      console.log('204處理遊戲大廳資訊 process_204(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const lobbyinfo = cmder.B
-          console.log('lobbyinfo=', lobbyinfo)
-          this.$store.commit('setLobby', lobbyinfo)
-        }
-        console.log('this.$store.state.lobby=', this.$store.state.lobby)
-      } else {
-        console.log('get lobby data fail!')
-      }
-    },
-    // REFLASH_GAME_TABLE_STATUS
-    process_205 (cmder) {
-      console.log('205處理遊戲桌資訊 process_205(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const gametableinfo = cmder.B
-          console.log('gametableinfo=', gametableinfo)
-          this.$store.commit('setTables', gametableinfo)
-        }
-        console.log('this.$store.state.tables=', this.$store.state.tables)
-      } else {
-        console.log('get tables data fail!')
-      }
-    },
-    // RESPONSE_SIGN_OUT
-    process_299 (cmder) {
-      console.log('處理登出回傳299 process_299(', cmder, ')')
-      // this.$nuxt.$loading.finish()
-      this.$store.commit('clear')
-      this.$router.push('/')
-    },
-    // RESPONSE_JOIN_GAME_RESULT
-    process_20001 (cmder) {
-      console.log('處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        console.log('join table success!')
-        this.intable = true
-      } else {
-        console.log('join table fail!')
-      }
-    },
-    // REFLASH_TALBE_STATUS
-    process_20002 (cmder) {
-      console.log('更新遊戲桌狀態20002 process_20002(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const gametableinfo = cmder.B
-          console.log('gametableinfo=', gametableinfo)
-          // this.$store.commit('setTables', gametableinfo)
-        }
-      } else {
-        console.log('reflash table status fail!')
-      }
-    },
-    // REFLASH_BET_INFOS
-    process_20003 (cmder) {
-      console.log('更新下注資訊20003 process_20003(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const betinfo = cmder.B
-          console.log('betinfo=', betinfo)
-          // this.$store.commit('setTables', gametableinfo)
-        }
-      } else {
-        console.log('reflash bet info fail!')
-      }
-    },
-    // REFLASH_GAME_HISTORY
-    process_20004 (cmder) {
-      console.log('更新遊戲歷史資訊20004 process_20004(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const history = cmder.B
-          console.log('history=', history)
-          // this.$store.commit('setTables', gametableinfo)
-        }
-      } else {
-        console.log('refresh game history fail!')
-      }
-    },
-    // RESPONSE_BET_RESULT
-    process_20011 (cmder) {
-      console.log('回傳下注結果20011 process_20011(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const betinfo = cmder.B
-          console.log('betinfo=', betinfo)
-          // this.$store.commit('setTables', gametableinfo)
-        }
-      } else {
-        console.log('response bet result fail!')
-      }
-    },
-    // RESPONSE_LEAVE_GAME_RESULT
-    process_20099 (cmder) {
-      console.log('回傳離開遊戲桌結果20099 process_20099(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        console.log('leave table success!')
-      } else {
-        console.log('leave table fail!')
-      }
-    },
-    send (msg) {
-      // console.log('send(', msg, ')')
-      this.$sendMessage(msg)
-    },
-    bet () {
-      console.log('要求壓注 bet()')
-      // this.$nuxt.$loading.start()
-      // this.$nuxt.$loading.finish()
-      const cmdBody = {
-        GameID: 10001,
-        TableID: 1,
-        RoundID: '1234567890',
-        AccessCode: 'IEiX-U7ZC0OOJCdQQUR2_Q',
-        Bets: [1, 0, 0, 0, 0, 0, 0]
-      }
-      const cmd = {
-        SN: 2,
-        CID: 10011,
-        StatusCode: 1000,
-        B: cmdBody
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
-    joinGame () {
-      console.log('加入遊戲桌 joinGame()')
-      const token = this.$store.state.account.Token
-      const cmdBody = {
-        Token: token,
-        GameID: 10001,
-        TableID: 1
-      }
-      const cmd = {
-        SN: 2,
-        CID: 10001,
-        SC: 1000,
-        B: cmdBody
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
-    leaveGame () {
-      console.log('離開遊戲桌 leaveGame()')
-      const token = this.$store.state.account.Token
-      const cmd = {
-        SN: 2,
-        CID: 10099,
-        SC: 1000,
-        B: {
-          Token: token
-        }
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
-    processMsg (msg) {
-      // console.log('processMsg(msg=', msg, ')')
-      const cmder = JSON.parse(msg)
-      // console.log('processMsg(cmder=', cmder, ')')
-      switch (cmder.CID) {
-        case 201: // RESPONSE_SIGN_IN_BY_LOGIN_CODE_RESULT
-          this.process_201(cmder)
-          break
-        case 202: // RESPONSE_RECHECK_TOKEN_RESULT
-          this.process_202(cmder)
-          break
-        case 203:// REFLASH_MEMBER_INFO
-          this.process_203(cmder)
-          break
-        case 204:// REFLASH_GAME_LOBBY_INFO
-          this.process_204(cmder)
-          break
-        case 205:// REFLASH_GAME_TABLE_STATUS
-          this.process_205(cmder)
-          break
-        case 299:// RESPONSE_SIGN_OUT
-          this.process_299(cmder)
-          break
-        case 20001:// RESPONSE_JOIN_GAME_RESULT
-          this.process_20001(cmder)
-          break
-        case 20002:// REFLASH_TALBE_STATUS
-          this.process_20002(cmder)
-          break
-        case 20003:// REFLASH_BET_INFOS
-          this.process_20003(cmder)
-          break
-        case 20004:// REFLASH_GAME_HISTORY
-          this.process_20004(cmder)
-          break
-        case 20011:// RESPONSE_BET_RESULT
-          this.process_20011(cmder)
-          break
-        case 20099:// RESPONSE_LEAVE_GAME_RESULT
-          this.process_20099(cmder)
-          break
-        default:
-          console.error('no process CommandID=', cmder.CommandHeader.CommandID)
-          break
       }
     }
   }

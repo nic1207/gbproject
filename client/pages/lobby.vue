@@ -8,7 +8,7 @@
       app
       clipped
     >
-      <el-image src="img/logo1.png" width=140></el-image>
+      <el-image src="img/logo.png" width="140" />
       <v-list dense>
         <v-list-item
           v-for="item in items"
@@ -21,27 +21,36 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-subheader class="mt-4 grey--text text--darken-1"> </v-subheader>
-        <v-subheader class="mt-4 grey--text text--darken-1"> </v-subheader>
-        <v-list>
-        </v-list>
+        <v-subheader class="mt-4 grey--text text--darken-1" />
+        <v-subheader class="mt-4 grey--text text--darken-1" />
+        <v-list />
         <v-list-item
           class="mt-4"
           link
         >
           <v-list-item-action>
-            <v-icon color="grey darken-1">mdi-email</v-icon>
+            <v-icon color="grey darken-1">
+              mdi-email
+            </v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1">意見提交</v-list-item-title>
+          <v-list-item-title class="grey--text text--darken-1">
+            意見提交
+          </v-list-item-title>
         </v-list-item>
         <v-list-item>
           <v-list-item-action>
-            <v-icon color="grey darken-1">mdi-account-multiple</v-icon>
+            <v-icon color="grey darken-1">
+              mdi-account-multiple
+            </v-icon>
           </v-list-item-action>
-          <v-list-item-title class="grey--text text--darken-1">12321</v-list-item-title>
+          <v-list-item-title class="grey--text text--darken-1">
+            12321
+          </v-list-item-title>
         </v-list-item>
         <v-list-item>
-          <v-list-item-title class="grey--text text--darken-1">v1.0.0</v-list-item-title>
+          <v-list-item-title class="grey--text text--darken-1">
+            v1.0.0
+          </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -101,11 +110,11 @@
           >
             {{ item.tab }}
           </v-tab>
-          <v-tabs-items class="fill-height" v-model="tab">
+          <v-tabs-items v-model="tab" class="fill-height">
             <v-tab-item
-              class="fill-height"
               v-for="item in itemtabs"
               :key="item.tab"
+              class="fill-height"
             >
               <div>
                 <v-container v-if="!intable">
@@ -117,8 +126,8 @@
                     >
                       <v-card
                         :color="item.color"
-                        @click.native="joinGame()"
                         dark
+                        @click.native="joinGame()"
                       >
                         <div class="d-flex flex-no-wrap">
                           <v-avatar
@@ -126,14 +135,14 @@
                             size="125"
                             tile
                           >
-                            <v-img :src="item.src"></v-img>
+                            <v-img :src="item.src" />
                           </v-avatar>
                           <div>
                             <v-card-title
                               class="headline"
                               v-text="item.title"
-                            ></v-card-title>
-                            <v-card-subtitle v-text="item.artist"></v-card-subtitle>
+                            />
+                            <v-card-subtitle v-text="item.artist" />
                           </div>
                         </div>
                       </v-card>
@@ -145,7 +154,7 @@
                     <v-col
                       cols="8"
                     >
-                      <v-img src="img/dea1011.jpg" width=120></v-img>
+                      <v-img src="img/dea1011.jpg" width="120" />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -252,6 +261,7 @@ export default {
       // const url = 'ws://121.40.165.18:8800'
       // const url = 'ws://localhost:3333'
       const url = 'ws://35.229.140.14:30510'
+      // eslint-disable-next-line no-console
       console.log('建立連線至...connect(url=', url, ')')
       if (this.websocket === undefined) {
         this.websocket = this.$initWebSocket(url)
@@ -261,6 +271,7 @@ export default {
           that.$nextTick(() => {
             that.$nuxt.$loading.finish()
           })
+          // eslint-disable-next-line no-console
           console.log('WebSocket連線成功 WebSocket connected.')
           that.signin_by_logincode()
           // this.send('aaa')
@@ -298,24 +309,16 @@ export default {
       this.$nextTick(() => {
         this.$nuxt.$loading.start()
       })
-      const cmdHeader = {
-        SN: 1,
-        CommandID: 101,
-        Encode: 'ASCII',
-        Timestamp: 'xxxx',
-        StatusCode: 1000,
-        Message: 'SUCCESS',
-        HasBody: true
-      }
-      const cmdBody = {
-        LoginCode: code
-      }
       const cmd = {
-        CommandHeader: cmdHeader,
-        CommandBody: cmdBody
+        SN: 1,
+        CID: 101,
+        SC: 1000,
+        B: {
+          LoginCode: code
+        }
       }
       const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
+      console.log('strcmd=', strcmd)
       this.send(strcmd)
     },
     // 登出
