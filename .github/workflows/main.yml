@@ -33,6 +33,7 @@ jobs:
       run: |
         pwd
         ls
+        cd client
         cd dist
         git init
         git config --local user.name $USER_NAME
