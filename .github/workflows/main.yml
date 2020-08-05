@@ -1,0 +1,47 @@
+name: deploy gh-pages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build and deploy gh-pages
+    env:
+      MY_SECRET   : ${{secrets.mysecret}}
+      USER_NAME   : nic1207
+      USER_EMAIL  : nic1207@gmail.com
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      run: |
+        cd client
+        npm install
+    - name: npm run build
+      run: |
+        cd client
+        npm run build
+        npm run export
+    - name: Commit files
+      run: |
+        cd client/dist
+        ls
+        git init
+        git config --local user.name $USER_NAME
+        git config --local user.email $USER_EMAIL
+        git status
+        echo $MY_SECRET
+        echo $GITHUB_REPOSITORY
+        git remote add origin https://$MY_SECRET@github.com/nic1207/gbproject.git
+        git checkout -b gh-pages
+        git add --all
+        git commit -m "deploy to Github pages"
+        git push origin gh-pages -f
+        echo 🤘 deploy gh-pages complete.
