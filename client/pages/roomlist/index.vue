@@ -1,8 +1,13 @@
 <template>
-  <v-container class="pa-0 ma-0" fluid>
+  <v-container fluid>
     <!-- first row -->
     <v-row no-gutters dense>
-      <dashboardCard v-for="project in projects" :key="project.name" :project="project" prop-card-size="md6" />
+      <dashboardCard
+        v-for="tableinfo in tableinfos"
+        :key="tableinfo.name"
+        :tableinfo="tableinfo"
+        prop-card-size="md6"
+      />
     </v-row>
   </v-container>
 </template>
@@ -16,11 +21,13 @@ export default {
   },
   data () {
     return {
-      projects: [
-        { seri: 'C01', name: 'SIKEN', user: '123300', avator: 'img/dea1011.jpg', bb: '1232200', pp: '2322200', tt: '2020', status: 'Dealing' },
-        { seri: 'C02', name: 'KNY MCY', user: '5200', avator: 'img/dea1011.jpg', bb: '1232200', pp: '2322200', tt: '2020', status: 'Waiting' }
+      tableinfos: [
+        { seri: 'C01', name: 'SIKEN', user: '1300', avator: 'img/xdea1011.jpg', bb: '1232200', pp: '2322200', tt: '2020', status: 'Dealing' },
+        { seri: 'C02', name: 'KNYMCY', user: '5200', avator: 'img/xdea1011.jpg', bb: '1232200', pp: '2322200', tt: '2020', status: 'Waiting' }
       ]
     }
+  },
+  methods: {
   }
 }
 </script>

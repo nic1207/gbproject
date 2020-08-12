@@ -127,7 +127,6 @@
                       <v-card
                         :color="item.color"
                         dark
-                        @click.native="joinGame()"
                       >
                         <div class="d-flex flex-no-wrap">
                           <v-avatar
@@ -531,7 +530,7 @@ export default {
       this.send(strcmd)
     },
     joinGame () {
-      console.log('加入遊戲桌 joinGame()')
+      console.log('joinGame()')
       const cmdHeader = {
         SN: 2,
         CommandID: 10001,

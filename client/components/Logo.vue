@@ -1,5 +1,6 @@
 <template>
-  <img class="NuxtLogo" src="~/static/img/SA_Gaming_logo_1a.png">
+  <div class="Triangle Triangle--two" />
+<!--<img class="NuxtLogo" src="~/static/img/SA_Gaming_logo_1a.png">-->
 </template>
 
 <style>

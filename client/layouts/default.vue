@@ -11,7 +11,7 @@
       <v-img :src="mylogo" width="140" />
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in LeftMenu"
           :key="i"
           class="red--text text-center"
         >
@@ -26,25 +26,10 @@
               {{ item.title }}
             </v-btn>
           </v-list-item-content>
-          <!-- <v-btn block
-          >{{item.title}}</v-btn> -->
         </v-list-item>
       </v-list>
       <template v-slot:append>
         <v-list>
-          <!-- <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-          class="red--text text-center"
-        >
-          <v-list-item-content >
-            <v-list-item-title ><v-icon>{{ item.icon }}</v-icon> {{item.title}}</v-list-item-title>
-          </v-list-item-content>
-
-        </v-list-item> -->
           <v-divider />
           <v-list-item
             link
@@ -52,7 +37,7 @@
           >
             <v-list-item-content>
               <v-list-item-title class="text-size">
-                <v-icon>email</v-icon> Feedback
+                <v-icon>email</v-icon> {{ $t('LEFTMENU.FEEDBACK') }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -62,7 +47,7 @@
           >
             <v-list-item-content>
               <v-list-item-title class="text-size">
-                <v-icon>people</v-icon> 12,213
+                <v-icon>people</v-icon> &nbsp;&nbsp;{{ online }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -70,23 +55,13 @@
           <v-list-item class="red--text text-center">
             <v-list-item-content>
               <v-list-item-title class="text-size">
-                v1.1.31
+                {{ version }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </template>
     </v-navigation-drawer>
-    <!-- <v-app-bar
-      flat
-      fixed
-      app
-      height="20px"
-    >
-
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-    </v-app-bar> -->
     <v-main>
       <nuxt />
     </v-main>
@@ -140,7 +115,7 @@
             offset-y
             top
             :close-on-content-click="false"
-            :nudge-width="350"
+            :nudge-width="150"
             :max-width="350"
           >
             <template v-slot:activator="{ on, attrs }">
@@ -184,7 +159,7 @@
         </div>
 
         <v-divider vertical />
-        <div class="d-flex" style="width:175px">
+        <div class="d-flex">
           <v-menu
             offset-y
             top
@@ -301,54 +276,49 @@
           </v-btn>
         </div>
         <v-divider vertical />
-        <div class="d-flex" style="width:165px">
+        <div class="d-flex">
           <div style="width:40px" class="pa-2">
             <v-icon>attach_money</v-icon>
           </div>
 
-          <div class="pa-2" style="width:75px">
-            5,00000
+          <div class="pa-2">
+            {{ Money }}
           </div>
-
-          <div class=" pa-2">
+          <v-btn icon link>
             <v-icon small>
               autorenew
             </v-icon>
-          </div>
+          </v-btn>
         </div>
         <v-divider vertical />
-        <div class="d-flex" style="width:180px">
+        <div class="d-flex">
           <div style="width:40px" class="pa-2">
             <v-icon>account_circle</v-icon>
           </div>
-          <div class="pa-2" style="width:75px">
+          <div class="pa-2">
             {{ PLAYER_NAME }}
           </div>
         </div>
         <v-divider vertical />
-        <div class="d-flex" style="width:250px">
+        <div class="d-flex">
           <div class="pa-2">
-            2020-07-14 10:46:34 (UTC+6.5)
+            {{ Now }}
           </div>
         </div>
         <v-divider vertical />
-        <div class="d-flex justify-center">
+        <div class="d-flex">
           <v-menu
             offset-y
             top
             close-on-content-click
-            :nudge-width="100"
-            left
-            :max-width="250"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 icon
-                class="pa-2 ma-1"
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon class="pa-2">
+                <v-icon>
                   menu
                 </v-icon>
               </v-btn>
@@ -362,48 +332,23 @@
                 <v-subheader>
                   <v-icon>account_circle</v-icon> &nbsp;&nbsp;&nbsp;&nbsp;{{ PLAYER_NAME }}
                 </v-subheader>
-                <v-list-item link @click="betlogDialog=true">
+                <v-list-item
+                  v-for="(item, i) in MainMenu"
+                  :key="i"
+                  link
+                  @click="toggle(i)"
+                >
                   <v-list-item-icon>
-                    <v-icon>history</v-icon>
+                    <v-icon>{{ item.icon }}</v-icon>
                   </v-list-item-icon>
-                  <v-list-item-content>Bet Log</v-list-item-content>
-                </v-list-item>
-
-                <v-list-item link @click="memberReportDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>text_snippet</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Member Report</v-list-item-content>
-                </v-list-item>
-                <v-list-item link @click="settingDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>settings</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Settings</v-list-item-content>
-                </v-list-item>
-                <v-list-item link @click="gameAgreementDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>info</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Game Agreement</v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-action-text>
-                    v0.123
-                  </v-list-item-action-text>
-                </v-list-item>
-                <v-list-item link @click="logoutDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>logout</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Logout</v-list-item-content>
+                  {{ item.title }}
                 </v-list-item>
               </v-list>
             </v-card>
           </v-menu>
         </div>
         <v-divider vertical />
-        <div class="d-flex" style="width:100px" />
+        <div class="d-flex" style="width:10px" />
       </v-row>
     </v-footer>
   </v-app>
@@ -415,7 +360,9 @@ import memberReport from '@/components/member_report'
 import gameAgreement from '@/components/gameAgreement'
 import setting from '@/components/setting'
 import logoutdialog from '@/components/logoutdialog'
+
 export default {
+  middleware: 'authenticated',
   components: {
     betLog,
     memberReport,
@@ -425,7 +372,12 @@ export default {
   },
   data () {
     return {
-      mylogo: 'img/logo.png',
+      LoginCode: this.$nuxt.$route.query.LoginCode,
+      online: 1,
+      Money: 0,
+      Now: this.$moment().format('YYYY-MM-DD HH:mm:ss Z'),
+      version: 'v0.0.10',
+      mylogo: 'img/logo1.png',
       PLAYER_NAME: '',
       studioSound: 50,
       gameVolume: 60,
@@ -437,23 +389,42 @@ export default {
       gameAgreementDialog: false,
       settingDialog: false,
       logoutDialog: false,
-      items: [
+      LeftMenu: [
         {
-          icon: 'mdi-apps',
-          title: 'BACCARAT',
+          title: this.$t('LEFTMENU.BACCARAT'),
           to: '/roomlist'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'MULTI-BET',
+          title: this.$t('LEFTMENU.MULTIBET'),
           to: '/multibet'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Mobile',
+          title: this.$t('LEFTMENU.MOBILE'),
           to: '/inspire'
         }
 
+      ],
+      MainMenu: [
+        {
+          icon: 'history',
+          title: this.$t('MAINMENU.BETLOG')
+        },
+        {
+          icon: 'text_snippet',
+          title: this.$t('MAINMENU.MEMBERREPORT')
+        },
+        {
+          icon: 'settings',
+          title: this.$t('MAINMENU.SETTING')
+        },
+        {
+          icon: 'info',
+          title: this.$t('MAINMENU.GAGREEMENT')
+        },
+        {
+          icon: 'logout',
+          title: this.$t('MAINMENU.LOGOUT')
+        }
       ],
       miniVariant: false,
       right: true,
@@ -482,16 +453,56 @@ export default {
   },
   loading: false,
   mounted () {
-    this.connect()
+    // this.connect()
+    // Always call on message
+    this.$websocket.addEventListener('any', (data) => {
+      console.log('xxxxxxxxxxxxxxxxxx Got a message: ', data)
+      const cmder = JSON.parse(data)
+      this.processMsg(cmder)
+    })
+    const that = this
+    setInterval(() => {
+      that.getNow()
+    }, 1000)
+    // console.log('this.$store.state.account=', this.$store.state.account)
+    this.PLAYER_NAME = this.$store.state.account.AccountName
   },
   methods: {
+    toggle (index) {
+      console.log('toggle(', index, ')')
+      switch (index) {
+        case 0:
+          this.betlogDialog = true
+          break
+        case 1:
+          this.memberReportDialog = true
+          break
+        case 2:
+          this.settingDialog = true
+          break
+        case 3:
+          this.gameAgreementDialog = true
+          break
+        case 4:
+          this.logoutDialog = true
+          break
+        default:
+          break
+      }
+    },
+    getNow () {
+      this.Now = this.$moment().format('YYYY-MM-DD HH:mm:ss Z')
+      // console.log(this.Now)
+    },
+    /*
     connect () {
-      this.$nextTick(() => {
+      // this.$nextTick(() => {
         // this.$nuxt.$loading.start()
-      })
+      // })
       // console.log('this.$nuxt.$loading=', this.$nuxt.$loading)
       // const url = 'ws://121.40.165.18:8800'
       // const url = 'ws://localhost:3333'
+
       const url = 'ws://35.229.140.14:30510'
       console.log('建立連線至...connect(url=', url, ')')
       if (this.websocket === undefined) {
@@ -532,31 +543,13 @@ export default {
         }
       }
     },
-    // 登入
-    signin_by_logincode () {
-      const code = 'Yz8DHneE00-TGp_yQ6D5LA'
-      console.log('要求登入 signin_by_logincode()')
-      this.$nextTick(() => {
-        // this.$nuxt.$loading.start()
-      })
-      const cmd = {
-        SN: 1,
-        CID: 101,
-        SC: 1000,
-        B: {
-          LoginCode: code
-        }
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
+    */
     // 登出
-    signout () {
+    async signout () {
       this.logoutDialog = false
       // this.$nuxt.$loading.start()
       const token = this.$store.state.account.Token
-      console.log('要求登出 signout()')
+      console.log('要求登出 signout()', token)
       const cmd = {
         SN: 2,
         CID: 199,
@@ -565,26 +558,12 @@ export default {
           Token: token
         }
       }
-      const strcmd = JSON.stringify(cmd)
       // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
-    // RESPONSE_SIGN_IN_BY_LOGIN_CODE_RESULT
-    process_201 (cmder) {
-      console.log('201處理登入回傳 process_201(', cmder, ')')
-      // this.$nuxt.$loading.finish()
-      if (cmder.SC === 1000) { // success
-        if (cmder.B) {
-          const accountinfo = cmder.B
-          console.log('accountinfo=', accountinfo)
-          this.$store.commit('setAccount', accountinfo)
-          this.PLAYER_NAME = this.$store.state.account.AccountName
-        }
-        console.log('this.$store.state.account=', this.$store.state.account)
-        // console.log(this.$store.fetchAccount)
-      } else {
-        console.log('get login data fail!')
-      }
+      // this.send(strcmd)
+      const cmder = await this.$websocket.sendAsync(cmd)
+      // console.log('Response.data:', response.data)
+      // const cmder = JSON.parse(response)
+      this.processMsg(cmder)
     },
     // RESPONSE_RECHECK_TOKEN_RESULT
     process_202 (cmder) {
@@ -652,16 +631,6 @@ export default {
       this.$store.commit('clear')
       this.$router.push('/')
     },
-    // RESPONSE_JOIN_GAME_RESULT
-    process_20001 (cmder) {
-      console.log('處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
-      if (cmder.SC === 1000) { // success
-        console.log('join table success!')
-        this.intable = true
-      } else {
-        console.log('join table fail!')
-      }
-    },
     // REFLASH_TALBE_STATUS
     process_20002 (cmder) {
       console.log('更新遊戲桌狀態20002 process_20002(', cmder, ')')
@@ -723,6 +692,7 @@ export default {
         console.log('leave table fail!')
       }
     },
+    /*
     send (msg) {
       // console.log('send(', msg, ')')
       this.$sendMessage(msg)
@@ -748,7 +718,7 @@ export default {
       // console.log('strcmd=', strcmd)
       this.send(strcmd)
     },
-    joinGame () {
+    async joinGame () {
       console.log('加入遊戲桌 joinGame()')
       const token = this.$store.state.account.Token
       const cmdBody = {
@@ -762,10 +732,15 @@ export default {
         SC: 1000,
         B: cmdBody
       }
-      const strcmd = JSON.stringify(cmd)
+      // const strcmd = JSON.stringify(cmd)
       // console.log('strcmd=', strcmd)
-      this.send(strcmd)
+      // this.send(strcmd)
+      const cmder = await this.$websocket.sendAsync(cmd)
+      // console.log('Response.data:', response.data)
+      // const cmder = JSON.parse(response)
+      this.processMsg(cmder)
     },
+    */
     leaveGame () {
       console.log('離開遊戲桌 leaveGame()')
       const token = this.$store.state.account.Token
@@ -781,9 +756,9 @@ export default {
       // console.log('strcmd=', strcmd)
       this.send(strcmd)
     },
-    processMsg (msg) {
+    processMsg (cmder) {
       // console.log('processMsg(msg=', msg, ')')
-      const cmder = JSON.parse(msg)
+      // const cmder = JSON.parse(msg)
       // console.log('processMsg(cmder=', cmder, ')')
       switch (cmder.CID) {
         case 201: // RESPONSE_SIGN_IN_BY_LOGIN_CODE_RESULT

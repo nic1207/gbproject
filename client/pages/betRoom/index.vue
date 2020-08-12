@@ -3,6 +3,14 @@
     <v-row class="pa-0" style="height:100vh;" no-gutters>
       <v-col class="pa-0" style="width:50% ;max-width: 50%">
         <div class="playTable">
+          <video
+            id="avatorplayer"
+            class="video-js vjs-big-play-centered"
+            controls
+            preload="auto"
+            style="width:100% ;height: 100%"
+            data-setup="{}"
+          />
           <v-btn
             class="mx-2"
             dark
@@ -25,6 +33,7 @@
             size="130"
             class="gameCountDown"
           >
+            <!--
             <v-progress-circular
               :value="70"
               color="red"
@@ -32,9 +41,9 @@
             >
               <span> 60</span>
             </v-progress-circular>
+            -->
           </v-avatar>
         </div>
-
         <v-tabs
           background-color="rgba(0, 0, 0, 0.7)"
           class="elevation-2"
@@ -188,7 +197,6 @@
             </v-card>
           </v-tab-item>
         </v-tabs>
-
         <div
           style="height:4vh ;background-color:#023016"
           class="d-flex justify-center align-center white--text"
@@ -1172,8 +1180,9 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
+import 'video.js/dist/video-js.css'
+import Videojs from 'video.js'
 import previewTable from '@/components/previewTable'
 export default {
   components: {
@@ -1181,6 +1190,8 @@ export default {
   },
   data () {
     return {
+      player: null,
+      activeSrc: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
       progress: 50,
       window: 1,
       coinMenu: false,
@@ -1197,7 +1208,22 @@ export default {
         return false
       }
     }
-
+  },
+  mounted () {
+    if (this.player === null) {
+      console.log('zzzzzzzzzzzzzzzzzzz')
+      const player = Videojs('avatorplayer', {
+        sources: [{ src: this.activeSrc }],
+        autoplay: true,
+        muted: true,
+        controls: true
+      })
+      this.player = player
+      this.player.src(this.activeSrc)
+    } else {
+      this.player.src(this.activeSrc)
+      // this.player.play();
+    }
   },
   methods: {
     changeShowing () {
@@ -1219,7 +1245,7 @@ export default {
       overflow-y: auto;
     }
     .playTable{
-        background-image: url("/table.png");
+        background-image: url("/table1.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;

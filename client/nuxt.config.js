@@ -2,7 +2,9 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   router: {
+    // add it if using github deploy
     base: '/gbproject/'
+    // base: ''
   },
   /*
   ** Nuxt rendering mode
@@ -28,7 +30,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Material+Icons" },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Material+Icons' }
     ]
   },
   /*
@@ -46,8 +48,8 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    '@/plugins/element-ui',
-    '@/plugins/websocket'
+    { src: '@/plugins/element-ui', mode: 'client' },
+    { src: '@/plugins/websocket-async-client', mode: 'client' }
   ],
   /*
   ** Auto import components
@@ -59,6 +61,7 @@ export default {
   */
   buildModules: [
     '@nuxtjs/vuetify',
+    '@nuxtjs/moment',
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
   ],
@@ -83,7 +86,7 @@ export default {
       ],
       lazy: true,
       langDir: 'lang/',
-      defaultLocale: 'zh-TW',
+      defaultLocale: 'en',
       strategy: 'no_prefix',
       detectBrowserLanguage: {
         // 將目前指定語系寫入cookie
