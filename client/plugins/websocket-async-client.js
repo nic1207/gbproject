@@ -1,4 +1,4 @@
-import WebSocketVue from 'websocket-async-vue-nic'
+import WebSocketVue from 'vue-async-websocket-nic'
 import Vue from 'vue'
 
 const defOptions = {
