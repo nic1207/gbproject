@@ -1,13 +1,13 @@
 <template lang="html">
   <div v-if="loading" class="loading-page">
-    <div class="sk-chase">
+    ><div class="sk-chase">
       <div class="sk-chase-dot" />
       <div class="sk-chase-dot" />
       <div class="sk-chase-dot" />
       <div class="sk-chase-dot" />
       <div class="sk-chase-dot" />
       <div class="sk-chase-dot" />
-    </div>
+    </div
   </div>
 </template>
 

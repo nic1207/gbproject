@@ -3,7 +3,7 @@
     <v-card class="ma-2">
       <v-row v-if="tableinfo" no-gutters class="dashboard-bar">
         <v-flex>
-          <span class="white--text textSize">Seria {{ tableinfo.seri }}  </span>
+          <span class="white--text textSize">Seria {{ tableinfo.TableName }}  </span>
         </v-flex>
         <v-flex>
           <div class="white--text textSize">
@@ -43,9 +43,9 @@
           <v-img
             width="90px"
             height="120px"
-            :src="tableinfo.avator"
+            :src="tableinfo.DealerAvatar"
           />
-          <div>{{ tableinfo.name }}</div>
+          <div>{{ tableinfo.DealerName }}</div>
         </div>
         <v-hover v-slot:default="{ hover }">
           <!-- Start show resultimg -->
@@ -114,7 +114,7 @@
                   class="white--text mt-3 mr-3"
                   color="#5f4d35"
                   link
-                  @click.native="joinGame($event)"
+                  @click="joinGame($event)"
                 >
                   {{ betlimit.title }}
                 </v-btn>
@@ -137,7 +137,7 @@
                   class="white--text mt-3 mr-3"
                   color="#5f4d35"
                   link
-                  @click.native="joinGame($event)"
+                  @click="joinGame($event)"
                 >
                   {{ betlimit.title }}
                 </v-btn>
@@ -161,6 +161,10 @@ export default {
     tableinfo: {
       type: Object,
       default: null
+    },
+    token: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -176,28 +180,35 @@ export default {
       ]
     }
   },
+  computed: {
+  },
   methods: {
     async joinGame () {
-      console.log('joinGame()')
-      const token = this.$store.state.account.Token
-      const cmdBody = {
-        Token: token,
-        GameID: 10001,
-        TableID: 1
+      console.log('joinGame(', this.tableinfo, ')')
+      console.log('tihs.token=', this.token)
+      try {
+        const cmdBody = {
+          Token: this.token,
+          GameID: this.tableinfo.GameID,
+          TableID: this.tableinfo.TableID
+        }
+        const cmd = {
+          SN: 2,
+          CID: 10001,
+          SC: 1000,
+          B: cmdBody
+        }
+        // const strcmd = JSON.stringify(cmd)
+        console.log('cmd=', cmd)
+        // this.send(strcmd)
+        const cmder = await this.$websocket.sendAsync(cmd)
+        // console.log('Response.data:', response.data)
+        // const cmder = JSON.parse(response)
+        this.process_20001(cmder)
+      } catch (error) {
+        console.log('[debug] error=', error)
+        this.$router.push('/betRoom')
       }
-      const cmd = {
-        SN: 2,
-        CID: 10001,
-        SC: 1000,
-        B: cmdBody
-      }
-      // const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      // this.send(strcmd)
-      const cmder = await this.$websocket.sendAsync(cmd)
-      // console.log('Response.data:', response.data)
-      // const cmder = JSON.parse(response)
-      this.process_20001(cmder)
     },
     // RESPONSE_JOIN_GAME_RESULT
     process_20001 (cmder) {
@@ -207,7 +218,8 @@ export default {
         this.$router.push('/betRoom')
         // this.intable = true
       } else {
-        console.log('join table fail!')
+        console.log('join table fail!', cmder)
+        this.$router.push('/betRoom')
       }
     }
   }

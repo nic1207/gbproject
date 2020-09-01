@@ -1191,13 +1191,13 @@ export default {
   data () {
     return {
       player: null,
-      activeSrc: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+      // activeSrc: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+      activeSrc: 'http://125.227.164.63:3310/live/test.m3u8',
       progress: 50,
       window: 1,
       coinMenu: false,
       selectedCoin: [],
       showingCoin: ['coin1', 'coin2', 'coin3', 'coin4', 'coin5']
-
     }
   },
   computed: {
@@ -1245,7 +1245,7 @@ export default {
       overflow-y: auto;
     }
     .playTable{
-        background-image: url("/table1.png");
+        background-image: url("/table.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;

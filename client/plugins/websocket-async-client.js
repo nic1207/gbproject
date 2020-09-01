@@ -2,7 +2,7 @@ import WebSocketVue from 'vue-async-websocket-nic'
 import Vue from 'vue'
 
 const defOptions = {
-  debug: true,
+  debug: false,
   // protocols: '',
   'load-on-start': true,
   'max-timeout': 10000,
@@ -14,8 +14,8 @@ const defOptions = {
   'response-id': 'SN'
   // 'response-type': '_type'
 }
-
-const url = 'ws://35.229.140.14:30510'
+// console.log('WebSocketVue=', WebSocketVue, 'defOptions=', defOptions)
+const url = 'ws://35.229.140.14:30622'
 // const url = 'ws://121.40.165.18:8800'
 // const webSocket = new WebSocket(url)
 // console.log('webSocket=', webSocket)

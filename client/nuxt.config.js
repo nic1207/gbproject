@@ -3,8 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   router: {
     // add it if using github deploy
-    base: '/gbproject/'
-    // base: ''
+    // base: '/gbproject/'
+    base: ''
   },
   /*
   ** Nuxt rendering mode
@@ -69,6 +69,7 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
     ['nuxt-i18n', {
       locales: [
         {
@@ -96,6 +97,9 @@ export default {
       }
     }]
   ],
+  axios: {
+    // proxyHeaders: false
+  },
   // loading: '~/components/loading.vue',
   loadingIndicator: {
     name: 'circle',

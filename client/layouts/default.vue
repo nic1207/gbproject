@@ -377,7 +377,7 @@ export default {
       Money: 0,
       Now: this.$moment().format('YYYY-MM-DD HH:mm:ss Z'),
       version: 'v0.0.10',
-      mylogo: 'img/logo1.png',
+      mylogo: 'img/logo.png',
       PLAYER_NAME: '',
       studioSound: 50,
       gameVolume: 60,
@@ -455,9 +455,9 @@ export default {
   mounted () {
     // this.connect()
     // Always call on message
-    this.$websocket.addEventListener('any', (data) => {
-      console.log('xxxxxxxxxxxxxxxxxx Got a message: ', data)
-      const cmder = JSON.parse(data)
+    this.$websocket.addEventListener('any', (cmder) => {
+      // console.log('xxxxxxxxxxxxxxxxxx Got a message: ', cmder)
+      // const cmder = JSON.parse(data)
       this.processMsg(cmder)
     })
     const that = this
@@ -583,43 +583,43 @@ export default {
     },
     // REFLASH_MEMBER_INFO
     process_203 (cmder) {
-      console.log('203處理會員資訊 process_203(', cmder, ')')
+      // console.log('203處理會員資訊 process_203(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const userinfo = cmder.B
-          console.log('userinfo=', userinfo)
+          // console.log('userinfo=', userinfo)
           this.$store.commit('setUser', userinfo)
         }
-        console.log('this.$store.state.user=', this.$store.state.user)
+        // .log('this.$store.state.user=', this.$store.state.user)
       } else {
         console.log('get user data fail!')
       }
     },
     // REFLASH_GAME_LOBBY_INFO
     process_204 (cmder) {
-      console.log('204處理遊戲大廳資訊 process_204(', cmder, ')')
+      // console.log('204處理遊戲大廳資訊 process_204(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const lobbyinfo = cmder.B
-          console.log('lobbyinfo=', lobbyinfo)
+          // console.log('lobbyinfo=', lobbyinfo)
           this.$store.commit('setLobby', lobbyinfo)
         }
-        console.log('this.$store.state.lobby=', this.$store.state.lobby)
+        // console.log('this.$store.state.lobby=', this.$store.state.lobby)
       } else {
         console.log('get lobby data fail!')
       }
     },
     // REFLASH_GAME_TABLE_STATUS
     process_205 (cmder) {
-      console.log('205處理遊戲桌資訊 process_205(', cmder, ')')
+      // console.log('205處理遊戲桌資訊 process_205(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const gametableinfo = cmder.B
-          console.log('gametableinfo=', gametableinfo)
+          // console.log('gametableinfo=', gametableinfo)
           this.$store.commit('setTables', gametableinfo)
         }
-        console.log('this.$store.state.tables=', this.$store.state.tables)
+        // console.log('this.$store.state.tables=', this.$store.state.tables)
       } else {
         console.log('get tables data fail!')
       }
@@ -633,11 +633,11 @@ export default {
     },
     // REFLASH_TALBE_STATUS
     process_20002 (cmder) {
-      console.log('更新遊戲桌狀態20002 process_20002(', cmder, ')')
+      // console.log('更新遊戲桌狀態20002 process_20002(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          const gametableinfo = cmder.B
-          console.log('gametableinfo=', gametableinfo)
+          // const gametableinfo = cmder.B
+          // console.log('gametableinfo=', gametableinfo)
           // this.$store.commit('setTables', gametableinfo)
         }
       } else {
@@ -646,11 +646,11 @@ export default {
     },
     // REFLASH_BET_INFOS
     process_20003 (cmder) {
-      console.log('更新下注資訊20003 process_20003(', cmder, ')')
+      // console.log('更新下注資訊20003 process_20003(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          const betinfo = cmder.B
-          console.log('betinfo=', betinfo)
+          // const betinfo = cmder.B
+          // console.log('betinfo=', betinfo)
           // this.$store.commit('setTables', gametableinfo)
         }
       } else {
@@ -659,11 +659,11 @@ export default {
     },
     // REFLASH_GAME_HISTORY
     process_20004 (cmder) {
-      console.log('更新遊戲歷史資訊20004 process_20004(', cmder, ')')
+      // console.log('更新遊戲歷史資訊20004 process_20004(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          const history = cmder.B
-          console.log('history=', history)
+          // const history = cmder.B
+          // console.log('history=', history)
           // this.$store.commit('setTables', gametableinfo)
         }
       } else {
@@ -672,11 +672,11 @@ export default {
     },
     // RESPONSE_BET_RESULT
     process_20011 (cmder) {
-      console.log('回傳下注結果20011 process_20011(', cmder, ')')
+      // console.log('回傳下注結果20011 process_20011(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          const betinfo = cmder.B
-          console.log('betinfo=', betinfo)
+          // const betinfo = cmder.B
+          // console.log('betinfo=', betinfo)
           // this.$store.commit('setTables', gametableinfo)
         }
       } else {
