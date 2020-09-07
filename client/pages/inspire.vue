@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-layout style="overflow:hidden" class="dog">
     <v-flex class="text-center">
       <img
         src="/v.png"
@@ -17,3 +17,8 @@
     </v-flex>
   </v-layout>
 </template>
+<style scoped>
+.dog::-webkit-scrollbar {
+  display: none;
+}
+</style>

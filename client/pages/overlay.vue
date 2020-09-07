@@ -4,23 +4,42 @@
     <v-row no-gutters dense>
       <dashboardCard v-for="project in projects" :key="project.name" :project="project" prop-card-size="md6" />
 
-      <div class="text-center">
-        <!-- <v-btn
-                color="error"
-                @click="overlay = !overlay"
-              >
-                Show Overlay
-              </v-btn> -->
+      <v-overlay
+        :z-index="zIndex"
+        :value="overlay"
+      >
+        <v-card
 
-        <v-overlay :value="overlay">
-          <v-btn
-            icon
-            @click="overlay = false"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-overlay>
-      </div>
+          height="250"
+          width="280"
+          color="#9e9d9b"
+          class="mr-2"
+        >
+          <div class="text-center pt-10">
+            <h3 style="color:black;">
+              This is overlay
+            </h3>
+            <h3 style="color:black;">
+              dddd
+            </h3>
+          </div>
+
+          <div class="white--text mt-14 text-center">
+            <v-btn
+              color="#876f4d"
+              @click="overlay = false"
+            >
+              Change
+            </v-btn>
+          </div>
+          <div style="background:white; margin-left:7.2vw; height:22vh; width:0.1vw; margin-top:5vh;" />
+          <div
+            style="background:#3b2e1e"
+            :class="`rounded-circle`"
+            class="pa-16 text-center grey lighten-2"
+          />
+        </v-card>
+      </v-overlay>
     </v-row>
   </v-container>
 </template>
@@ -34,7 +53,8 @@ export default {
   },
   data () {
     return {
-    // overlay: false,
+      overlay: true,
+      zIndex: 0,
       projects: [
         { seri: 'C01', name: 'SIKEN', user: '123300', bb: '1232200', pp: '2322200', tt: '2020', status: 'Dealing' },
         { seri: 'C02', name: 'HONGLONG', user: '5200', bb: '1232200', pp: '2322200', tt: '2020', status: 'Waiting' },
@@ -48,6 +68,13 @@ export default {
         { seri: 'C10', name: 'PHALLA', user: '2200', bb: '1232200', pp: '2322200', tt: '2020', status: 'Waiting' }
 
       ]
+    }
+  },
+  watch: {
+    overlay (val) {
+      val && setTimeout(() => {
+        this.overlay = false
+      }, 3000)
     }
   }
 }

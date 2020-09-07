@@ -20,6 +20,7 @@
     "nuxt": "^2.13.0",
     "nuxt-i18n": "^6.13.1",
     "video.js": "^7.8.4",
+    "vue-tour": "^1.5.0",
     "vue-async-websocket-nic": "^0.4.0"
   },
   "devDependencies": {

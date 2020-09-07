@@ -3,31 +3,48 @@
     <v-navigation-drawer
       fixed
       app
-      dark
       permanent
-      width="140"
-      color="#312717"
+      width="140px"
+      style="box-sizing: border-box;border-right: 0.5vw solid #A56F19;"
     >
-      <v-img :src="mylogo" width="140" />
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in LeftMenu"
-          :key="i"
-          class="red--text text-center"
+      <div style="height:30%;width:100% ;position:relative">
+        <h1
+          style="position:absolute;
+            bottom:15%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size:1vw;
+            font-weight:bold"
         >
-          <v-list-item-content>
-            <v-btn
-              block
-              height="5vh"
-              :to="item.to"
-              class="text-size"
-              color="#9c7e49"
-            >
-              {{ item.title }}
-            </v-btn>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+          L O G O
+        </h1>
+        <p
+          style="position:absolute; bottom:1%;font-size:0.8vw;left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight:bold"
+        >
+          <pre>Company Name</pre>
+        </p>
+      </div>
+
+      <router-link
+        v-for="(item, i) in LeftMenu"
+        :key="i"
+        v-slot="{ navigate, isActive }"
+        :to="item.to"
+      >
+        <v-btn
+          block
+          height="6vh"
+          class="text-size mt-2"
+          dark
+          elevation="18"
+          :class="[isActive && 'activeLink']"
+          @click="navigate"
+        >
+          {{ item.title }}
+        </v-btn>
+      </router-link>
+
       <template v-slot:append>
         <v-list>
           <v-divider />
@@ -44,6 +61,7 @@
           <v-divider />
           <v-list-item
             class="red--text text-center"
+            link
           >
             <v-list-item-content>
               <v-list-item-title class="text-size">
@@ -52,7 +70,7 @@
             </v-list-item-content>
           </v-list-item>
           <v-divider />
-          <v-list-item class="red--text text-center">
+          <v-list-item class="red--text text-center" link>
             <v-list-item-content>
               <v-list-item-title class="text-size">
                 {{ version }}
@@ -62,6 +80,16 @@
         </v-list>
       </template>
     </v-navigation-drawer>
+    <!-- <v-app-bar
+      flat
+      fixed
+      app
+      height="20px"
+    >
+
+      <v-toolbar-title v-text="title" />
+      <v-spacer />
+    </v-app-bar> -->
     <v-main>
       <nuxt />
     </v-main>
@@ -93,73 +121,22 @@
     >
       <setting @close="settingDialog=false" />
     </v-dialog>
-    <v-dialog
-      v-model="logoutDialog"
-      max-width="400"
-      min-width="290"
-    >
-      <logoutdialog @close="logoutDialog=false" @signout="signout" />
-    </v-dialog>
     <v-footer
-      color="#312717"
+      color="white"
       padless
       height="40px"
       inset
-      app
-      dark
+      fixed
+      elevation="20"
     >
       <v-row class="d-flex flex-row justify-end">
+        <div class="d-flex justify-center">
+          <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
+            <v-img src="/icon/wifi按鈕_4.png" />
+          </v-btn>
+        </div>
         <v-divider vertical />
         <div class="d-flex justify-center">
-          <v-menu
-            offset-y
-            top
-            :close-on-content-click="false"
-            :nudge-width="150"
-            :max-width="350"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                class="pa-2 ma-1"
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon v-show="soundOn" class="pa-2">
-                  audiotrack
-                </v-icon>
-                <v-icon v-show="!soundOn" class="pa-2">
-                  music_off
-                </v-icon>
-              </v-btn>
-            </template>
-            <v-card>
-              <v-row no-gutters>
-                <v-col cols="3" class="text-center">
-                  <p style="color:#876f4d" class="mt-4">
-                    Music
-                  </p>
-                </v-col>
-
-                <v-col cols="9" class="text-center">
-                  <v-row no-gutters dense>
-                    <v-btn icon color="#876f4d" class="mt-2">
-                      <v-icon>volume_up</v-icon>
-                      <!-- <v-icon>volume_off</v-icon> -->
-                    </v-btn>
-                    <v-slider
-                      v-model="music"
-                      class="mt-3"
-                    />
-                  </v-row>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-menu>
-        </div>
-
-        <v-divider vertical />
-        <div class="d-flex">
           <v-menu
             offset-y
             top
@@ -174,143 +151,52 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon class="pa-2 ">
-                  volume_up
+                <v-icon v-show="music!=0" class="pa-2" color="#B98F38">
+                  audiotrack
+                </v-icon>
+                <v-icon v-show="music==0" class="pa-2" color="#B98F38">
+                  music_off
                 </v-icon>
               </v-btn>
             </template>
-            <v-card>
+            <v-card color="rgba(34, 34, 34,0.9)">
               <v-row no-gutters>
-                <v-col cols="4" class="text-center">
-                  <p style="color:#876f4d" class="mt-4">
-                    Studio Sound
+                <v-col cols="3" class="text-center">
+                  <p style="color:#C4A76E" class="mt-4">
+                    Music
                   </p>
                 </v-col>
 
-                <v-col cols="8" class="text-center">
+                <v-col cols="9" class="text-center">
                   <v-row no-gutters dense>
-                    <v-btn icon color="#876f4d" class="mt-2">
-                      <v-icon>volume_up</v-icon>
-                      <!-- <v-icon>volume_off</v-icon> -->
+                    <v-btn icon color="#C4A76E" class="mt-2" @click="music==0?music=50:music=0">
+                      <v-icon v-show="music!=0">
+                        volume_up
+                      </v-icon>
+                      <v-icon v-show="music==0">
+                        volume_off
+                      </v-icon>
                     </v-btn>
                     <v-slider
-                      v-model="studioSound"
+                      v-model="music"
                       class="mt-3"
-                    />
-                  </v-row>
-                </v-col>
-              </v-row>
-              <v-row no-gutters>
-                <v-col cols="4" class="text-center">
-                  <p style="color:#876f4d" class="mt-4">
-                    Game Volume
-                  </p>
-                </v-col>
-
-                <v-col cols="8" class="text-center">
-                  <v-row no-gutters dense>
-                    <v-btn icon color="#876f4d" class="mt-2">
-                      <v-icon>volume_up</v-icon>
-                      <!-- <v-icon>volume_off</v-icon> -->
-                    </v-btn>
-                    <v-slider
-                      v-model="gameVolume"
-                      class="mt-3"
+                      color="#196260"
                     />
                   </v-row>
                 </v-col>
               </v-row>
             </v-card>
           </v-menu>
-          <v-btn
-            v-if="!showViewList"
-            icon
-            class="pa-2 ma-1"
-            link
-            :to="toRouteName"
-            exact
-          >
-            <v-icon class="pa-2 ">
-              view_list
-            </v-icon>
-          </v-btn>
-          <v-btn
-            v-if="!showViewList"
-            icon
-            class="pa-2 ma-1"
-            link
-            :to="toRouteName+'/road_map_view'"
-            exact
-          >
-            <v-icon class="pa-2 ">
-              view_module
-            </v-icon>
-          </v-btn>
-          <v-btn
-            v-if="!showViewList"
-            icon
-            class="pa-2 ma-1"
-            link
-            :to="toRouteName+'/big_road_view'"
-            exact
-          >
-            <v-icon class="pa-2 ">
-              view_column
-            </v-icon>
-          </v-btn>
+        </div>
 
-          <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
-            <v-icon class="pa-2 ">
-              hd
-            </v-icon>
-          </v-btn>
-          <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
-            <v-icon class="pa-2 ">
-              videocam
-            </v-icon>
-          </v-btn>
-          <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
-            <v-icon class="pa-2 ">
-              videocam_off
-            </v-icon>
-          </v-btn>
-        </div>
         <v-divider vertical />
-        <div class="d-flex">
-          <div style="width:40px" class="pa-2">
-            <v-icon>attach_money</v-icon>
-          </div>
-
-          <div class="pa-2">
-            {{ Money }}
-          </div>
-          <v-btn icon link>
-            <v-icon small>
-              autorenew
-            </v-icon>
-          </v-btn>
-        </div>
-        <v-divider vertical />
-        <div class="d-flex">
-          <div style="width:40px" class="pa-2">
-            <v-icon>account_circle</v-icon>
-          </div>
-          <div class="pa-2">
-            {{ PLAYER_NAME }}
-          </div>
-        </div>
-        <v-divider vertical />
-        <div class="d-flex">
-          <div class="pa-2">
-            {{ Now }}
-          </div>
-        </div>
-        <v-divider vertical />
-        <div class="d-flex">
+        <div class="d-flex justify-center align-center" style="width:20vw">
           <v-menu
             offset-y
             top
-            close-on-content-click
+            :close-on-content-click="false"
+            :nudge-width="350"
+            :max-width="350"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -318,7 +204,136 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon>
+                <v-icon class="pa-2 " color="#B98F38">
+                  volume_up
+                </v-icon>
+              </v-btn>
+            </template>
+            <v-card color="rgba(34, 34, 34,0.9)">
+              <v-row no-gutters>
+                <v-col cols="4" class="text-center">
+                  <p style="color:#C4A76E" class="mt-4">
+                    Studio Sound
+                  </p>
+                </v-col>
+
+                <v-col cols="8" class="text-center">
+                  <v-row no-gutters dense>
+                    <v-btn icon color="#C4A76E" class="mt-2" @click="studioSound==0?studioSound=50:studioSound=0">
+                      <v-icon v-show="studioSound!=0">
+                        volume_up
+                      </v-icon>
+                      <v-icon v-show="studioSound==0">
+                        volume_off
+                      </v-icon>
+                    </v-btn>
+                    <v-slider
+                      v-model="studioSound"
+                      class="mt-3"
+                      color="#196260"
+                    />
+                  </v-row>
+                </v-col>
+              </v-row>
+              <v-row no-gutters>
+                <v-col cols="4" class="text-center">
+                  <p style="color:#C4A76E" class="mt-4">
+                    Game Volume
+                  </p>
+                </v-col>
+
+                <v-col cols="8" class="text-center">
+                  <v-row no-gutters dense>
+                    <v-btn icon color="#C4A76E" class="mt-2" @click="gameVolume==0?gameVolume=50:gameVolume=0">
+                      <v-icon v-show="gameVolume!=0">
+                        volume_up
+                      </v-icon>
+                      <v-icon v-show="gameVolume==0">
+                        volume_off
+                      </v-icon>
+                    </v-btn>
+                    <v-slider
+                      v-model="gameVolume"
+                      class="mt-3"
+                      color="#196260"
+                    />
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-menu>
+          <v-btn v-if="!showViewList" icon link :to="toRouteName+'/default'" exact>
+            <v-icon class="pa-2 " color="#B98F38">
+              view_list
+            </v-icon>
+          </v-btn>
+          <v-btn v-if="!showViewList" icon link :to="toRouteName+'/road_map_view'" exact>
+            <v-icon class="pa-2 " color="#B98F38">
+              view_module
+            </v-icon>
+          </v-btn>
+          <v-btn v-if="!showViewList" icon link :to="toRouteName+'/big_road_view'" exact>
+            <v-icon class="pa-2 " color="#B98F38">
+              view_column
+            </v-icon>
+          </v-btn>
+
+          <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
+            <v-img src="/icon/高清按鈕.png" />
+          </v-btn>
+          <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
+            <v-icon class="pa-2 " color="#B98F38">
+              videocam
+            </v-icon>
+          </v-btn>
+          <v-btn v-if="showViewList&&false" icon class="pa-2 ma-1" link exact>
+            <v-icon class="pa-2 " color="#B98F38">
+              videocam_off
+            </v-icon>
+          </v-btn>
+          <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
+            <v-img src="/icon/重新載入視訊按鈕.png" />
+          </v-btn>
+        </div>
+        <v-divider vertical />
+        <div class="d-flex justify-center align-center footer-size" style="width:10vw;color:#C4A76E">
+          <v-icon color="#B98F38" class="mr-2">
+            attach_money
+          </v-icon>
+          {{ Money }}
+          <v-icon small color="#B98F38" class="ml-2">
+            autorenew
+          </v-icon>
+        </div>
+        <v-divider vertical />
+        <div class="d-flex justify-center align-center footer-size" style="width:10vw;color:#C4A76E">
+          <v-icon class="mr-1" color="#B98F38">
+            account_circle
+          </v-icon>
+          {{ PLAYER_NAME }}
+        </div>
+        <v-divider vertical />
+        <div class="d-flex justify-center align-center footer-size" style="width:15vw;color:#C4A76E">
+          {{ Now }}
+        </div>
+        <v-divider vertical />
+        <div class="d-flex justify-center align-center">
+          <v-menu
+            offset-y
+            top
+            close-on-content-click
+            :nudge-width="100"
+            left
+            :max-width="250"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                class="pa-2 ma-1"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon class="pa-2" color="#B98F38">
                   menu
                 </v-icon>
               </v-btn>
@@ -327,10 +342,10 @@
             <v-card>
               <v-list
                 dark
-                color="#312717"
+                color="rgba(12, 10, 6, 0.8)"
               >
                 <v-subheader>
-                  <v-icon>account_circle</v-icon> &nbsp;&nbsp;&nbsp;&nbsp;{{ PLAYER_NAME }}
+                  <v-icon>account_circle</v-icon>&nbsp;&nbsp;&nbsp;&nbsp;{{ PLAYER_NAME }}
                 </v-subheader>
                 <v-list-item
                   v-for="(item, i) in MainMenu"
@@ -343,12 +358,44 @@
                   </v-list-item-icon>
                   {{ item.title }}
                 </v-list-item>
+                <!--
+                <v-list-item link @click="betlogDialog=true">
+                  <v-list-item-icon>
+                    <v-icon>history</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>Bet Log  </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item link @click="memberReportDialog=true">
+                  <v-list-item-icon>
+                    <v-icon>text_snippet</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>Member Report</v-list-item-content>
+                </v-list-item>
+                <v-list-item link @click="settingDialog=true">
+                  <v-list-item-icon>
+                    <v-icon>settings</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>Settings</v-list-item-content>
+                </v-list-item>
+                <v-list-item link @click="gameAgreementDialog=true">
+                  <v-list-item-icon>
+                    <v-icon>info</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>Game Agreement</v-list-item-content>
+                </v-list-item>
+                -->
+                <v-list-item>
+                  <v-list-item-action-text>
+                    v0.123
+                  </v-list-item-action-text>
+                </v-list-item>
               </v-list>
             </v-card>
           </v-menu>
         </div>
         <v-divider vertical />
-        <div class="d-flex" style="width:10px" />
+        <div class="d-flex" style="width:1vw" />
       </v-row>
     </v-footer>
   </v-app>
@@ -359,22 +406,18 @@ import betLog from '@/components/bet_log'
 import memberReport from '@/components/member_report'
 import gameAgreement from '@/components/gameAgreement'
 import setting from '@/components/setting'
-import logoutdialog from '@/components/logoutdialog'
-
 export default {
   middleware: 'authenticated',
   components: {
     betLog,
     memberReport,
     gameAgreement,
-    setting,
-    logoutdialog
+    setting
   },
   data () {
     return {
       LoginCode: this.$nuxt.$route.query.LoginCode,
       online: 1,
-      Money: 0,
       Now: this.$moment().format('YYYY-MM-DD HH:mm:ss Z'),
       version: 'v0.0.10',
       mylogo: 'img/logo.png',
@@ -388,7 +431,31 @@ export default {
       memberReportDialog: false,
       gameAgreementDialog: false,
       settingDialog: false,
-      logoutDialog: false,
+      /*
+      items: [
+        {
+          icon: 'mdi-apps',
+          title: 'BACCARAT',
+          to: '/roomlist/default'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Other Games',
+          to: '/inspire'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'MULTI-BET',
+          to: '/multibet/default'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Mobile',
+          to: '#'
+        }
+
+      ],
+      */
       LeftMenu: [
         {
           title: this.$t('LEFTMENU.BACCARAT'),
@@ -433,6 +500,7 @@ export default {
     }
   },
   computed: {
+
     toRouteName () {
       const routeArr = this.$route.name.split('-')
       if (routeArr.includes('multibet')) {
@@ -442,12 +510,21 @@ export default {
       }
     },
     showViewList () {
+      console.log('this.$route=', this.$route)
       const routeArr = this.$route.name.split('-')
       console.log(routeArr)
       if (routeArr.includes('betRoom')) {
         return true
       } else {
         return false
+      }
+    },
+    Money () {
+      // console.log('Money=', this.$store.state.user)
+      if (this.$store.state.user && this.$store.state.user.Point) {
+        return this.$store.state.user.Point
+      } else {
+        return 0
       }
     }
   },
@@ -567,12 +644,12 @@ export default {
     },
     // RESPONSE_RECHECK_TOKEN_RESULT
     process_202 (cmder) {
-      console.log('202 重新檢查token回傳 process_202(', cmder, ')')
+      // console.log('202 重新檢查token回傳 process_202(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const accountinfo = cmder.B
-          console.log('accountinfo=', accountinfo)
+          // console.log('accountinfo=', accountinfo)
           this.$store.commit('setAccount', accountinfo)
         }
         console.log('this.$store.state.account=', this.$store.state.account)
@@ -615,9 +692,9 @@ export default {
       // console.log('205處理遊戲桌資訊 process_205(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          const gametableinfo = cmder.B
-          // console.log('gametableinfo=', gametableinfo)
-          this.$store.commit('setTables', gametableinfo)
+          const TableStatus = cmder.B.TableStatus
+          // console.log('TableStatus=', TableStatus)
+          this.$store.commit('setTables', TableStatus)
         }
         // console.log('this.$store.state.tables=', this.$store.state.tables)
       } else {
@@ -809,7 +886,18 @@ export default {
 .text-size{
   font-size: 1.6vh;
 }
+.footer-size{
+  font-size: 0.8vw;
+}
 #app {
     background-color: var(--v-background-base);
+}
+.activeLink{
+  background-image:
+  linear-gradient(
+      rgb(255, 255, 255) 63%,
+      #B98F38
+    );
+  color:black
 }
 </style>

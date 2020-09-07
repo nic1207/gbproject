@@ -41,6 +41,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '@assets/index.css',
     'element-ui/lib/theme-chalk/index.css'
   ],
   /*
@@ -48,6 +49,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    { src: '@/plugins/vueTour.js', mode: 'client' },
     { src: '@/plugins/element-ui', mode: 'client' },
     { src: '@/plugins/websocket-async-client', mode: 'client' }
   ],

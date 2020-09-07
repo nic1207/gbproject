@@ -1,7 +1,7 @@
 <template>
-  <v-container class="pa-0 ma-0" fluid>
+  <v-container class="pa-0 ml-2" fluid>
     <v-row class="pa-0" style="height:100vh;" no-gutters>
-      <v-col cols="10">
+      <v-col cols="12">
         <div class="tableInfo">
           <div class="room-title d-flex justify-center align-center">
             Baccrart C01
@@ -34,599 +34,220 @@
             </v-progress-circular>
           </v-avatar>
           <div class="result-cards">
-            <img
-              src="/card.png"
-              style="width:20%; height:40%; position:absolute;left:15%;top:0; transform: rotate(-90deg);"
-            >
-            <img
-              src="/card.png"
-              style="width:20%; height:40%; position:absolute;left:5%;bottom:23%"
-            >
-            <img
-              src="/card.png"
-              style="width:20%; height:40%; position:absolute;left:27%;bottom:23%"
-            >
+            <v-img
+              src="/card/方塊2.png"
+              height="10vh"
+              contain
+              style="position:absolute;left:10%;top:1%; transform: rotate(-90deg);"
+            />
+            <v-img
+              src="/card/方塊2.png"
+              height="10vh"
+              contain
+              style=" position:absolute;left:0;bottom:18%"
+            />
+            <v-img
+              src="/card/方塊2.png"
+              height="10vh"
+              contain
+              style=" position:absolute;left:19%;bottom:18%"
+            />
             <div
               class=" d-flex justify-center align-center"
-              style="width:42%; height:10%; position:absolute; top:80%; left:5%; background-color:blue"
+              style="width:42%; height:10%; position:absolute; top:85%; left:5%; background-color:blue"
             >
               <span>P 6</span>
             </div>
-            <img
-              src="/card.png"
-              style="width:20%; height:40%; position:absolute;right:15%;top:0; transform: rotate(-90deg);"
-            >
-            <img
-              src="/card.png"
-              style="width:20%; height:40%; position:absolute;right:5%;bottom:23%"
-            >
-            <img
-              src="/card.png"
-              style="width:20%; height:40%; position:absolute;right:27%;bottom:23%"
-            >
+            <v-img
+              src="/card/方塊2.png"
+              contain
+              height="10vh"
+              style="position:absolute;right:10%;top:2%; transform: rotate(-90deg);"
+            />
+            <v-img
+              src="/card/方塊2.png"
+              contain
+              height="10vh"
+              style=" position:absolute;right:0;bottom:18%"
+            />
+            <v-img
+              src="/card/方塊2.png"
+              contain
+              height="10vh"
+              style="position:absolute;right:19%;bottom:18%"
+            />
             <div
               class=" d-flex justify-center align-center"
-              style="width:42%; height:10%; position:absolute; top:80%; right:5%; background-color:red"
+              style="width:42%; height:10%; position:absolute; top:85%; right:5%; background-color:red"
             >
               <span>B 5</span>
             </div>
           </div>
-          <div style="width:500px;position:absolute; top:0;right: 0;">
-            <v-tabs
-              background-color="rgba(0, 0, 0, 0.7)"
-              class="elevation-2"
+          <BetRoom2Tableinfo />
+
+          <div class="selectCoin d-flex align-center justify-end white--text pa-2">
+            <v-menu
+              v-model="coinMenu"
+              offset-y
+              top
+              :close-on-content-click="false"
+              :nudge-width="450"
+              :max-width="450"
               dark
-              centered
-              grow
-              height="5vh"
             >
-              <v-tabs-slider />
-
-              <v-tab
-                :href="`#tab-1`"
-                @click="tableInfoShow=!tableInfoShow"
-              >
-                Table Info
-                <v-icon>{{ tableInfoShow? 'mdi-menu-down':'mdi-menu-up' }}</v-icon>
-              </v-tab>
-              <v-tab
-                :href="`#tab-2`"
-                @click="betPoolShow=!betPoolShow"
-              >
-                Bet Pool
-                <v-icon>{{ betPoolShow? 'mdi-menu-down':'mdi-menu-up' }}</v-icon>
-              </v-tab>
-
-              <v-tab-item
-                :value="'tab-' + 1"
-              >
-                <v-card
-                  v-show="tableInfoShow"
-                  flat
-                  tile
-                  height="30vh"
-                  color="rgba(0, 0, 0, 0.5)"
-                >
-                  <v-row style="width:100%; margin:0">
-                    <v-card width="50%">
-                      <v-list dense>
-                        <v-list-item>
-                          <v-list-item-content><span class="table-info">Table</span></v-list-item-content>
-                          <v-list-item-content class="align-end">
-                            <span class="table-info">C01</span>
-                          </v-list-item-content>
-                        </v-list-item>
-
-                        <v-list-item>
-                          <v-list-item-content><span class="table-info">Dealer</span></v-list-item-content>
-                          <v-list-item-content class="align-end">
-                            <span class="table-info">SOKNY</span>
-                          </v-list-item-content>
-                        </v-list-item>
-
-                        <v-list-item>
-                          <v-list-item-content><span class="table-info">Round</span></v-list-item-content>
-                          <v-list-item-content class="align-end">
-                            <span class="table-info">23-34 </span>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list>
-                    </v-card>
-                    <v-card width="50%">
-                      <v-list dense>
-                        <v-list-item dense>
-                          <v-list-item-content><span class="table-info">ID</span></v-list-item-content>
-                          <v-list-item-content class="align-end">
-                            <span class="table-info">93924329423</span>
-                          </v-list-item-content>
-                        </v-list-item>
-
-                        <v-list-item dense>
-                          <v-list-item-content><span class="table-info">Table Limit</span></v-list-item-content>
-                          <v-list-item-content class="align-end">
-                            <span class="table-info"> 20,000.000</span>
-                          </v-list-item-content>
-                        </v-list-item>
-
-                        <v-list-item dense>
-                          <v-list-item-content><span class="table-info">Bet Limit</span></v-list-item-content>
-                          <v-list-item-content class="align-end">
-                            <span class="table-info">100-5,000 </span>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list>
-                    </v-card>
+              <template v-slot:activator="{ on, attrs }">
+                <div
+                  class="text-center mt-1 mx-2"
+                  style="width:2.7vw;
+                                                   height:2.6vw;
+                                                    background-image:url('/icon/七人座自定UI.png');
+                                                    background-repeat: no-repeat;
+                                                    background-position: center;
+                                                    background-size: 100% 100%"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="openCoinSelect"
+                />
+              </template>
+              <v-card color="rgba(0, 0, 0, 0.7)" elevation="20">
+                <v-card-title>
+                  <v-row no-gutters justify="center">
+                    Please Select
                   </v-row>
-                  <v-row style="height:20%;width:100%; margin:0; " class="table-info">
-                    <v-col cols="2" class="text-center">
-                      <span>Banker</span><br>
-                      <span>5000</span>
-                    </v-col>
-                    <v-col cols="2" class="text-center">
-                      <span>Player</span><br>
-                      <span>5000</span>
-                    </v-col>
-                    <v-col cols="2" class="text-center">
-                      <span>Tie</span><br>
-                      <span>5000</span>
-                    </v-col>
-                    <v-col cols="2" class="text-center">
-                      <span>Pair</span><br>
-                      <span>500</span>
-                    </v-col>
-                    <v-col cols="2" class="text-center">
-                      <span>Natural</span><br>
-                      <span>5000</span>
-                    </v-col>
-                    <v-col cols="2" class="text-center">
-                      <span>Lucky Six</span><br>
-                      <span>500</span>
-                    </v-col>
+                </v-card-title>
+                <v-row no-gutters justify="center">
+                  <v-img
+                    v-for="(coin,n) in coinList"
+                    :key="n"
+                    class="text-center ma-2"
+                    max-width="3.7vw"
+                    max-height="2.6vw"
+                    :src="'/coin/'+coin"
+                  >
+                    <v-checkbox
+                      v-model="selectedCoin"
+                      :value="coin"
+                      color="#009167"
+                      :disabled="disableCoinSelect?selectedCoin.includes(coin)?false:true:false"
+                    />
+                  </v-img>
+                </v-row>
+                <v-card-actions>
+                  <v-row justify="center">
+                    <!-- <v-btn small class="mx-2" fab dark color="#4f3c2b" @click="cancelCoinSelect"> -->
+
+                    <v-img
+                      src="/icon/萬用選擇UI.png"
+                      class="ma-2"
+                      max-width="2.5vw"
+                      max-height="2.5vw"
+                      @click="cancelCoinSelect"
+                    />
+
+                    <!-- </v-btn> -->
+                    <v-img
+                      src="/icon/萬用取消UI.png"
+                      class="ma-2"
+                      max-width="2.5vw"
+                      max-height="2.5vw"
+                      @click="changeShowing"
+                    />
                   </v-row>
-                  <v-row style="height:20%;width:100%; margin:0; " class="table-info">
-                    <v-col cols="12" class="text-center d-flex align-center justify-center">
-                      <v-btn x-small>
-                        change
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item
-                :value="'tab-' + 2"
+                </v-card-actions>
+              </v-card>
+            </v-menu>
+            <v-img
+              v-for="(coin,n) in showingCoin"
+              :key="n"
+              :src="betCoin==coin?'/coin/籌碼發光.png':''"
+              max-width="4.9vw"
+              height="3.9vw"
+              @click="betCoin=coin"
+            >
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
               >
-                <v-card
-                  v-show="betPoolShow"
-                  flat
-                  tile
-                  height="15vh"
-                >
-                  <v-row style="width:100%; margin:0">
-                    <v-card width="50%">
-                      <v-row style="margin:0;" dense>
-                        <v-col cols="6" class="banker">
-                          Banker 65%
-                        </v-col>
-                        <v-col cols="6">
-                          2242532/1213
-                        </v-col>
-                        <v-progress-linear
-                          v-model="progress"
-                          color="red"
-                        />
-                      </v-row>
-
-                      <v-row style="margin:0;" dense>
-                        <v-col cols="6" class="player">
-                          Player 41%
-                        </v-col>
-                        <v-col cols="6">
-                          2242532/1213
-                        </v-col>
-                        <v-progress-linear
-                          v-model="progress"
-                          color="blue"
-                        />
-                      </v-row>
-
-                      <v-row style="margin:0;" dense>
-                        <v-col cols="6" class="tie-text">
-                          Tie 1%
-                        </v-col>
-                        <v-col cols="6">
-                          2242532/1213
-                        </v-col>
-                        <v-progress-linear
-                          v-model="progress"
-                          color="green"
-                        />
-                      </v-row>
-                    </v-card>
-                    <v-card width="50%">
-                      <v-row style="margin:0;" dense>
-                        <v-col cols="6" class="banker">
-                          Banker Pair
-                        </v-col>
-                        <v-col cols="6">
-                          2242532/1213
-                        </v-col>
-                      </v-row>
-                      <v-row style="margin:0;" dense>
-                        <v-col cols="6" class="player">
-                          Player Pair
-                        </v-col>
-                        <v-col cols="6">
-                          2242532/1213
-                        </v-col>
-                      </v-row>
-                      <v-row style="margin:0;" dense>
-                        <v-col cols="6" class="banker">
-                          Banker Natural
-                        </v-col>
-                        <v-col cols="6">
-                          2242532/1213
-                        </v-col>
-                      </v-row>
-                      <v-row style="margin:0;" dense>
-                        <v-col cols="6" class="player">
-                          Player Natural
-                        </v-col>
-                        <v-col cols="6">
-                          2242532/1213
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </v-row>
-                </v-card>
-              </v-tab-item>
-            </v-tabs>
+                <v-img
+                  max-width="3.7vw"
+                  max-height="2.6vw"
+                  :src="'/coin/'+coin"
+                />
+              </v-row>
+            </v-img>
+            <div
+              class="text-center mt-1 ml-2"
+              style="width:2.7vw;
+                                                    height:2.6vw;
+                                                      background-image:url('/icon/單人雙倍ui.png');
+                                                      background-repeat: no-repeat;
+                                                      background-position: center;
+                                                      background-size: 100% 100%"
+            />
           </div>
         </div>
         <v-row
-          style="height:21vh;width:100%"
+          style="height:20vh;width:100%"
           class="pa-0 ma-0"
         >
-          <div style="height:100%;  width:30%">
-            <previewTable :row="7" :column="15" />
-          </div>
-          <div style="height:100%;  width:30%">
-            <div style="width:100%; height:45%">
-              <previewTable :row="6" :column="36" />
-            </div>
-            <v-divider />
-            <div style="width:100%; height:27.5%">
-              <previewTable :row="3" :column="36" />
-            </div>
-            <v-divider />
-            <v-row style="width:100%; height:27.5%" no-gutters>
-              <div style="width:49.7%; height:100%; ">
-                <previewTable :row="4" :column="18" />
-              </div>
-              <v-divider vertical />
-              <div style="width:50%; height:100%">
-                <previewTable :row="4" :column="18" />
-              </div>
-            </v-row>
-          </div>
-          <div style="height:100%;  width:40%">
-            <div
-              style="height:25% ;background-color:rgba(0,0,0,0.5)"
-              class="d-flex justify-center align-center white--text"
-            >
-              Total BetAmount : 0.0
-            </div>
-            <v-divider />
-            <div
-              style="height:52% ;background-color:#4F3C2B"
-              class="d-flex align-center white--text"
-            >
-              <div
-                class="text-center mt-4 ml-2"
-                style="width:4vw; height:2.6vw; background-color:rgba(0,0,0,0.5)"
-              >
-                <v-icon dark>
-                  monetization_on
-                </v-icon>
-                <span style="font-size:0.8vw">Custom</span>
-              </div>
-              <div
-                class="text-center mt-4"
-                style="width:4vw; height:2.6vw; "
-              >
-                <img src="/coin1.jpg" style="width:3.2vw;">
-              </div>
-              <div
-                class="text-center mt-4"
-                style="width:4vw; height:2.6vw; "
-              >
-                <img src="/coin1.jpg" style="width:3.2vw;">
-              </div>
-              <div
-                class="text-center mt-4"
-                style="width:4vw; height:2.6vw; "
-              >
-                <img src="/coin1.jpg" style="width:3.2vw;">
-              </div>
-              <div
-                class="text-center mt-4"
-                style="width:4vw; height:2.6vw; "
-              >
-                <img src="/coin1.jpg" style="width:3.2vw;">
-              </div>
-              <div
-                class="text-center mt-4"
-                style="width:4vw; height:2.6vw; "
-              >
-                <img src="/coin1.jpg" style="width:3.2vw;">
-              </div>
-              <div
-                class="text-center mt-4 ml-2"
-                style="width:4vw; height:2.6vw; background-color:rgba(0,0,0,0.5)"
-              >
-                <v-icon dark>
-                  monetization_on
-                </v-icon><br>
-                <span style="font-size:0.8vw">Double</span>
-              </div>
-            </div>
-            <v-divider />
-            <div
-              style="height:20% ;background-color:rgba(0,0,0,0.5)"
-              class="d-flex justify-center align-center white--text"
-            >
-              <div class="d-flex align-center justify-left room-list" style="width:50%; height:100%; background-color:black">
-                <span class="font-weight-bold red--text ml-1">B</span>
-                <span class="font-weight-bold white--text ml-1">13</span>
-                <span class="font-weight-bold blue--text ml-1">P</span>
-                <span class="font-weight-bold white--text ml-1">123</span>
-                <span class="font-weight-bold green--text ml-1">T</span>
-                <span class="font-weight-bold white--text ml-1">13</span>
-                <span class="font-weight-bold red--text ml-1">BP</span>
-                <span class="font-weight-bold white--text ml-1">13</span>
-                <span class="font-weight-bold blue--text ml-1">PP</span>
-                <span class="font-weight-bold white--text ml-1">133</span>
-              </div>
-              <div class="d-flex align-center justify-left room-list" style="width:50%; height:100%; background-color:black">
-                <v-btn x-small color="red" class="ml-1">
-                  <span class="white--text"> Ask B.</span>
-                </v-btn>
-                <v-progress-circular
-                  :value="100"
-                  width="3"
-                  color="blue"
-                  class="ml-1"
-                  size="15"
-                />
-                <v-avatar color="blue" class="ml-1" size="15" />
-                <span class="font-weight-bold red--text ml-1 mr-5  ">/</span>
-                <v-btn x-small color="blue" class="ml-1">
-                  <span class="white--text"> Ask P.</span>
-                </v-btn>
-                <v-progress-circular
-                  :value="100"
-                  width="3"
-                  color="red"
-                  class="ml-1"
-                  size="15"
-                />
-                <v-avatar color="red" class="ml-1" size="15" />
-                <span class="font-weight-bold blue--text ml-1">/</span>
-              </div>
-            </div>
-          </div>
+          <BetHistory2 />
+          <v-row no-gutters style="height:100%;  width:50%">
+            <ResultBar />
+            <BetRoom2SideTable />
+            <Chat />
+          </v-row>
         </v-row>
       </v-col>
-      <v-col cols="2">
-        <v-card height="50vh">
-          <v-expansion-panels flat>
-            <v-expansion-panel>
-              <v-expansion-panel-header color="black">
-                <span class="white--text">Switch Table</span>
-                <template v-slot:actions>
-                  <v-icon color="white">
-                    clear_all
-                  </v-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row class="d-flex justify-center align-center ma-0 pa-0">
-                  <v-checkbox
-                    label="Checkbox 1"
-                  />
-                  <v-checkbox
-                    label="Checkbox 1"
-                  />
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-          <v-divider />
-          <v-card-text style="height: 85%;" class="scroll pa-0 ma-0">
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-              <previewTable :row="7" :column="16" />
-            </v-card>
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-              <previewTable :row="7" :column="16" />
-            </v-card>
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-              <previewTable :row="7" :column="16" />
-            </v-card>
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-
-              <previewTable :row="7" :column="16" />
-            </v-card>
-          </v-card-text>
-        </v-card>
-
-        <v-card height="46vh">
-          <v-system-bar
-            color="black"
-            dark
-            class="ma-0 pa-0"
-            height="35"
-          >
-            <span class="room-list ml-5 white--text">Good Road</span>
-            <v-spacer />
-
-            <v-icon color="white">
-              mdi-menu-down
-            </v-icon>
-          </v-system-bar>
-          <v-divider />
-          <v-card-text style="height: 85%;" class="scroll pa-0 ma-0">
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-              <previewTable :row="7" :column="16" />
-            </v-card>
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-              <previewTable :row="7" :column="16" />
-            </v-card>
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-              <previewTable :row="7" :column="16" />
-            </v-card>
-            <v-card height="150px" class="mb-2" color="blue">
-              <v-system-bar
-                color="black"
-                dark
-                class="ma-0 pa-0"
-              >
-                <span class="room-list ml-1 white--text">Baccarat C02</span>
-                <v-spacer />
-
-                <div
-                  class="d-flex justify-center align-center ma-0 pa-0"
-                  style="width:30%;height:100%;background-color:#196260"
-                >
-                  <span>20</span>
-                </div>
-              </v-system-bar>
-
-              <previewTable :row="7" :column="16" />
-            </v-card>
-          </v-card-text>
-        </v-card>
-      </v-col>
+      <!-- <v-col cols="2"></v-col> -->
+      <button v-show="!drawer" class="Custombutton" style="position:absolute; top:37vh;right:0" @click="drawer=true">
+        <p class="py-5" style="writing-mode: vertical-rl;text-orientation: upright;letter-spacing:-2px;font-size:0.8vw">
+          tables
+        </p>
+      </button>
+      <TableDrawer :drawer="drawer" @close="drawer=false" />
     </v-row>
   </v-container>
 </template>
 
 <script>
-import previewTable from '@/components/previewTable'
+// import previewTable from '@/components/PreviewTable';
 export default {
-  components: {
-    previewTable
-  },
+  // components:{
+  //       previewTable
+  //   },
   data () {
     return {
-      progress: 50,
-      window: 1,
-      tableInfoShow: false,
-      betPoolShow: false
+      drawer: false,
+      coinMenu: false,
+      selectedCoin: [],
+      showingCoin: ['5籌碼.png', '10K籌碼.png', '10籌碼.png', '20K籌碼.png', '50籌碼.png'],
+      coinList: ['5籌碼.png', '10K籌碼.png', '10籌碼.png', '20K籌碼.png', '20籌碼.png', '50籌碼.png', '100籌碼.png',
+        '200籌碼.png', '500籌碼.png', '1000籌碼.png', '2000籌碼.png', '5000籌碼.png'],
+      betCoin: '5籌碼.png'
+    }
+  },
+  computed: {
+    disableCoinSelect () {
+      if (this.selectedCoin.length === 5) {
+        return true
+      } else {
+        return false
+      }
+    }
 
+  },
+  methods: {
+    changeShowing () {
+      this.showingCoin = [...this.selectedCoin]
+      this.coinMenu = false
+    },
+    openCoinSelect () {
+      this.selectedCoin = [...this.showingCoin]
+    },
+    cancelCoinSelect () {
+      this.selectedCoin = []
+      this.coinMenu = false
     }
   }
 }
@@ -674,12 +295,6 @@ export default {
       border-bottom: 1px solid  rgba(255,255,255, 0.3);
     }
 
-    .selectCoin{
-        width: 100%;
-    }
-    .table-info{
-      font-size: 0.7vw;
-    }
     .room-list{
         font-size: 0.8vw;
     }
@@ -691,6 +306,7 @@ export default {
         left:0;
         background-color:rgba(0,0,0,0.5);
         font-size: 1vw;
+        color:white
     }
     .gameCountDown{
         position:absolute;
@@ -698,12 +314,39 @@ export default {
         left:5%;
     }
     .result-cards{
-        background-color:rgba(0, 0, 0, 0.5);
+        background-color:rgba(46, 46, 46, 0.6);
          position:absolute;
-          top:10%;
+          top:5vh;
           left:0;
-        width:30%;
-        height:30vh
+        width:20%;
+        height:23vh
     }
+   .Custombutton {
+      border: none;
+      color: white;
+      padding: 9px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.8vw;
+      margin: 0px 8.5px;
+      cursor: pointer;
+      background-image:url('/icon/選擇桌台ui_1.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+      letter-spacing:20px;
 
+    }
+    .Custombutton:focus {
+    outline: 1px solid #F7D8A8;
+    outline-offset: -4px;
+}
+.selectCoin{
+        /* background-color: rgba(0,0,0,0.5); */
+        width:32vw;
+        position: absolute;
+        right:0;
+        bottom: 0;
+    }
 </style>

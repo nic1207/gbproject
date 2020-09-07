@@ -1,18 +1,22 @@
 <template>
-  <v-card min-height="360">
-    <v-toolbar dark color="#7A6445">
+  <v-card min-height="360" dark color="rgba(34, 34, 34,0.9)">
+    <v-toolbar dark class="AppBar">
       <v-toolbar-title>
-        <v-icon>mdi-setting</v-icon>
+        <v-icon color="black">
+          settings
+        </v-icon>
         Setting
       </v-toolbar-title>
       <v-spacer />
       <v-btn icon dark @click="close">
-        <v-icon>mdi-close</v-icon>
+        <v-icon color="black">
+          mdi-close
+        </v-icon>
       </v-btn>
     </v-toolbar>
     <v-row no-gutters dense>
       <v-col cols="3" class="text-center">
-        <p style="color:#876f4d" class="mt-4">
+        <p style="color:white" class="mt-4">
           Language
         </p>
       </v-col>
@@ -23,7 +27,7 @@
           filled
           label="Language"
           dense
-          background-color="#7A6445"
+          background-color="#C4A76E"
           color="white"
           full-width
           rounded
@@ -35,20 +39,25 @@
     <v-divider />
     <v-row no-gutters dense align="center">
       <v-col cols="3" class="text-center">
-        <p style="color:#876f4d" class="mt-4">
+        <p style="color:white" class="mt-4">
           Studio Sound
         </p>
       </v-col>
 
       <v-col cols="6" class="text-center">
         <v-row no-gutters dense>
-          <v-btn icon color="#876f4d" class="mt-2">
-            <v-icon>volume_up</v-icon>
-            <!-- <v-icon>volume_off</v-icon> -->
+          <v-btn icon color="#B98F38" class="mt-2" @click="studioSound==0? studioSound=10: studioSound=0">
+            <v-icon v-show="studioSound!=0">
+              volume_up
+            </v-icon>
+            <v-icon v-show="studioSound==0">
+              volume_off
+            </v-icon>
           </v-btn>
           <v-slider
             v-model="studioSound"
             class="mt-3"
+            color="#196260"
           />
         </v-row>
       </v-col>
@@ -56,20 +65,25 @@
     <v-divider />
     <v-row no-gutters dense align="center">
       <v-col cols="3" class="text-center">
-        <p style="color:#876f4d" class="mt-4">
+        <p style="color:white" class="mt-4">
           Game Volume
         </p>
       </v-col>
 
       <v-col cols="6" class="text-center">
         <v-row no-gutters dense>
-          <v-btn icon color="#876f4d" class="mt-2">
-            <v-icon>volume_up</v-icon>
-            <!-- <v-icon>volume_off</v-icon> -->
+          <v-btn icon color="#B98F38" class="mt-2" @click="gameVolume==0? gameVolume=10: gameVolume=0">
+            <v-icon v-show="gameVolume!=0">
+              volume_up
+            </v-icon>
+            <v-icon v-show="gameVolume==0">
+              volume_off
+            </v-icon>
           </v-btn>
           <v-slider
             v-model="gameVolume"
             class="mt-3"
+            color="#196260"
           />
         </v-row>
       </v-col>
@@ -80,31 +94,36 @@
           filled
           label="Language"
           dense
-          background-color="#7A6445"
+          background-color="#C4A76E"
           color="white"
           full-width
           rounded
-          class="mt-2"
+          class="mt-2 mr-1"
         />
       </v-col>
     </v-row>
     <v-divider />
     <v-row no-gutters dense align="center">
       <v-col cols="3" class="text-center">
-        <p style="color:#876f4d" class="mt-4">
+        <p style="color:white" class="mt-4">
           Music
         </p>
       </v-col>
 
       <v-col cols="6" class="text-center">
         <v-row no-gutters dense>
-          <v-btn icon color="#876f4d" class="mt-2">
-            <v-icon>volume_up</v-icon>
-            <!-- <v-icon>volume_off</v-icon> -->
+          <v-btn icon color="#B98F38" class="mt-2" @click="music==0? music=10: music=0">
+            <v-icon v-show="music!=0">
+              audiotrack
+            </v-icon>
+            <v-icon v-show="music==0">
+              music_off
+            </v-icon>
           </v-btn>
           <v-slider
             v-model="music"
             class="mt-3"
+            color="#196260"
           />
         </v-row>
       </v-col>
@@ -115,11 +134,11 @@
           filled
           label="Language"
           dense
-          background-color="#7A6445"
+          background-color="#C4A76E"
           color="white"
           full-width
           rounded
-          class="mt-2"
+          class="mt-2 mr-1"
         />
       </v-col>
     </v-row>
@@ -128,14 +147,14 @@
       <v-spacer />
 
       <v-btn
-        color="#7A6445"
+        color="#C4A76E"
         @click="close"
       >
         Confirm
       </v-btn>
 
       <v-btn
-        color="#7A6445"
+        color="#404040"
         @click="close"
       >
         Cancel
@@ -162,3 +181,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+.AppBar{
+  background-image:
+  linear-gradient(
+      rgb(255, 255, 255) 63%,
+      #B98F38
+    );
+    color:black
+}
+</style>

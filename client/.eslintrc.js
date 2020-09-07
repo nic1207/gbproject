@@ -16,6 +16,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'object-shorthand': 0,
-    'no-extra-semi': 'off'
+    'no-extra-semi': 'off',
+    'vue/no-use-v-if-with-v-for': 'off'
   }
 }

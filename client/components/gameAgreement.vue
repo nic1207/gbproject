@@ -1,12 +1,14 @@
 <template>
-  <v-card min-height="360">
-    <v-toolbar dark color="#7A6445">
+  <v-card min-height="360" dark color="rgba(34, 34, 34,0.9)">
+    <v-toolbar dark class="AppBar">
       <v-toolbar-title>
         Game Agreement
       </v-toolbar-title>
       <v-spacer />
       <v-btn icon dark @click="close">
-        <v-icon>mdi-close</v-icon>
+        <v-icon color="black">
+          mdi-close
+        </v-icon>
       </v-btn>
     </v-toolbar>
     <v-card-text>
@@ -29,6 +31,16 @@
         </v-card-actions> -->
   </v-card>
 </template>
+<style scoped>
+.AppBar{
+  background-image:
+  linear-gradient(
+      rgb(255, 255, 255) 63%,
+      #B98F38
+    );
+    color:black
+}
+</style>
 <script>
 export default {
   data () {
