@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 <template>
   <v-container fluid>
     <div class="logo" style="margin-left:470px;" />
@@ -60,7 +61,8 @@ export default {
     }
   },
   mounted () {
-    this.$i18n.setLocaleCookie('zh-tw')
+    console.log('pages.index mounted()')
+    // this.$i18n.setLocaleCookie('zh-tw')
     this.doLogin()
     // this.doGetCode()
   },
@@ -80,7 +82,7 @@ export default {
         const respons = await this.$axios.$post(url, data)
         this.percent = 40
         code = respons.LoginCode
-        console.log('LoginCode=', code)
+        console.log('[debug] LoginCode=', code)
         // this.image = respons.message
       } catch (err) {
         console.log(err)
@@ -88,12 +90,12 @@ export default {
       return code
     },
     async doLogin () {
-      console.log('login()')
+      console.log('[debug] doLogin()')
       // const url = 'ws://121.40.165.18:8800'
       // const url = 'ws://35.229.140.14:30510'
       // this.$connect(url)
       this.percent = 10
-      console.log('this.LoginCode=', this.LoginCode)
+      // console.log('[debug] this.LoginCode=', this.LoginCode)
       if (this.LoginCode === undefined) {
         // for local test
         this.percent = 20
@@ -109,7 +111,7 @@ export default {
             LoginCode: code
           }
         }
-        console.log('cmd=', cmd)
+        // console.log('[debug] cmd=', cmd)
         // const strcmd = JSON.stringify(cmd)
         // console.log('this.$websocket=', this.$websocket)
         const cmder = await this.$websocket.sendAsync(cmd)
@@ -117,35 +119,35 @@ export default {
         // const cmder = JSON.parse(response)
         this.percent = 50
         this.process_201(cmder)
-        console.log('cmder=', cmder)
+        // console.log('[debug] cmder=', cmder)
       } catch (error) {
-        console.log('[debug] error=', error)
+        console.error('[debug] error=', error)
         // for test
         const accountinfo = {
           xxx: 'aaa'
         }
-        console.log('accountinfo=', accountinfo)
+        console.log('[debug] accountinfo=', accountinfo)
         this.$store.commit('setAccount', accountinfo)
         this.percent = 100
         this.$router.push('/roomlist')
       }
     },
     process_201 (cmder) {
-      console.log('201處理登入回傳 process_201(', cmder, ')')
+      // console.log('[debug] 201處理登入回傳 process_201(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           this.percent = 100
           const accountinfo = cmder.B
-          console.log('accountinfo=', accountinfo)
+          console.log('[debug] accountinfo=', accountinfo)
           this.$store.commit('setAccount', accountinfo)
-          this.$i18n.setLocaleCookie(accountinfo.LanguageTypeCode)
+          // this.$i18n.setLocaleCookie(accountinfo.LanguageTypeCode)
           this.$router.push('/roomlist')
         }
         // console.log(this.$store.fetchAccount)
       } else {
         this.percent = 100
-        console.log('get login data fail!')
+        console.log('[debug] get login data fail!')
         // this.$router.push('/roomlist')
       }
     }

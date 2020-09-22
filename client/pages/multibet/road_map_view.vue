@@ -158,7 +158,7 @@ export default {
   },
   methods: {
     AddingFav (project) {
-      console.log('sadsad')
+      console.log('[debug] sadsad')
       project.isFavourite = !project.isFavourite
     }
   }

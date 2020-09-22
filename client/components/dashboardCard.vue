@@ -4,13 +4,13 @@
       <!-- Card bar for 2 cloumn view -->
       <v-row v-if="PropCardSize=='md6'" no-gutters class="dashboard-bar">
         <v-flex row class=" align-center">
-          <span class="black--text textSize ml-4">TableID {{ table && table.TableID }}  </span>
+          <span class="black--text textSize ml-4">{{ table && table.TableName }}  </span>
         </v-flex>
         <v-flex row class="align-center">
           <v-icon color="#B98F38">
             group
           </v-icon>
-          <span class="black--text textSize">{{ table && table.tableinfo && table.tableinfo.Status && table.tableinfo.Status.PlayerCount }} </span>
+          <span class="black--text textSize">{{ playerCount }} </span>
         </v-flex>
         <v-flex row class="align-center">
           <v-img src="/icon/圓庄.png" max-height="1vw" max-width="1vw" />
@@ -24,22 +24,22 @@
           <v-img src="/icon/圓和.png" max-height="1vw" max-width="1vw" />
           <span class="black--text textSize"> {{ table && table.tt }}</span>
         </v-flex>
-        <v-flex>
-          <div class="d-flex white--text textSize justify-center align-center" style="background:#404040; height:30px;">
-            <span> {{ table && table.status }}</span>
+        <v-flex style="flex: 0 1 auto;flex-basis: 100px;height:30px">
+          <div class="d-flex white--text textSize justify-center align-center" :style="StateColor">
+            <span class="white--text textSize"> {{ State }}</span>
           </div>
         </v-flex>
       </v-row>
       <!-- card bar for other column views -->
       <v-row v-if="PropCardSize!='md6'" no-gutters class="dashboard-bar">
         <v-flex row class=" align-center">
-          <span class="black--text textSize ml-4">TableType {{ table && table.TableID }}  </span>
+          <span class="black--text textSize ml-4"> {{ table && table.TableName }}  </span>
         </v-flex>
         <v-flex row class="align-center">
           <v-icon color="#B98F38">
             group
           </v-icon>
-          <span class="black--text textSize">xx{{ table && table.tableinfo && table.tableinfo.Status && table.tableinfo.Status.PlayerCount }}xx</span>
+          <span class="black--text textSize">{{ playerCount }}</span>
         </v-flex>
         <v-flex row class="align-center">
           <v-img src="/icon/圓庄.png" max-height="1vw" max-width="1vw" />
@@ -58,7 +58,7 @@
         </v-flex>
         <v-flex>
           <div class="d-flex white--text textSize justify-center align-center" style="background:#404040; height:30px;">
-            <span> {{ table && table.status }}</span>
+            <span> {{ State }}</span>
           </div>
         </v-flex>
       </v-row>
@@ -69,8 +69,11 @@
           <v-img
             height="100%"
             width="100%"
-            src="/icon/荷官頭圖.png"
+            :src="imageavatar"
           >
+            <div class="subheading text-center align-center white--text textSize" style="background-color:rgba(0,0,0,0.5)">
+              {{ nameavatar }}
+            </div>
             <v-row align="end" class="fill-height" no-gutters>
               <v-col>
                 <div class="subheading text-center white--text textSize" style="background-color:rgba(0,0,0,0.5)">
@@ -94,33 +97,20 @@
                        'background-position': 'center',
                        'background-size': '100% 100%'}"
             >
-              <v-row no-gutters style="height:100%">
+              <v-row no-gutters style="height:100%;width:100%">
                 <div
                   v-if="PropCardSize=='md6'||PropCardSize=='md3'"
                   :style="{height:'100%', width:PropCardSize=='md3'?'100%':'39%',}"
                   class="d-flex align-content-start flex-wrap flex-column"
                 >
                   <v-img
-                    v-if="table && table.tableinfo && table.tableinfo.Status && table.tableinfo.Status.History"
-                    v-for="(hi, index) in table && table.tableinfo && table.tableinfo.Status && table.tableinfo.Status.History"
-                    :key='index'
+                    v-for="(hi, index) in histroy"
+                    :key="index"
                     class="mt-1"
                     :src="images[hi]"
-                    :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'"
-                    :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'"
+                    max-height="calc((100%)/6)"
+                    max-width="calc(100%/11)"
                   />
-                  <!--
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓閒.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓閒.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  <v-img class="mt-1" src="/icon/圓庄.png" :max-height="PropCardSize=='md3'?'0.8vw':'1.4vw'" :max-width="PropCardSize=='md3'?'0.75vw':'1.3vw'" />
-                  -->
                 </div>
                 <div
                   v-if="PropCardSize=='md4'||PropCardSize=='md6'"
@@ -154,7 +144,11 @@
             >
               <!-- <v-input v-model="show">{{show}}</v-input> -->
 
-              <div class=" mr-5 ">
+              <div
+                v-for="(ga, index) in Games"
+                :key="index"
+                class=" mr-5 "
+              >
                 <v-btn
                   class="white--text"
                   :small="PropCardSize=='md3'"
@@ -163,10 +157,10 @@
                   color="#5f4d35"
                   @click="show=true"
                 >
-                  Baccarat
+                  {{ ga.GameCode }}
                 </v-btn>
               </div>
-
+              <!--
               <div class="mr-5 ">
                 <v-btn
                   class="white--text"
@@ -179,17 +173,20 @@
                   7-Seat Baccarat
                 </v-btn>
               </div>
+              -->
             </div>
             <!-- end first button -->
 
             <!-- first button- second action-->
             <div
-              v-if="hover ? show&& hover : show=false "
+              v-if="hover ? show && hover : show=false "
               class=" #1f180e darken-2 v-card--reveal d-flex justify-center align-center flex-wrap display-3 white--text"
 
               style="height: 100%; background:black;"
             >
               <v-btn
+                v-for="(bl, index) in betlimits"
+                :key="index"
                 class="white--text  mr-1"
                 :small="PropCardSize=='md3'"
                 :large="!PropCardSize=='md3'"
@@ -198,55 +195,7 @@
                 link
                 to="/betRoom"
               >
-                10 - 1,000
-              </v-btn>
-
-              <v-btn
-                class="white--text  mr-1"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-                link
-                to="/betRoom"
-              >
-                50 - 5,000
-              </v-btn>
-
-              <v-btn
-                class="white--text mr-1"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-                link
-                to="/betRoom"
-              >
-                100 - 5,000
-              </v-btn>
-
-              <v-btn
-                class="white--text  mr-1"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-                link
-                to="/betRoom"
-              >
-                100 - 5,000
-              </v-btn>
-
-              <v-btn
-                class="white--text  mr-1"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-                link
-                to="/betRoom"
-              >
-                100 - 5,000
+                {{ numFormat(bl.BetSettings[0].PBLL) }} - {{ numFormat(bl.BetSettings[0].PBUL) }}
               </v-btn>
             </div>
             <!-- end first button- second action-->
@@ -259,6 +208,8 @@
               style="height: 100%; background:black;"
             >
               <v-btn
+                v-for="(bl, index) in betlimits"
+                :key="index"
                 class="white--text mr-1"
                 :small="PropCardSize=='md3'"
                 :large="!PropCardSize=='md3'"
@@ -267,55 +218,7 @@
                 link
                 to="/betRoom"
               >
-                10 - 1,000
-              </v-btn>
-
-              <v-btn
-                class="white--text  mr-1"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-                link
-                to="/betRoom"
-              >
-                50 - 5,000
-              </v-btn>
-
-              <v-btn
-                class="white--text mr-1"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-                link
-                to="/betRoom"
-              >
-                100 - 5,000
-              </v-btn>
-
-              <v-btn
-                class="white--text  mr-1"
-                link
-                to="/betRoom"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-              >
-                100 - 5,000
-              </v-btn>
-
-              <v-btn
-                class="white--text  mr-1"
-                :small="PropCardSize=='md3'"
-                :large="!PropCardSize=='md3'"
-                depressed
-                color="#5f4d35"
-                link
-                to="/betRoom"
-              >
-                100 - 5,000
+                {{ numFormat(bl.PBLL) }} - {{ numFormat(bl.PBUL) }}
               </v-btn>
             </div>
             <!-- end second button- second action-->
@@ -341,22 +244,43 @@ export default {
     return {
       show: false,
       secondshow: false,
-      betlimits: [
-        { title: '10 - 1,000' },
-        { title: '50 - 5,000' },
-        { title: '100 - 5,000' },
-        { title: '100 - 10K' },
-        { title: '200 - 20K' }
-      ],
       images: [
         { src: '/icon/0.png' },
         { src: '/icon/圓閒.png' },
         { src: '/icon/圓和.png' },
         { src: '/icon/圓庄.png' }
-      ]
+      ],
+      WinText: {
+        0: this.$t('GAMEWIN.UWIN'),
+        1: this.$t('GAMEWIN.PWIN'),
+        2: this.$t('GAMEWIN.TWIN'),
+        3: this.$t('GAMEWIN.BWIN')
+      },
+      StateText: {
+        11: this.$t('GAMESTATE.READY'),
+        21: this.$t('GAMESTATE.SUFFLE'),
+        31: this.$t('GAMESTATE.BET'),
+        41: this.$t('GAMESTATE.DRAW_CARDS'),
+        51: this.$t('GAMESTATE.SETTLE')
+      }
     }
   },
   computed: {
+    imageavatar () {
+      if (this.table && this.table.tableinfo && this.table.tableinfo.DealerAvatar) {
+        // console.log('this.table.tableinfo=', this.table.tableinfo)
+        return this.table.tableinfo.DealerAvatar
+      } else {
+        return '/icon/荷官頭圖.png'
+      }
+    },
+    nameavatar () {
+      if (this.table && this.table.tableinfo && this.table.tableinfo.DealerName) {
+        return this.table.tableinfo.DealerName
+      } else {
+        return ''
+      }
+    },
     cardSize () {
       switch (this.PropCardSize) {
         case 'md6':
@@ -384,12 +308,92 @@ export default {
             md3: false
           }
       }
+    },
+    State () {
+      if (this.table && this.table.tableinfo && this.table.tableinfo.State) {
+        const st = this.table.tableinfo.State
+        // console.log('tableinfo.State=', this.table.tableinfo.State)
+        if (st === 31 && this.table.tableinfo.Desktop.BetTimeCountDown > 1000) {
+          // console.log('BetTimeCountDown=', this.table.tableinfo.Desktop.BetTimeCountDown)
+          return (this.table.tableinfo.Desktop.BetTimeCountDown / 1000)
+        } else if (st === 41) { // DRAW_CARDS 開牌
+          const win = this.table.tableinfo.Desktop.Winlose
+          return this.WinText[win]
+        } else {
+          return this.StateText[st]
+        }
+      } else {
+        return ''
+      }
+    },
+    StateColor () {
+      if (this.table && this.table.tableinfo && this.table.tableinfo.State) {
+        const st = this.table.tableinfo.State
+        // console.log('tableinfo.State=', this.table.tableinfo.State)
+        if (st === 11) { // READY 準備
+          return 'background:dimgrey;height:30px'
+        } else if (st === 21) { // SUFFLE 洗牌中
+          return 'background:rebeccapurple;height:30px'
+        } else if (st === 31) { // BET 可押注
+          return 'background:darkcyan;height:30px'
+        } else if (st === 41) { // DRAW_CARDS 開牌
+          const win = this.table.tableinfo.Desktop.Winlose
+          if (win === 1) { // player win
+            return 'background:blue;height:30px'
+          } else if (win === 2) { // tie
+            return 'background:green;height:30px'
+          } else if (win === 3) { // bank win
+            return 'background:darkred;height:30px'
+          } else {
+            return 'background:black;height:30px'
+          }
+        } else if (st === 51) { // SETTLE 結算
+          return 'background:darkslategrey;height:30px'
+        } else {
+          return 'background:green;height:30px'
+        }
+      } else {
+        return 'background:black;height:30px'
+      }
+    },
+    Games () {
+      // console.log('[debug] lobby=', this.$store.state.lobby)
+      if (this.$store.state.lobby) {
+        // console.log('[debug] Games=', this.$store.state.lobby.Games)
+        return this.$store.state.lobby.Games
+      } else {
+        return []
+      }
+    },
+    histroy () {
+      if (this.table && this.table.tableinfo && this.table.tableinfo.History) {
+        // console.log('this.table.tableinfo=', this.table.tableinfo)
+        return this.table.tableinfo.History
+        // return ['1']
+      } else {
+        return []
+      }
+    },
+    betlimits () {
+      if (this.$store.state.groups) {
+        // console.log('this.$store.state.groups=', this.$store.state.groups)
+        return this.$store.state.groups.Groups
+      } else {
+        return []
+      }
+    },
+    playerCount () {
+      if (this.table && this.table.tableinfo && this.table.tableinfo.PlayerCount) {
+        return this.table.tableinfo.PlayerCount
+      } else {
+        return 0
+      }
     }
   },
   methods: {
     async joinGame () {
-      console.log('joinGame(', this.table, ')')
-      console.log('tihs.token=', this.token)
+      console.log('[debug] joinGame(', this.table, ')')
+      console.log('[debug] tihs.token=', this.token)
       try {
         const cmdBody = {
           Token: this.token,
@@ -403,27 +407,35 @@ export default {
           B: cmdBody
         }
         // const strcmd = JSON.stringify(cmd)
-        console.log('cmd=', cmd)
+        console.log('[debug] cmd=', cmd)
         // this.send(strcmd)
         const cmder = await this.$websocket.sendAsync(cmd)
-        // console.log('Response.data:', response.data)
+        // console.log('[debug] Response.data:', response.data)
         // const cmder = JSON.parse(response)
         this.process_20001(cmder)
       } catch (error) {
-        console.log('[debug] error=', error)
+        console.error('[debug] error=', error)
         this.$router.push('/betRoom')
       }
     },
     // RESPONSE_JOIN_GAME_RESULT
     process_20001 (cmder) {
-      console.log('處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
+      console.log('[debug] 處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
       if (cmder.SC === 1000) { // success
-        console.log('join table success!')
+        console.log('[debug] join table success!')
         this.$router.push('/betRoom')
         // this.intable = true
       } else {
-        console.log('join table fail!', cmder)
+        console.log('[debug] join table fail!', cmder)
         this.$router.push('/betRoom')
+      }
+    },
+    numFormat (num) {
+      // console.log('numFormat(', num, ')')
+      if (num >= 10000000) {
+        return (num / 10000000) + 'K'
+      } else {
+        return (num / 10000)
       }
     }
   }

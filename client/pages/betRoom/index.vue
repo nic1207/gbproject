@@ -9,7 +9,7 @@
         :style="{ left: page.left+ 'vw', top: page.top+ 'px' ,position:'absolute','z-index':1000}"
         :src="'/coin/'+betCoin"
       />
-      <TutorialBetroom1 v-if="tutorial" @close="tutorial=false" />
+      <TutorialBetroom1 v-if="tutorial" @close="do_tutorial" />
       <v-col class="pa-0" cols="7">
         <div id="v-step-0" class="playTable">
           <video
@@ -376,7 +376,7 @@ export default {
       activeSrc: 'http://125.227.164.63:3310/live/test.m3u8',
       page: { left: 170, top: 0 },
       showImage: false,
-      tutorial: true,
+      tutorial: false,
       drawer: false,
       coinMenu: false,
       selectedCoin: [],
@@ -401,8 +401,12 @@ export default {
   //       tableDrawer
   //   },
   mounted () {
+    const xx = this.$cookies.get('t_betroom')
+    this.tutorial = !xx
+    console.log('xxxx this.tutorial=', this.tutorial)
+
     if (this.player === null) {
-      console.log('zzzzzzzzzzzzzzzzzzz')
+      console.log('[debug] zzzzzzzzzzzzzzzzzzz')
       const player = Videojs('avatorplayer', {
         sources: [{ src: this.activeSrc }],
         autoplay: true,
@@ -418,8 +422,8 @@ export default {
   },
   methods: {
     onMouseMove (e) {
-      console.log('page x: ', e.pageX * 100 / window.screen.width, e.clientY)
-      console.log(window.screen.width)
+      // console.log('[debug] page x: ', e.pageX * 100 / window.screen.width, e.clientY)
+      // console.log(window.screen.width)
       this.page.left = (e.pageX * 100 / window.screen.width) - 7
       this.page.top = e.pageY
     },
@@ -433,6 +437,11 @@ export default {
     cancelCoinSelect () {
       this.selectedCoin = []
       this.coinMenu = false
+    },
+    do_tutorial () {
+      console.log('do_tutorial()')
+      this.tutorial = false
+      this.$cookies.set('t_betroom', 1)
     }
   }
 }

@@ -49,28 +49,16 @@
         <v-list>
           <v-divider />
           <v-list-item
-            link
-            class="red--text text-center "
-          >
-            <v-list-item-content>
-              <v-list-item-title class="text-size">
-                <v-icon>email</v-icon> {{ $t('LEFTMENU.FEEDBACK') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider />
-          <v-list-item
             class="red--text text-center"
-            link
           >
             <v-list-item-content>
               <v-list-item-title class="text-size">
-                <v-icon>people</v-icon> &nbsp;&nbsp;{{ online }}
+                <v-icon>people</v-icon> &nbsp;&nbsp;{{ TotalCount }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-divider />
-          <v-list-item class="red--text text-center" link>
+          <v-list-item class="red--text text-center">
             <v-list-item-content>
               <v-list-item-title class="text-size">
                 {{ version }}
@@ -122,7 +110,7 @@
       <setting @close="settingDialog=false" />
     </v-dialog>
     <v-footer
-      color="white"
+      color="black"
       padless
       height="40px"
       inset
@@ -262,22 +250,45 @@
               </v-row>
             </v-card>
           </v-menu>
-          <v-btn v-if="!showViewList" icon link :to="toRouteName+'/default'" exact>
-            <v-icon class="pa-2 " color="#B98F38">
-              view_list
-            </v-icon>
-          </v-btn>
-          <v-btn v-if="!showViewList" icon link :to="toRouteName+'/road_map_view'" exact>
-            <v-icon class="pa-2 " color="#B98F38">
-              view_module
-            </v-icon>
-          </v-btn>
-          <v-btn v-if="!showViewList" icon link :to="toRouteName+'/big_road_view'" exact>
-            <v-icon class="pa-2 " color="#B98F38">
-              view_column
-            </v-icon>
-          </v-btn>
-
+          <v-btn-toggle v-model="toggle_exclusive" color="#B98F38">
+            <v-btn
+              v-if="!showViewList"
+              value="0"
+              icon
+              link
+              background-color="primary"
+              :to="toRouteName+'?vtype=default'"
+              exact
+            >
+              <v-icon class="pa-2 " color="#B98F38">
+                view_list
+              </v-icon>
+            </v-btn>
+            <v-btn
+              v-if="!showViewList"
+              value="1"
+              icon
+              link
+              :to="toRouteName+'?vtype=road_map_view'"
+              exact
+            >
+              <v-icon class="pa-2 " color="#B98F38">
+                view_module
+              </v-icon>
+            </v-btn>
+            <v-btn
+              v-if="!showViewList"
+              value="2"
+              icon
+              link
+              :to="toRouteName+'?vtype=big_road_view'"
+              exact
+            >
+              <v-icon class="pa-2 " color="#B98F38">
+                view_column
+              </v-icon>
+            </v-btn>
+          </v-btn-toggle>
           <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
             <v-img src="/icon/高清按鈕.png" />
           </v-btn>
@@ -358,33 +369,6 @@
                   </v-list-item-icon>
                   {{ item.title }}
                 </v-list-item>
-                <!--
-                <v-list-item link @click="betlogDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>history</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Bet Log  </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item link @click="memberReportDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>text_snippet</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Member Report</v-list-item-content>
-                </v-list-item>
-                <v-list-item link @click="settingDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>settings</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Settings</v-list-item-content>
-                </v-list-item>
-                <v-list-item link @click="gameAgreementDialog=true">
-                  <v-list-item-icon>
-                    <v-icon>info</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>Game Agreement</v-list-item-content>
-                </v-list-item>
-                -->
                 <v-list-item>
                   <v-list-item-action-text>
                     v0.123
@@ -417,7 +401,6 @@ export default {
   data () {
     return {
       LoginCode: this.$nuxt.$route.query.LoginCode,
-      online: 1,
       Now: this.$moment().format('YYYY-MM-DD HH:mm:ss Z'),
       version: 'v0.0.10',
       mylogo: 'img/logo.png',
@@ -431,31 +414,7 @@ export default {
       memberReportDialog: false,
       gameAgreementDialog: false,
       settingDialog: false,
-      /*
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'BACCARAT',
-          to: '/roomlist/default'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Other Games',
-          to: '/inspire'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'MULTI-BET',
-          to: '/multibet/default'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Mobile',
-          to: '#'
-        }
-
-      ],
-      */
+      toggle_exclusive: 0,
       LeftMenu: [
         {
           title: this.$t('LEFTMENU.BACCARAT'),
@@ -500,7 +459,6 @@ export default {
     }
   },
   computed: {
-
     toRouteName () {
       const routeArr = this.$route.name.split('-')
       if (routeArr.includes('multibet')) {
@@ -510,9 +468,9 @@ export default {
       }
     },
     showViewList () {
-      console.log('this.$route=', this.$route)
+      // console.log('[debug] this.$route=', this.$route)
       const routeArr = this.$route.name.split('-')
-      console.log(routeArr)
+      // console.log(routeArr)
       if (routeArr.includes('betRoom')) {
         return true
       } else {
@@ -520,18 +478,43 @@ export default {
       }
     },
     Money () {
-      // console.log('Money=', this.$store.state.user)
+      // console.log('[debug] Money=', this.$store.state.user)
       if (this.$store.state.user && this.$store.state.user.Point) {
-        return this.$store.state.user.Point
+        return (this.$store.state.user.Point / 10000)
+      } else {
+        return 0
+      }
+    },
+    TotalCount () {
+      if (this.$store.state.tables && this.$store.state.tables.Tables) {
+        const arr = this.$store.state.tables.Tables
+        let count = 0
+        arr.forEach((item) => {
+          // console.log('item=', item)
+          if (item) {
+            count += item.PlayerCount
+          }
+        })
+        // console.log('count=', count)
+        return count
       } else {
         return 0
       }
     }
   },
+  watch: {
+  },
   loading: false,
   mounted () {
     // this.connect()
     // Always call on message
+    this.doLogin()
+    this.recheckToken()
+    console.log('default.mounted()', this.$i18n)
+    this.$websocket.addEventListener('close', (event) => {
+      console.log('The connection has been closed successfully.')
+    })
+    // this.$i18n.setLocaleCookie('zh_tw')
     this.$websocket.addEventListener('any', (cmder) => {
       // console.log('xxxxxxxxxxxxxxxxxx Got a message: ', cmder)
       // const cmder = JSON.parse(data)
@@ -544,9 +527,12 @@ export default {
     // console.log('this.$store.state.account=', this.$store.state.account)
     this.PLAYER_NAME = this.$store.state.account.AccountName
   },
+  beforeDestroy () {
+    this.$websocket.removeEventListener('any')
+  },
   methods: {
     toggle (index) {
-      console.log('toggle(', index, ')')
+      console.log('[debug] toggle(', index, ')')
       switch (index) {
         case 0:
           this.betlogDialog = true
@@ -571,62 +557,12 @@ export default {
       this.Now = this.$moment().format('YYYY-MM-DD HH:mm:ss Z')
       // console.log(this.Now)
     },
-    /*
-    connect () {
-      // this.$nextTick(() => {
-        // this.$nuxt.$loading.start()
-      // })
-      // console.log('this.$nuxt.$loading=', this.$nuxt.$loading)
-      // const url = 'ws://121.40.165.18:8800'
-      // const url = 'ws://localhost:3333'
-
-      const url = 'ws://35.229.140.14:30510'
-      console.log('建立連線至...connect(url=', url, ')')
-      if (this.websocket === undefined) {
-        this.websocket = this.$initWebSocket(url)
-        // console.log('this.websocket=', this.websocket)
-        const that = this
-        this.websocket.onopen = function () {
-          that.$nextTick(() => {
-            // that.$nuxt.$loading.finish()
-          })
-          console.log('WebSocket連線成功 WebSocket connected.')
-          that.signin_by_logincode()
-          // this.send('aaa')
-        }
-        this.websocket.onmessage = function (e) {
-          // console.log('onMessage(', e.data, ')')
-          that.processMsg(e.data)
-        }
-        this.websocket.onerror = function (err) {
-          that.$nextTick(() => {
-            // that.$nuxt.$loading.finish()
-          })
-          console.error('onerror() Socket encountered error: ', err, 'Closing socket')
-          that.websocket.close()
-        }
-        this.websocket.onclose = function (e) {
-          that.$nextTick(() => {
-            // that.$nuxt.$loading.finish()
-          })
-          that.websocket = undefined
-          that.$clearWebSocket()
-          const tt = 3000
-          console.log('onclose() webSocket is closed.')
-          console.log('Reconnect will be attempted in', (tt / 1000), ' second.', e.reason)
-          setTimeout(function () {
-            that.connect()
-          }, tt)
-        }
-      }
-    },
-    */
     // 登出
     async signout () {
       this.logoutDialog = false
       // this.$nuxt.$loading.start()
       const token = this.$store.state.account.Token
-      console.log('要求登出 signout()', token)
+      console.log('[debug] 要求登出 signout()', token)
       const cmd = {
         SN: 2,
         CID: 199,
@@ -642,9 +578,113 @@ export default {
       // const cmder = JSON.parse(response)
       this.processMsg(cmder)
     },
+    async doGetCode () {
+      let code = ''
+      try {
+        const url = 'http://35.229.140.14:30000/api/Agent/GetGameEntrance'
+        const data = {
+          AgentKey: '6J4wV3iFdUakdSiritwpMw',
+          AccountName: 'DEMO999',
+          GameProductionCode: 'STREAM_GAMING',
+          LanguageTypeCode: 'en',
+          ReturnURI: '',
+          NotifyPlatformPlayerLeaveCallback: ''
+        }
+        const respons = await this.$axios.$post(url, data)
+        this.percent = 40
+        code = respons.LoginCode
+        console.log('[debug] LoginCode=', code)
+        // this.image = respons.message
+      } catch (err) {
+        console.log(err)
+      }
+      return code
+    },
+    async doLogin () {
+      console.log('[debug] default.doLogin()')
+      // const url = 'ws://121.40.165.18:8800'
+      // const url = 'ws://35.229.140.14:30510'
+      // this.$connect(url)
+      this.percent = 10
+      // console.log('[debug] this.LoginCode=', this.LoginCode)
+      if (this.LoginCode === undefined) {
+        // for local test
+        this.percent = 20
+        this.LoginCode = await this.doGetCode()
+      }
+      const code = this.LoginCode
+      try {
+        const cmd = {
+          SN: 1,
+          CID: 101,
+          SC: 1000,
+          B: {
+            LoginCode: code
+          }
+        }
+        // console.log('[debug] cmd=', cmd)
+        // const strcmd = JSON.stringify(cmd)
+        // console.log('this.$websocket=', this.$websocket)
+        const cmder = await this.$websocket.sendAsync(cmd)
+        // console.log('Response:', response)
+        // const cmder = JSON.parse(response)
+        this.percent = 50
+        this.process_201(cmder)
+        // console.log('[debug] cmder=', cmder)
+      } catch (error) {
+        console.error('[debug] error=', error)
+        // for test
+        const accountinfo = {
+          xxx: 'aaa'
+        }
+        console.log('[debug] accountinfo=', accountinfo)
+        this.$store.commit('setAccount', accountinfo)
+        this.percent = 100
+        this.$router.push('/roomlistdefault')
+      }
+    },
+    async recheckToken () {
+      this.logoutDialog = false
+      // this.$nuxt.$loading.start()
+      const token = this.$store.state.account.Token
+      console.log('[debug] recheckToken() token=', token)
+      const cmd = {
+        SN: 3,
+        CID: 102,
+        SC: 1000,
+        B: {
+          Token: token
+        }
+      }
+      // console.log('strcmd=', strcmd)
+      // this.send(strcmd)
+      const cmder = await this.$websocket.sendAsync(cmd)
+      // console.log('Response.data:', response.data)
+      // const cmder = JSON.parse(response)
+      this.processMsg(cmder)
+    },
+    process_201 (cmder) {
+      // console.log('[debug] 201處理登入回傳 process_201(', cmder, ')')
+      // this.$nuxt.$loading.finish()
+      if (cmder.SC === 1000) { // success
+        if (cmder.B) {
+          this.percent = 100
+          const accountinfo = cmder.B
+          console.log('[debug] accountinfo=', accountinfo)
+          this.$store.commit('setAccount', accountinfo)
+          // this.$i18n.setLocaleCookie(accountinfo.LanguageTypeCode)
+          this.$router.push('/roomlist')
+        }
+        // console.log(this.$store.fetchAccount)
+      } else {
+        this.percent = 100
+        console.log('[debug] get login data fail!')
+        // this.$router.push('/roomlist')
+      }
+    },
     // RESPONSE_RECHECK_TOKEN_RESULT
     process_202 (cmder) {
-      // console.log('202 重新檢查token回傳 process_202(', cmder, ')')
+      console.log('202 重新檢查token回傳 process_202(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
@@ -652,65 +692,79 @@ export default {
           // console.log('accountinfo=', accountinfo)
           this.$store.commit('setAccount', accountinfo)
         }
-        console.log('this.$store.state.account=', this.$store.state.account)
+        console.log('[debug] this.$store.state.account=', this.$store.state.account)
         // console.log(this.$store.fetchAccount)
       } else {
-        console.log('get login data fail!')
+        console.log('[debug] get login data fail!')
       }
     },
     // REFLASH_MEMBER_INFO
     process_203 (cmder) {
-      // console.log('203處理會員資訊 process_203(', cmder, ')')
+      // console.log('203處理更新會員資訊 process_203(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const userinfo = cmder.B
-          // console.log('userinfo=', userinfo)
+          // console.log('更新會員資訊 userinfo=', userinfo)
           this.$store.commit('setUser', userinfo)
         }
         // .log('this.$store.state.user=', this.$store.state.user)
       } else {
-        console.log('get user data fail!')
+        console.log('[debug] get user data fail!')
       }
     },
     // REFLASH_GAME_LOBBY_INFO
     process_204 (cmder) {
-      // console.log('204處理遊戲大廳資訊 process_204(', cmder, ')')
+      console.log('204處理更新遊戲大廳資訊 process_204(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const lobbyinfo = cmder.B
-          // console.log('lobbyinfo=', lobbyinfo)
+          // console.log('更新遊戲大廳資訊 lobbyinfo=', lobbyinfo)
           this.$store.commit('setLobby', lobbyinfo)
         }
         // console.log('this.$store.state.lobby=', this.$store.state.lobby)
       } else {
-        console.log('get lobby data fail!')
+        console.log('[debug] get lobby data fail!')
       }
     },
     // REFLASH_GAME_TABLE_STATUS
     process_205 (cmder) {
-      // console.log('205處理遊戲桌資訊 process_205(', cmder, ')')
+      console.log('205處理更新遊戲桌資訊 process_205(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          const TableStatus = cmder.B.TableStatus
-          // console.log('TableStatus=', TableStatus)
-          this.$store.commit('setTables', TableStatus)
+          const Tables = cmder.B
+          console.log('更新遊戲桌資訊 Tables=', Tables)
+          this.$store.commit('setTables', Tables)
         }
         // console.log('this.$store.state.tables=', this.$store.state.tables)
       } else {
-        console.log('get tables data fail!')
+        console.log('[debug] get tables data fail!')
+      }
+    },
+    // REFLASH_GAME_GROUP
+    process_206 (cmder) {
+      console.log('206 處理刷新群組資訊 process_206(', cmder, ')')
+      if (cmder.SC === 1000) { // success
+        if (cmder.B) {
+          const groups = cmder.B
+          // console.log('更新群組資訊 groups=', groups)
+          this.$store.commit('setGroups', groups)
+        }
+        // console.log('this.$store.state.tables=', this.$store.state.tables)
+      } else {
+        console.log('[debug] get groups data fail!')
       }
     },
     // RESPONSE_SIGN_OUT
     process_299 (cmder) {
-      console.log('處理登出回傳299 process_299(', cmder, ')')
+      console.log('[debug] 處理登出回傳299 process_299(', cmder, ')')
       // this.$nuxt.$loading.finish()
       this.$store.commit('clear')
       this.$router.push('/')
     },
     // REFLASH_TALBE_STATUS
     process_20002 (cmder) {
-      // console.log('更新遊戲桌狀態20002 process_20002(', cmder, ')')
+      // console.log('[debug] 更新遊戲桌狀態20002 process_20002(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           // const gametableinfo = cmder.B
@@ -723,7 +777,7 @@ export default {
     },
     // REFLASH_BET_INFOS
     process_20003 (cmder) {
-      // console.log('更新下注資訊20003 process_20003(', cmder, ')')
+      // console.log('[debug] 更新下注資訊20003 process_20003(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           // const betinfo = cmder.B
@@ -736,7 +790,7 @@ export default {
     },
     // REFLASH_GAME_HISTORY
     process_20004 (cmder) {
-      // console.log('更新遊戲歷史資訊20004 process_20004(', cmder, ')')
+      // console.log('[debug] 更新遊戲歷史資訊20004 process_20004(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           // const history = cmder.B
@@ -749,7 +803,7 @@ export default {
     },
     // RESPONSE_BET_RESULT
     process_20011 (cmder) {
-      // console.log('回傳下注結果20011 process_20011(', cmder, ')')
+      console.log('[debug] 回傳下注結果20011 process_20011(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           // const betinfo = cmder.B
@@ -762,7 +816,7 @@ export default {
     },
     // RESPONSE_LEAVE_GAME_RESULT
     process_20099 (cmder) {
-      console.log('回傳離開遊戲桌結果20099 process_20099(', cmder, ')')
+      console.log('[debug] 回傳離開遊戲桌結果20099 process_20099(', cmder, ')')
       if (cmder.SC === 1000) { // success
         console.log('leave table success!')
       } else {
@@ -819,7 +873,7 @@ export default {
     },
     */
     leaveGame () {
-      console.log('離開遊戲桌 leaveGame()')
+      console.log('[debug] 離開遊戲桌 leaveGame()')
       const token = this.$store.state.account.Token
       const cmd = {
         SN: 2,
@@ -834,7 +888,7 @@ export default {
       this.send(strcmd)
     },
     processMsg (cmder) {
-      // console.log('processMsg(msg=', msg, ')')
+      // console.log('processMsg(cmder=', cmder, ')')
       // const cmder = JSON.parse(msg)
       // console.log('processMsg(cmder=', cmder, ')')
       switch (cmder.CID) {
@@ -852,6 +906,9 @@ export default {
           break
         case 205:// REFLASH_GAME_TABLE_STATUS
           this.process_205(cmder)
+          break
+        case 206:// REFLASH_GAME_GROUP
+          this.process_206(cmder)
           break
         case 299:// RESPONSE_SIGN_OUT
           this.process_299(cmder)
@@ -875,7 +932,7 @@ export default {
           this.process_20099(cmder)
           break
         default:
-          console.error('no process CommandID=', cmder.CommandHeader.CommandID)
+          console.error('no process cmder=', cmder)
           break
       }
     }

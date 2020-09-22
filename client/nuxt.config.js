@@ -49,6 +49,8 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    { src: '@/plugins/vue-cookie.js', mode: 'client' },
+    { src: '@/plugins/vuex-persist', mode: 'client' },
     { src: '@/plugins/vueTour.js', mode: 'client' },
     { src: '@/plugins/element-ui', mode: 'client' },
     { src: '@/plugins/websocket-async-client', mode: 'client' }
@@ -75,7 +77,7 @@ export default {
     ['nuxt-i18n', {
       locales: [
         {
-          name: '繁中',
+          name: '繁體中文',
           code: 'zh-TW',
           iso: 'zh-TW',
           file: 'zh-tw.js'

@@ -5,7 +5,7 @@
         <v-icon color="black">
           settings
         </v-icon>
-        Setting
+        {{ $t('SETTING.SETTING') }}
       </v-toolbar-title>
       <v-spacer />
       <v-btn icon dark @click="close">
@@ -17,13 +17,15 @@
     <v-row no-gutters dense>
       <v-col cols="3" class="text-center">
         <p style="color:white" class="mt-4">
-          Language
+          {{ $t('SETTING.LANGUAGE') }}
         </p>
       </v-col>
       <v-col cols="3">
         <v-select
           v-model="selectedLanguage"
-          :items="language"
+          :items="availableLocales"
+          item-text="name"
+          item-value="code"
           filled
           label="Language"
           dense
@@ -40,7 +42,7 @@
     <v-row no-gutters dense align="center">
       <v-col cols="3" class="text-center">
         <p style="color:white" class="mt-4">
-          Studio Sound
+          {{ $t('SETTING.STUDIOSOUND') }}
         </p>
       </v-col>
 
@@ -66,7 +68,7 @@
     <v-row no-gutters dense align="center">
       <v-col cols="3" class="text-center">
         <p style="color:white" class="mt-4">
-          Game Volume
+          {{ $t('SETTING.GAMEVOLUME') }}
         </p>
       </v-col>
 
@@ -88,6 +90,7 @@
         </v-row>
       </v-col>
       <v-col cols="3">
+        <!--
         <v-select
           v-model="selectedLanguage"
           :items="language"
@@ -100,13 +103,14 @@
           rounded
           class="mt-2 mr-1"
         />
+        -->
       </v-col>
     </v-row>
     <v-divider />
     <v-row no-gutters dense align="center">
       <v-col cols="3" class="text-center">
         <p style="color:white" class="mt-4">
-          Music
+          {{ $t('SETTING.MUSIC') }}
         </p>
       </v-col>
 
@@ -128,6 +132,7 @@
         </v-row>
       </v-col>
       <v-col cols="3">
+        <!--
         <v-select
           v-model="selectedLanguage"
           :items="language"
@@ -140,6 +145,7 @@
           rounded
           class="mt-2 mr-1"
         />
+        -->
       </v-col>
     </v-row>
     <v-divider />
@@ -150,14 +156,14 @@
         color="#C4A76E"
         @click="close"
       >
-        Confirm
+        {{ $t('SETTING.CONFIRM') }}
       </v-btn>
 
       <v-btn
         color="#404040"
         @click="close"
       >
-        Cancel
+        {{ $t('SETTING.CANCEL') }}
       </v-btn>
       <v-spacer />
     </v-card-actions>
@@ -167,15 +173,36 @@
 export default {
   data () {
     return {
-      language: ['English', 'Chinese', 'Thai', 'Malaysia'],
-      selectedLanguage: 'English',
+      selectedLanguage: '',
       studioSound: 50,
       gameVolume: 30,
       music: 40
     }
   },
+  computed: {
+    availableLocales () {
+      // console.log(this.$i18n.locales.filter(i => i.code !== this.$i18n.locale))
+      console.log(this.$i18n.locales)
+      return this.$i18n.locales
+    }
+  },
+  mounted () {
+    console.log('setting.mounted() this.$i18n.locale=', this.$i18n.locale)
+    this.selectedLanguage = this.$i18n.locale
+  },
   methods: {
     close () {
+      console.log('this.selectedLanguage=', this.selectedLanguage)
+      const code = this.selectedLanguage
+      // console.log(this.$i18n)
+      // this.$i18n.setLocaleCookie(code)
+      this.$i18n.setLocale(code)
+      // console.log(this.switchLocalePath)
+      // this.$i18n.setLocaleMessage(code, module.default)
+      // this.switchLocalePath(code)
+      // this.$router.push(this.switchLocalePath(code))
+      // window.location.reload(true)
+      // this.$root.$i18n.switchLocalePath(this.selectedLanguage)
       this.$emit('close')
     }
   }
