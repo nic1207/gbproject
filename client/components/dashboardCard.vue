@@ -13,15 +13,15 @@
           <span class="black--text textSize">{{ playerCount }} </span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/圓庄.png" max-height="1vw" max-width="1vw" />
+          <v-img src="/icon/cb.png" max-height="1vw" max-width="1vw" />
           <span class="black--text textSize">{{ table && table.bb }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/圓閒.png" max-height="1vw" max-width="1vw" />
+          <v-img src="/icon/cp.png" max-height="1vw" max-width="1vw" />
           <span class="black--text textSize">{{ table && table.pp }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/圓和.png" max-height="1vw" max-width="1vw" />
+          <v-img src="/icon/ct.png" max-height="1vw" max-width="1vw" />
           <span class="black--text textSize"> {{ table && table.tt }}</span>
         </v-flex>
         <v-flex style="flex: 0 1 auto;flex-basis: 100px;height:30px">
@@ -42,18 +42,18 @@
           <span class="black--text textSize">{{ playerCount }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/圓庄.png" max-height="1vw" max-width="1vw" />
+          <v-img src="/icon/cb.png" max-height="1vw" max-width="1vw" />
           <span class="black--text textSize">{{ table && table.bb }}</span>
         </v-flex>
       </v-row>
       <!-- card bar for other column views -->
       <v-row v-if="PropCardSize!='md6'" no-gutters class="dashboard-bar">
         <v-flex row class="align-center ml-1">
-          <v-img src="/icon/圓閒.png" max-height="1vw" max-width="1vw" />
+          <v-img src="/icon/cp.png" max-height="1vw" max-width="1vw" />
           <span class="black--text textSize">{{ table && table.pp }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/圓和.png" max-height="1vw" max-width="1vw" />
+          <v-img src="/icon/ct.png" max-height="1vw" max-width="1vw" />
           <span class="black--text textSize"> {{ table && table.tt }}</span>
         </v-flex>
         <v-flex>
@@ -74,7 +74,7 @@
             <div class="subheading text-center align-center white--text textSize" style="background-color:rgba(0,0,0,0.5)">
               {{ nameavatar }}
             </div>
-            <v-row align="end" class="fill-height" no-gutters>
+            <v-row class="align-end fill-height" no-gutters>
               <v-col>
                 <div class="subheading text-center white--text textSize" style="background-color:rgba(0,0,0,0.5)">
                   {{ table && table.name }}
@@ -90,7 +90,7 @@
             <div
               :style="{width:'100%', height:'100%',
                        'background-image': 'url(\'/icon/'+
-                         `${PropCardSize=='md6'?'珠盤路單(大).png':PropCardSize=='md4'?'檯桌棋盤格.png':'珠盤路單(小).png'}`
+                         `${PropCardSize=='md6'?'road_big.png':PropCardSize=='md4'?'chess.png':'road_small.png'}`
                          //chaing background image based on card size and column views
                          + '\')',
                        'background-repeat': 'no-repeat',
@@ -157,7 +157,7 @@
                   color="#5f4d35"
                   @click="show=true"
                 >
-                  {{ ga.GameCode }}
+                  {{ $t('TABLE.'+ga.GameCode) }}
                 </v-btn>
               </div>
               <!--
@@ -193,7 +193,7 @@
                 depressed
                 color="#5f4d35"
                 link
-                to="/betRoom"
+                @click="joinGame(Games[0].GameID, table.TableID, bl.GroupID)"
               >
                 {{ numFormat(bl.BetSettings[0].PBLL) }} - {{ numFormat(bl.BetSettings[0].PBUL) }}
               </v-btn>
@@ -216,7 +216,7 @@
                 depressed
                 color="#5f4d35"
                 link
-                to="/betRoom"
+                @click="joinGame(Games[0].GameID, table.TableID, bl.GroupID)"
               >
                 {{ numFormat(bl.PBLL) }} - {{ numFormat(bl.PBUL) }}
               </v-btn>
@@ -234,7 +234,6 @@
 export default {
   props: [
     'table',
-    'token',
     'PropCardSize'
   ],
   //   components:{
@@ -246,9 +245,9 @@ export default {
       secondshow: false,
       images: [
         { src: '/icon/0.png' },
-        { src: '/icon/圓閒.png' },
-        { src: '/icon/圓和.png' },
-        { src: '/icon/圓庄.png' }
+        { src: '/icon/cp.png' },
+        { src: '/icon/ct.png' },
+        { src: '/icon/cb.png' }
       ],
       WinText: {
         0: this.$t('GAMEWIN.UWIN'),
@@ -257,11 +256,11 @@ export default {
         3: this.$t('GAMEWIN.BWIN')
       },
       StateText: {
-        11: this.$t('GAMESTATE.READY'),
-        21: this.$t('GAMESTATE.SUFFLE'),
-        31: this.$t('GAMESTATE.BET'),
-        41: this.$t('GAMESTATE.DRAW_CARDS'),
-        51: this.$t('GAMESTATE.SETTLE')
+        11: this.$t('GAMESTATE.READY'), // 準備
+        21: this.$t('GAMESTATE.SUFFLE'), // 洗牌
+        31: this.$t('GAMESTATE.BET'), // 押注
+        41: this.$t('GAMESTATE.DRAW_CARDS'), // 開牌
+        51: this.$t('GAMESTATE.SETTLE') // 結算
       }
     }
   },
@@ -271,7 +270,16 @@ export default {
         // console.log('this.table.tableinfo=', this.table.tableinfo)
         return this.table.tableinfo.DealerAvatar
       } else {
-        return '/icon/荷官頭圖.png'
+        return '/icon/avatar.png'
+      }
+    },
+    token () {
+      // console.log('this.$store.state=', this.$store.state)
+      if (this.$store.state.account) {
+        // console.log('[debug] Token=', this.$store.state.account.Token)
+        return this.$store.state.account.Token
+      } else {
+        return []
       }
     },
     nameavatar () {
@@ -313,10 +321,11 @@ export default {
       if (this.table && this.table.tableinfo && this.table.tableinfo.State) {
         const st = this.table.tableinfo.State
         // console.log('tableinfo.State=', this.table.tableinfo.State)
-        if (st === 31 && this.table.tableinfo.Desktop.BetTimeCountDown > 1000) {
-          // console.log('BetTimeCountDown=', this.table.tableinfo.Desktop.BetTimeCountDown)
-          return (this.table.tableinfo.Desktop.BetTimeCountDown / 1000)
-        } else if (st === 41) { // DRAW_CARDS 開牌
+        if (st === 31) {
+          const cd = Math.ceil(this.table.tableinfo.Desktop.BetTimeCountDown / 1000)
+          // console.log('tabled=' + this.table.tableinfo.TableID + ' cd=', cd)
+          return (cd)
+        } else if (st === 51) { // 結算
           const win = this.table.tableinfo.Desktop.Winlose
           return this.WinText[win]
         } else {
@@ -337,6 +346,8 @@ export default {
         } else if (st === 31) { // BET 可押注
           return 'background:darkcyan;height:30px'
         } else if (st === 41) { // DRAW_CARDS 開牌
+          return 'background:black;height:30px'
+        } else if (st === 51) { // SETTLE 結算
           const win = this.table.tableinfo.Desktop.Winlose
           if (win === 1) { // player win
             return 'background:blue;height:30px'
@@ -345,10 +356,8 @@ export default {
           } else if (win === 3) { // bank win
             return 'background:darkred;height:30px'
           } else {
-            return 'background:black;height:30px'
+            return 'background:darkslategrey;height:30px'
           }
-        } else if (st === 51) { // SETTLE 結算
-          return 'background:darkslategrey;height:30px'
         } else {
           return 'background:green;height:30px'
         }
@@ -391,15 +400,20 @@ export default {
     }
   },
   methods: {
-    async joinGame () {
+    async joinGame (gid, tid, groupid) {
       console.log('[debug] joinGame(', this.table, ')')
       console.log('[debug] tihs.token=', this.token)
+      console.log('[debug] groupid=', groupid)
       try {
+        if (groupid) {
+          this.$store.commit('setNowGroupID', groupid)
+        }
         const cmdBody = {
           Token: this.token,
-          GameID: this.table.GameID,
-          TableID: this.table.TableID
+          GameID: gid,
+          TableID: tid
         }
+        console.log('cmdBody=', cmdBody)
         const cmd = {
           SN: 2,
           CID: 10001,
@@ -407,7 +421,7 @@ export default {
           B: cmdBody
         }
         // const strcmd = JSON.stringify(cmd)
-        console.log('[debug] cmd=', cmd)
+        // console.log('[debug] cmd=', cmd)
         // this.send(strcmd)
         const cmder = await this.$websocket.sendAsync(cmd)
         // console.log('[debug] Response.data:', response.data)
@@ -415,19 +429,22 @@ export default {
         this.process_20001(cmder)
       } catch (error) {
         console.error('[debug] error=', error)
-        this.$router.push('/betRoom')
+        // this.$router.push('/betRoom')
       }
     },
     // RESPONSE_JOIN_GAME_RESULT
     process_20001 (cmder) {
       console.log('[debug] 處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
       if (cmder.SC === 1000) { // success
-        console.log('[debug] join table success!')
         this.$router.push('/betRoom')
-        // this.intable = true
+        const token = cmder.B.PlayerGameToken
+        console.log('[debug] join table success!! token=', token)
+        if (token) {
+          this.$store.commit('setPGToken', token)
+        }
       } else {
         console.log('[debug] join table fail!', cmder)
-        this.$router.push('/betRoom')
+        // this.$router.push('/betRoom')
       }
     },
     numFormat (num) {

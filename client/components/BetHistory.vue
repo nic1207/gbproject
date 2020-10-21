@@ -1,27 +1,27 @@
 <template>
   <div>
-    <div style="height:13vh;width:100%; background-color:#2E2E2E">
-      <v-row style="height:100%;width:100%; margin:0;" no-gutters justify="left">
+    <div style="height:5vh;width:100%;background-color:#2f2f2f">
+      <v-row class="justify-center" style="height:80%;width:100%; margin:0;" no-gutters>
         <div
-          v-for="n in 3"
-          :key="n"
-          style="height:50%;width:12.5%;"
+          v-for="(t, index) in Tables"
+          :key="index+1"
+          style="height:10vh;width:12.5%;"
           class="d-flex justify-center align-center"
         >
           <v-card
             height="80%"
             width="80%"
             dark
-            class="d-flex justify-center align-center room-list"
-            :class="{ 'windowActive': window==n }"
-            @click="window=n"
+            class="d-flex justify-center align-middle room-list"
+            :class="{ 'windowActive': nowtableid==t.TableID }"
+            @click="doChangeTable(t.TableID)"
           >
-            C0{{ n }}
+            {{ t.TableName }}
           </v-card>
         </div>
       </v-row>
     </div>
-    <v-window v-model="window">
+    <v-window>
       <v-window-item :value="1">
         <div style="height:45vh;width:100%">
           <div class="text-center tableBg">
@@ -39,7 +39,7 @@
               <HoverPreviewResult v-for="n in 12" :key="n">
                 <template v-slot:item="slotProps">
                   <v-img
-                    src="/icon/圓庄.png"
+                    src="/icon/cb.png"
                     max-height="1.6vw"
                     max-width="1.6vw"
                     v-bind="slotProps.activate.attrs"
@@ -69,7 +69,7 @@
               <v-img
                 max-width="1vw"
                 max-height="1vw"
-                src="/icon/大紅圈.png"
+                src="/icon/redc.png"
               />
               <v-avatar color="#c70000" class="ml-1" size="15" />
               <span class="font-weight-bold red--text ml-1 mr-5  ">/</span>
@@ -79,7 +79,7 @@
               <v-img
                 max-width="1vw"
                 max-height="1vw"
-                src="/icon/大藍圈.png"
+                src="/icon/bluec.png"
               />
               <v-avatar color="#2d30b1" class="ml-1" size="15" />
               <span class="font-weight-bold ml-1" style="color:#2d30b1">/</span>
@@ -87,7 +87,7 @@
           </v-row>
         </div>
       </v-window-item>
-
+      <!--
       <v-window-item :value="2">
         <div class="pa-4 text-center" style="height:100%; width:100%;background-color:black">
           <v-text-field
@@ -118,6 +118,7 @@
           <span class="caption grey--text">Thanks for signing up!</span>
         </div>
       </v-window-item>
+      -->
     </v-window>
   </div>
 </template>
@@ -127,6 +128,142 @@ export default {
     return {
       window: 1
     }
+  },
+  computed: {
+    nowtableid () {
+      if (this.$store.state.nowtable) {
+        const nowtable = this.$store.state.nowtable
+        return nowtable.TableID
+      } else {
+        return 1
+      }
+    },
+    nowgameid () {
+      if (this.$store.state.nowtable) {
+        const nowtable = this.$store.state.nowtable
+        return nowtable.GameID
+      } else {
+        return 0
+      }
+    },
+    token () {
+      // console.log('this.$store.state=', this.$store.state)
+      if (this.$store.state.account) {
+        // console.log('[debug] Token=', this.$store.state.account.Token)
+        return this.$store.state.account.Token
+      } else {
+        return []
+      }
+    },
+    Tables () {
+      // console.log('zzzzz nowtableinfo=', this.$store.state.nowtable)
+      if (this.$store.state.nowtable) {
+        const nowtable = this.$store.state.nowtable
+        // console.log('nowtable=', nowtable)
+        const gameid = nowtable.GameID
+        // const tableid = nowtable.TableID
+        const lobby = this.$store.state.lobby
+        // console.log('lobby=', lobby)
+        const games = lobby.Games
+        // console.log('games=', games)
+        const gameinfo = games.find(e => e.GameID === gameid)
+        // console.log('gameinfo=', gameinfo)
+        const gtables = gameinfo.Tables
+        // console.log('gtables=', gtables)
+        // const ti = gtables.find(e => e.TableID === tableid)
+        // console.log('tableinfo=', ti)
+        // nowtable.info = ti
+        // console.log('nowtable=', nowtable)
+        return gtables
+      } else {
+        return []
+      }
+    }
+  },
+  methods: {
+    doChangeTable (tid) {
+      console.log('doChangeTable(tableid=', tid, ')')
+      this.joinGameTable(this.nowgameid, tid)
+      // this.leaveGameTable(this.nowgameid, tid)
+    },
+    async leaveGameTable (ptoken) {
+      console.log('[debug] leaveGameTable(ptoken=', ptoken, ')')
+      console.log('[debug] tihs.token=', this.token)
+      try {
+        const cmdBody = {
+          Token: this.token,
+          PlayerGameToken: ptoken
+        }
+        console.log('cmdBody=', cmdBody)
+        const cmd = {
+          SN: 2,
+          CID: 19999,
+          B: cmdBody
+        }
+        // const strcmd = JSON.stringify(cmd)
+        console.log('[debug] cmd=', cmd)
+        // this.send(strcmd)
+        const cmder = await this.$websocket.sendAsync(cmd)
+        // console.log('[debug] Response.data:', response.data)
+        // const cmder = JSON.parse(response)
+        this.process_29999(cmder)
+      } catch (error) {
+        console.error('[debug] error=', error)
+        // this.$router.push('/betRoom')
+      }
+    },
+    async joinGameTable (gid, tid) {
+      console.log('[debug] joinGameTable(', this.table, ')')
+      console.log('[debug] tihs.token=', this.token)
+      try {
+        const cmdBody = {
+          Token: this.token,
+          GameID: gid,
+          TableID: tid
+        }
+        console.log('cmdBody=', cmdBody)
+        const cmd = {
+          SN: 2,
+          CID: 10001,
+          B: cmdBody
+        }
+        // const strcmd = JSON.stringify(cmd)
+        console.log('[debug] cmd=', cmd)
+        // this.send(strcmd)
+        const cmder = await this.$websocket.sendAsync(cmd)
+        // console.log('[debug] Response.data:', response.data)
+        // const cmder = JSON.parse(response)
+        this.process_20001(cmder)
+      } catch (error) {
+        console.error('[debug] error=', error)
+        // this.$router.push('/betRoom')
+      }
+    },
+    // RESPONSE_JOIN_GAME_RESULT
+    process_20001 (cmder) {
+      console.log('[debug] 處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
+      if (cmder.SC === 1000) { // success
+        const token = cmder.B
+        console.log('[debug] join table success!! token=', token)
+        if (token) {
+          const oldtoken = this.$store.state.pgtoken
+          this.leaveGameTable(oldtoken)
+          this.$store.commit('setPGToken', token)
+        }
+      } else {
+        console.log('[debug] join table fail!', cmder)
+        // this.$router.push('/betRoom')
+      }
+    },
+    // RESPONSE_LEAVE_GAME_RESULT
+    process_29999 (cmder) {
+      console.log('[debug] 回傳離開遊戲桌結果20099 process_20099(', cmder, ')')
+      if (cmder.SC === 1000) { // success
+        console.log('leave table success!')
+      } else {
+        console.log('leave table fail!')
+      }
+    }
   }
 }
 </script>
@@ -135,7 +272,7 @@ export default {
   height:90%;
   width:100%;
   background-color:#2E2E2E;
-  background-image: url('/icon/單人棋盤格.png');
+  background-image: url('/icon/road_s.png');
   background-repeat:no-repeat;
   background-position:center;
   background-size: 100% 100%

@@ -180,7 +180,7 @@ export default {
 
     }
 .playTable{
-    background-image: url("/icon/荷官暫代圖.png");
+    background-image: url("/icon/table_n.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

@@ -70,7 +70,7 @@ export const state = () => ({
     }]
   },
   */
-  Groups: []
+  groups: [],
   /*
   groups: { // 遊戲群組清單
     GameID: 1001, // 遊戲識別號
@@ -93,6 +93,124 @@ export const state = () => ({
     }]
   }
   */
+  // betsetting: undefined,
+  betsetting: {
+    GameID: 1001,
+    BetSettings: [{
+      GroupID: 1,
+      SubgameID: 1,
+      PBLL: 10000,
+      PBUL: 1000000,
+      BABULS: [
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000
+      ],
+      TBU: 10000000,
+      ACs: [
+        10000,
+        50000,
+        100000,
+        500000,
+        1000000
+      ]
+    },
+    {
+      GroupID: 2,
+      SubgameID: 2,
+      PBLL: 10000,
+      PBUL: 1000000,
+      BABULS: [
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000
+      ],
+      TBU: 10000000,
+      ACs: [
+        10000,
+        50000,
+        100000,
+        500000,
+        1000000
+      ]
+    },
+    {
+      GroupID: 3,
+      SubgameID: 3,
+      PBLL: 10000,
+      PBUL: 1000000,
+      BABULS: [
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000,
+        500000
+      ],
+      TBU: 10000000,
+      ACs: [
+        10000,
+        50000,
+        100000,
+        500000,
+        1000000
+      ]
+    }]
+  },
+  pgtoken: undefined, // 加入遊戲桌成功的TOKEN
+  nowtable: undefined,
+  /*
+  nowtable: {
+    GameID: 1001, // 遊戲識別號
+    TableID: 1, // 桌識別號
+    RoundID: 1234567890, // 回合識別號
+    RoundName: 'B01-01-01', // 回合名稱
+    DealerName: 'TEST_DEALER', // 發牌員
+    DealerAvatar: 'test_dealer.jpg', // 發牌員頭像
+    Desktop: {
+      IsSuffle: 1, // 是否洗牌
+      BetTimeCountDown: 0, // 押注倒數 (投注階段才有)
+      ShowCards: [1, 1, 1, 1, 1, 1, 1, 1], // 牌面 (開牌階段才有)
+      PlayerPoint: 3, // 玩家點數 (結算階段才有)
+      BankPoint: 3, // 莊家點數 (結算階段才有)
+      Winlose: 1 // 開牌結果
+    },
+    State: 11
+  }
+  */
+  nowgroupid: 0,
+  history: undefined,
+  /*
+  history: {
+    GameID: 1001,
+    TableID: 1,
+    History: [{
+      RoundID: 637352672851625635,
+      Winlose:1
+    }]
+  }
+  */
+  showcoins: []
+  /*
+  showcoins: [
+    'coin_5.png',
+    'coin_10.png',
+    'coin_20.png',
+    'coin_50.png'
+  ]
+  */
 })
 export const mutations = {
   setUser (state, user) {
@@ -100,6 +218,12 @@ export const mutations = {
   },
   setAccount (state, acc) {
     state.account = acc
+  },
+  setBetSetting (state, sett) {
+    state.betsetting = sett
+  },
+  setPGToken (state, token) {
+    state.pgtoken = token
   },
   setLobby (state, lobby) {
     // console.log('[debug] setLobby(', lobby, ')')
@@ -109,16 +233,37 @@ export const mutations = {
     // console.log('[debug] setTables(', tables, ')')
     state.tables = tables
   },
+  setNowTable (state, table) {
+    state.nowtable = table
+  },
+  setNowGroupID (state, gid) {
+    state.nowgroupid = gid
+  },
   setGroups (state, groups) {
     // console.log('[debug] setGroups(', groups, ')')
     state.groups = groups
   },
+  setHistory (state, history) {
+    // console.log('[debug] setHistory(', history, ')')
+    state.history = history
+  },
+  setShowCoins (state, coins) {
+    // console.log('[debug] setShowCoins(', coins, ')')
+    state.showcoins = coins
+  },
+
   clear (state) {
     state.user = undefined
     state.account = undefined
     state.lobby = undefined
     state.tables = undefined
     state.groups = undefined
+    state.pgtoken = undefined
+    state.nowtable = undefined
+    state.nowgroupid = 0
+    state.betsetting = undefined
+    state.history = undefined
+    state.showcoins = undefined
   }
 }
 export const getters = {
@@ -128,13 +273,34 @@ export const getters = {
   fetchAccount (state) {
     return state.account
   },
+  fetchBetSetting (state) {
+    return state.betsetting
+  },
+  fetchPGToken (state) {
+    return state.pgtoken
+  },
   fetchLobby (state) {
     return state.lobby
   },
   fetchTables (state) {
     return state.tables
   },
+  fetchNowTable () {
+    return state.nowtable
+  },
+  fetchNowGroupID () {
+    return state.nowgroupid
+  },
+  fetchnowtable (state) {
+    return state.nowtable
+  },
   fetchGroups (state) {
     return state.groups
+  },
+  fetchHistory (state) {
+    return state.history
+  },
+  fetchShowCoins (state) {
+    return state.showcoins
   }
 }

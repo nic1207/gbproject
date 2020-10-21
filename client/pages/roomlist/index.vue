@@ -2,7 +2,7 @@
   <v-container class="pa-0 ml-2 mt-0 viewList" fluid>
     <Tutorialroomlist v-if="tutorial" @close="do_tutorial" />
     <v-row no-gutters dense>
-      <dashboardCard v-for="table in tableList" :key="table.TableID" :table="table" :token="token" :prop-card-size="propCardSize" />
+      <dashboardCard v-for="table in tableList" :key="table.TableID" :table="table" :prop-card-size="propCardSize" />
     </v-row>
   </v-container>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     propCardSize () {
-      console.log('this.$route.query.vtype=', this.$route.query.vtype)
+      // console.log('this.$route.query.vtype=', this.$route.query.vtype)
       const viewType = this.$route.query.vtype
       switch (viewType) {
         case 'default':
@@ -108,14 +108,14 @@ export default {
   watch: {
   },
   mounted () {
-    console.log('mounted()')
+    // console.log('mounted()')
     const xx = this.$cookies.get('t_roomlist')
     this.tutorial = !xx
-    console.log('xxxx this.tutorial=', this.tutorial)
+    // console.log('xxxx this.tutorial=', this.tutorial)
   },
   methods: {
     do_tutorial () {
-      console.log('do_tutorial()')
+      // console.log('do_tutorial()')
       this.tutorial = false
       this.$cookies.set('t_roomlist', 1)
     }

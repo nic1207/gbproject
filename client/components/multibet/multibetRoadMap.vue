@@ -43,13 +43,13 @@
       </v-row>
       <v-img
         height="100%"
-        src="/icon/珠盤路單(中).png"
+        src="/icon/road_middle.png"
       >
         <div class="d-flex align-content-start flex-wrap flex-row" style="height:100%;width:100%">
           <HoverPreviewResult v-for="n in 12" :key="n">
             <template v-slot:item="slotProps">
               <v-img
-                src="/icon/大藍圈.png"
+                src="/icon/bluec.png"
                 max-height="0.62vw"
                 max-width="0.62vw"
                 v-bind="slotProps.activate.attrs"
@@ -63,21 +63,21 @@
           class="result-cards"
         >
           <v-img
-            src="/card/方塊2.png"
+            src="/card/d2.png"
             height="4vw"
             width="4vw"
             contain
             style="position:absolute;left:0;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/d2.png"
             height="4vw"
             width="4vw"
             contain
             style="position:absolute;left:12%;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/d2.png"
             height="4vw"
             width="4vw"
             contain
@@ -88,21 +88,21 @@
             <span>Banker Win</span>
           </div>
           <v-img
-            src="/card/方塊2.png"
+            src="/card/d2.png"
             height="4vw"
             width="4vw"
             contain
             style="position:absolute;right:0;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/d2.png"
             height="4vw"
             width="4vw"
             contain
             style="position:absolute;right:12%;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/d2.png"
             height="4vw"
             width="4vw"
             contain
@@ -305,7 +305,7 @@ background-color: rgba(0,0,0,0.5);
   width: 33.3333%;
 }
 .playAreaLast{
-    background-image:url('/icon/路紙牛牛百家樂下注盤面(中).png');
+    background-image:url('/icon/niuniu_m.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;

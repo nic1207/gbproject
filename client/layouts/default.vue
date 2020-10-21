@@ -109,6 +109,14 @@
     >
       <setting @close="settingDialog=false" />
     </v-dialog>
+    <v-dialog
+      v-model="logoutDialog"
+      max-width="600"
+      min-width="290"
+    >
+      <logoutdialog @close="logoutDialog=false" @logout="doLogout()" />
+    </v-dialog>
+
     <v-footer
       color="black"
       padless
@@ -120,7 +128,7 @@
       <v-row class="d-flex flex-row justify-end">
         <div class="d-flex justify-center">
           <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
-            <v-img src="/icon/wifi按鈕_4.png" />
+            <v-img src="/icon/wifib_4.png" />
           </v-btn>
         </div>
         <v-divider vertical />
@@ -303,7 +311,7 @@
             </v-icon>
           </v-btn>
           <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
-            <v-img src="/icon/重新載入視訊按鈕.png" />
+            <v-img src="/icon/reload_v.png" />
           </v-btn>
         </div>
         <v-divider vertical />
@@ -413,6 +421,7 @@ export default {
       betlogDialog: false,
       memberReportDialog: false,
       gameAgreementDialog: false,
+      logoutDialog: false,
       settingDialog: false,
       toggle_exclusive: 0,
       LeftMenu: [
@@ -506,13 +515,16 @@ export default {
   },
   loading: false,
   mounted () {
+    console.log('default.mounted()')
     // this.connect()
     // Always call on message
-    this.doLogin()
+    // this.doLogin()
     this.recheckToken()
-    console.log('default.mounted()', this.$i18n)
+    // this.recheckToken()
+    // console.log('default.mounted()', this.$i18n)
     this.$websocket.addEventListener('close', (event) => {
       console.log('The connection has been closed successfully.')
+      this.recheckToken()
     })
     // this.$i18n.setLocaleCookie('zh_tw')
     this.$websocket.addEventListener('any', (cmder) => {
@@ -532,7 +544,7 @@ export default {
   },
   methods: {
     toggle (index) {
-      console.log('[debug] toggle(', index, ')')
+      // console.log('[debug] toggle(', index, ')')
       switch (index) {
         case 0:
           this.betlogDialog = true
@@ -558,11 +570,11 @@ export default {
       // console.log(this.Now)
     },
     // 登出
-    async signout () {
+    async doLogout () {
+      console.log('[debug] 要求登出 doLogout()')
       this.logoutDialog = false
       // this.$nuxt.$loading.start()
       const token = this.$store.state.account.Token
-      console.log('[debug] 要求登出 signout()', token)
       const cmd = {
         SN: 2,
         CID: 199,
@@ -576,8 +588,9 @@ export default {
       const cmder = await this.$websocket.sendAsync(cmd)
       // console.log('Response.data:', response.data)
       // const cmder = JSON.parse(response)
-      this.processMsg(cmder)
+      this.process_299(cmder)
     },
+    /*
     async doGetCode () {
       let code = ''
       try {
@@ -600,8 +613,8 @@ export default {
       }
       return code
     },
-    async doLogin () {
-      console.log('[debug] default.doLogin()')
+    async doReloadCheck () {
+      console.log('[debug] default.doReloadCheck()')
       // const url = 'ws://121.40.165.18:8800'
       // const url = 'ws://35.229.140.14:30510'
       // this.$connect(url)
@@ -610,7 +623,10 @@ export default {
       if (this.LoginCode === undefined) {
         // for local test
         this.percent = 20
-        this.LoginCode = await this.doGetCode()
+        // for local test
+        // this.LoginCode = await this.doGetCode()
+        this.recheckToken()
+        return
       }
       const code = this.LoginCode
       try {
@@ -643,8 +659,9 @@ export default {
         this.$router.push('/roomlistdefault')
       }
     },
+    */
     async recheckToken () {
-      this.logoutDialog = false
+      // this.logoutDialog = false
       // this.$nuxt.$loading.start()
       const token = this.$store.state.account.Token
       console.log('[debug] recheckToken() token=', token)
@@ -661,16 +678,16 @@ export default {
       const cmder = await this.$websocket.sendAsync(cmd)
       // console.log('Response.data:', response.data)
       // const cmder = JSON.parse(response)
-      this.processMsg(cmder)
+      this.process_202(cmder)
     },
     process_201 (cmder) {
-      // console.log('[debug] 201處理登入回傳 process_201(', cmder, ')')
+      console.log('[debug] 201處理登入回傳 process_201(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           this.percent = 100
           const accountinfo = cmder.B
-          console.log('[debug] accountinfo=', accountinfo)
+          // console.log('[debug] accountinfo=', accountinfo)
           this.$store.commit('setAccount', accountinfo)
           // this.$i18n.setLocaleCookie(accountinfo.LanguageTypeCode)
           this.$router.push('/roomlist')
@@ -684,7 +701,7 @@ export default {
     },
     // RESPONSE_RECHECK_TOKEN_RESULT
     process_202 (cmder) {
-      console.log('202 重新檢查token回傳 process_202(', cmder, ')')
+      console.log('[debug] 202 重新檢查token回傳 process_202(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
@@ -692,15 +709,15 @@ export default {
           // console.log('accountinfo=', accountinfo)
           this.$store.commit('setAccount', accountinfo)
         }
-        console.log('[debug] this.$store.state.account=', this.$store.state.account)
+        // console.log('[debug] this.$store.state.account=', this.$store.state.account)
         // console.log(this.$store.fetchAccount)
       } else {
-        console.log('[debug] get login data fail!')
+        console.log('[debug] recheck token fail!')
       }
     },
     // REFLASH_MEMBER_INFO
     process_203 (cmder) {
-      // console.log('203處理更新會員資訊 process_203(', cmder, ')')
+      // console.log('[debug] 203處理更新會員資訊 process_203(', cmder, ')')
       // this.$nuxt.$loading.finish()
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
@@ -715,7 +732,7 @@ export default {
     },
     // REFLASH_GAME_LOBBY_INFO
     process_204 (cmder) {
-      console.log('204處理更新遊戲大廳資訊 process_204(', cmder, ')')
+      // console.log('[debug] 204處理更新遊戲大廳資訊 process_204(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const lobbyinfo = cmder.B
@@ -729,11 +746,11 @@ export default {
     },
     // REFLASH_GAME_TABLE_STATUS
     process_205 (cmder) {
-      console.log('205處理更新遊戲桌資訊 process_205(', cmder, ')')
+      // console.log('[debug] 205處理更新遊戲桌資訊 process_205(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const Tables = cmder.B
-          console.log('更新遊戲桌資訊 Tables=', Tables)
+          // console.log('更新遊戲桌資訊 Tables=', Tables)
           this.$store.commit('setTables', Tables)
         }
         // console.log('this.$store.state.tables=', this.$store.state.tables)
@@ -743,7 +760,7 @@ export default {
     },
     // REFLASH_GAME_GROUP
     process_206 (cmder) {
-      console.log('206 處理刷新群組資訊 process_206(', cmder, ')')
+      // console.log('[debug] 206 處理刷新群組資訊 process_206(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const groups = cmder.B
@@ -760,16 +777,16 @@ export default {
       console.log('[debug] 處理登出回傳299 process_299(', cmder, ')')
       // this.$nuxt.$loading.finish()
       this.$store.commit('clear')
-      this.$router.push('/')
+      window.location.href = 'http://35.229.140.14:30601/'
     },
     // REFLASH_TALBE_STATUS
     process_20002 (cmder) {
       // console.log('[debug] 更新遊戲桌狀態20002 process_20002(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          // const gametableinfo = cmder.B
-          // console.log('gametableinfo=', gametableinfo)
-          // this.$store.commit('setTables', gametableinfo)
+          const nowtableinfo = cmder.B
+          // console.log('zzzzzzzzzzzzz nowtableinfo=', nowtableinfo)
+          this.$store.commit('setNowTable', nowtableinfo)
         }
       } else {
         console.log('reflash table status fail!')
@@ -790,15 +807,28 @@ export default {
     },
     // REFLASH_GAME_HISTORY
     process_20004 (cmder) {
-      // console.log('[debug] 更新遊戲歷史資訊20004 process_20004(', cmder, ')')
+      console.log('[debug] 更新遊戲歷史資訊20004 process_20004(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          // const history = cmder.B
+          const history = cmder.B
           // console.log('history=', history)
-          // this.$store.commit('setTables', gametableinfo)
+          this.$store.commit('setHistory', history)
         }
       } else {
         console.log('refresh game history fail!')
+      }
+    },
+    // REFLASH_BET_SETTING
+    process_20005 (cmder) {
+      console.log('[debug] 刷新投注設定20005 process_20005(', cmder, ')')
+      if (cmder.SC === 1000) { // success
+        if (cmder.B) {
+          const betSetting = cmder.B
+          console.log('betSetting=', betSetting)
+          this.$store.commit('setBetSetting', betSetting)
+        }
+      } else {
+        console.log('refresh bet setting fail!')
       }
     },
     // RESPONSE_BET_RESULT
@@ -815,8 +845,8 @@ export default {
       }
     },
     // RESPONSE_LEAVE_GAME_RESULT
-    process_20099 (cmder) {
-      console.log('[debug] 回傳離開遊戲桌結果20099 process_20099(', cmder, ')')
+    process_29999 (cmder) {
+      console.log('[debug] 回傳離開遊戲桌結果29999 process_29999(', cmder, ')')
       if (cmder.SC === 1000) { // success
         console.log('leave table success!')
       } else {
@@ -827,27 +857,6 @@ export default {
     send (msg) {
       // console.log('send(', msg, ')')
       this.$sendMessage(msg)
-    },
-    bet () {
-      console.log('要求壓注 bet()')
-      // this.$nuxt.$loading.start()
-      // this.$nuxt.$loading.finish()
-      const cmdBody = {
-        GameID: 10001,
-        TableID: 1,
-        RoundID: '1234567890',
-        AccessCode: 'IEiX-U7ZC0OOJCdQQUR2_Q',
-        Bets: [1, 0, 0, 0, 0, 0, 0]
-      }
-      const cmd = {
-        SN: 2,
-        CID: 10011,
-        StatusCode: 1000,
-        B: cmdBody
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
     },
     async joinGame () {
       console.log('加入遊戲桌 joinGame()')
@@ -872,21 +881,6 @@ export default {
       this.processMsg(cmder)
     },
     */
-    leaveGame () {
-      console.log('[debug] 離開遊戲桌 leaveGame()')
-      const token = this.$store.state.account.Token
-      const cmd = {
-        SN: 2,
-        CID: 10099,
-        SC: 1000,
-        B: {
-          Token: token
-        }
-      }
-      const strcmd = JSON.stringify(cmd)
-      // console.log('strcmd=', strcmd)
-      this.send(strcmd)
-    },
     processMsg (cmder) {
       // console.log('processMsg(cmder=', cmder, ')')
       // const cmder = JSON.parse(msg)
@@ -924,6 +918,9 @@ export default {
           break
         case 20004:// REFLASH_GAME_HISTORY
           this.process_20004(cmder)
+          break
+        case 20005:// REFLASH_BET_SETTING
+          this.process_20005(cmder)
           break
         case 20011:// RESPONSE_BET_RESULT
           this.process_20011(cmder)

@@ -41,7 +41,7 @@
         <v-img
           max-width="1vw"
           max-height="1vw"
-          src="/icon/大紅圈.png"
+          src="/icon/redc.png"
         />
       </v-flex>
       <v-flex>
@@ -62,7 +62,7 @@
         <v-img
           max-width="1vw"
           max-height="1vw"
-          src="/icon/大藍圈.png"
+          src="/icon/bluec.png"
         />
       </v-flex>
 
@@ -100,7 +100,7 @@
           <HoverPreviewResult v-for="n in 12" :key="n">
             <template v-slot:item="slotProps">
               <v-img
-                src="/icon/圓庄.png"
+                src="/icon/cb.png"
                 max-height="1.51vw"
                 max-width="1.51vw"
                 v-bind="slotProps.activate.attrs"
@@ -114,21 +114,21 @@
           class="result-cards"
         >
           <v-img
-            src="/card/方塊2.png"
+            src="/card/c2.png"
             height="5vw"
             width="5vw"
             contain
             style="position:absolute;left:0;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/c2.png"
             height="5vw"
             width="5vw"
             contain
             style="position:absolute;left:12%;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/c2.png"
             height="5vw"
             width="5vw"
             contain
@@ -139,21 +139,21 @@
             <span>Banker Win</span>
           </div>
           <v-img
-            src="/card/方塊2.png"
+            src="/card/c2.png"
             height="5vw"
             width="5vw"
             contain
             style="position:absolute;right:0;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/c2.png"
             height="5vw"
             width="5vw"
             contain
             style="position:absolute;right:12%;top:5%; "
           />
           <v-img
-            src="/card/方塊2.png"
+            src="/card/c2.png"
             height="5vw"
             width="5vw"
             contain
@@ -310,7 +310,7 @@ export default {
   height:100%;
   width:70%;
   position:relative;
-  background-image: url('/icon/珠盤路單(大).png');
+  background-image: url('/icon/road_big.png');
   background-repeat:no-repeat;
   background-position:center;
   background-size: 100% 100%
@@ -368,7 +368,7 @@ background-color: rgba(0,0,0,0.5);
     height: 15.6vh;
 }
 .playAreaLast{
-    background-image:url('/icon/全方位牛牛百家樂下注盤面(大).png');
+    background-image:url('/icon/niuniu_b.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;

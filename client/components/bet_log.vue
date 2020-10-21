@@ -30,25 +30,25 @@
             <td>1sdsad</td>
             <td>
               <v-row no-gutters align="center">
-                <span class="mr-1">  �} </span>
+                <span class="mr-1">xx</span>
                 <v-img
-                  v-for="n in 3"
-                  :key="n"
+                  v-for="m in 3"
+                  :key="m"
                   max-height="4vh"
                   max-width="1vw"
                   class="mr-1"
                   contain
-                  src="/smallcard/�p���2.png"
+                  src="/smallcard/h2.png"
                 />
-                <span class="mr-1">     �� </span>
+                <span class="mr-1">zz</span>
                 <v-img
-                  v-for="n in 3"
-                  :key="n"
+                  v-for="m in 3"
+                  :key="m"
                   max-height="4vh"
                   max-width="1vw"
                   class="mr-1"
                   contain
-                  src="/smallcard/�p�®�10.png"
+                  src="/smallcard/h10.png"
                 />
               </v-row>
             </td>

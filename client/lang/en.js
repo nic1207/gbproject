@@ -18,9 +18,33 @@ export default {
     LOGOUT: 'Logout'
   },
   TABLE: {
+    SGBACCARAT: 'SGBACCARAT',
     BACCARAT: 'Baccarat',
     BACCARAT7: '7-Seat Baccarat',
-    BETLIMIT: 'Please Select Bet Limit:'
+    BETLIMIT: 'Please Select Bet Limit:',
+    TABLEINFO: 'Table Info',
+    VIDEO: 'Video',
+    CARDS: 'Cards',
+    TABLE: 'Table',
+    DEALER: 'Dealer',
+    ROUND: 'Round',
+    ID: 'ID',
+    TABLELIMIT: 'Table Limit',
+    MAXLIMIT: 'Max. Limit',
+    MINLIMIT: 'Min. Limit',
+    BANKER: 'Banker',
+    PLAYER: 'Player',
+    TIE: 'Tie',
+    PAIR: 'Pair',
+    NATURAL: 'Natural',
+    LUCKYSIX: 'Lucky Six',
+    BANKERPAIR: 'Banker Pair',
+    PLAYERPAIR: 'Player Pair',
+    BANKERNATURAL: 'Banker Natural',
+    PLAYERNATURAL: 'Player Natural',
+    CHANGE: 'Change',
+    TOTALBETAMOUNT: 'Total BetAmount',
+    STOPBETTING: 'Stop Betting'
   },
   GAMESTATE: {
     READY: 'READY',
@@ -43,6 +67,11 @@ export default {
     MUSIC: 'Music',
     CONFIRM: 'Confirm',
     CANCEL: 'Cancel'
+  },
+  SUBGAMENAMES: {
+    TRADITION: 'TRADITION',
+    NO_COMMISSION: 'NO_COMMISSION',
+    NIU_NIU: 'NIU_NIU'
   },
   LANGUAGE: {
     EN: 'English',

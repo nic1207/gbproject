@@ -23,6 +23,8 @@
     "vue-async-websocket-nic": "^0.4.0",
     "vue-cookies": "^1.7.4",
     "vue-tour": "^1.5.0",
+    "vue-uuid": "^2.0.2",
+    "vue-video-player": "^5.0.2",
     "vuex-persist": "^2.2.0"
   },
   "devDependencies": {

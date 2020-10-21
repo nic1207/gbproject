@@ -35,19 +35,19 @@
           </v-avatar>
           <div class="result-cards">
             <v-img
-              src="/card/方塊2.png"
+              src="/card/c2.png"
               height="10vh"
               contain
               style="position:absolute;left:10%;top:1%; transform: rotate(-90deg);"
             />
             <v-img
-              src="/card/方塊2.png"
+              src="/card/c2.png"
               height="10vh"
               contain
               style=" position:absolute;left:0;bottom:18%"
             />
             <v-img
-              src="/card/方塊2.png"
+              src="/card/c2.png"
               height="10vh"
               contain
               style=" position:absolute;left:19%;bottom:18%"
@@ -59,19 +59,19 @@
               <span>P 6</span>
             </div>
             <v-img
-              src="/card/方塊2.png"
+              src="/card/c2.png"
               contain
               height="10vh"
               style="position:absolute;right:10%;top:2%; transform: rotate(-90deg);"
             />
             <v-img
-              src="/card/方塊2.png"
+              src="/card/c2.png"
               contain
               height="10vh"
               style=" position:absolute;right:0;bottom:18%"
             />
             <v-img
-              src="/card/方塊2.png"
+              src="/card/c2.png"
               contain
               height="10vh"
               style="position:absolute;right:19%;bottom:18%"
@@ -100,7 +100,7 @@
                   class="text-center mt-1 mx-2"
                   style="width:2.7vw;
                                                    height:2.6vw;
-                                                    background-image:url('/icon/七人座自定UI.png');
+                                                    background-image:url('/icon/7customUI.png');
                                                     background-repeat: no-repeat;
                                                     background-position: center;
                                                     background-size: 100% 100%"
@@ -137,7 +137,7 @@
                     <!-- <v-btn small class="mx-2" fab dark color="#4f3c2b" @click="cancelCoinSelect"> -->
 
                     <v-img
-                      src="/icon/萬用選擇UI.png"
+                      src="/icon/selectUI.png"
                       class="ma-2"
                       max-width="2.5vw"
                       max-height="2.5vw"
@@ -146,7 +146,7 @@
 
                     <!-- </v-btn> -->
                     <v-img
-                      src="/icon/萬用取消UI.png"
+                      src="/icon/cancelUI.png"
                       class="ma-2"
                       max-width="2.5vw"
                       max-height="2.5vw"
@@ -180,7 +180,7 @@
               class="text-center mt-1 ml-2"
               style="width:2.7vw;
                                                     height:2.6vw;
-                                                      background-image:url('/icon/單人雙倍ui.png');
+                                                      background-image:url('/icon/doubleui.png');
                                                       background-repeat: no-repeat;
                                                       background-position: center;
                                                       background-size: 100% 100%"
@@ -331,7 +331,7 @@ export default {
       font-size: 0.8vw;
       margin: 0px 8.5px;
       cursor: pointer;
-      background-image:url('/icon/選擇桌台ui_1.png');
+      background-image:url('/icon/tselectui_1.png');
       background-repeat: no-repeat;
       background-position: center;
       background-size: 100% 100%;

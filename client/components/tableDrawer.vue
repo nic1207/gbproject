@@ -12,7 +12,7 @@
   >
     <v-row no-gutters style="width:100%;height:100%">
       <v-col cols="1" style="height:100%;">
-        <v-row align="center" style="width:100%;height:100%;" no-gutters>
+        <v-row class="align-center" style="width:100%;height:100%;" no-gutters>
           <button class="Custombutton" @click="close">
             <p
               class="py-5"
@@ -150,7 +150,7 @@ export default {
       font-size: 0.8vw;
       margin: 0px 8.5px;
       cursor: pointer;
-      background-image:url('/icon/選擇桌台ui_2.png');
+      background-image:url('/icon/tselectui_2.png');
       background-repeat: no-repeat;
       background-position: center;
       background-size: 100% 100%;
@@ -189,7 +189,7 @@ export default {
         width:96%;
         height:96%;
         background-color:black;
-        background-image:url('/icon/檯桌棋盤格.png');
+        background-image:url('/icon/grid.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: 100% 100%;

@@ -159,7 +159,7 @@
             class="text-center mt-1"
             style="width:2.7vw;
                                                    height:2.6vw;
-                                                    background-image:url('/icon/七人座自定UI.png');
+                                                    background-image:url('/icon/7customUI.png');
                                                     background-repeat: no-repeat;
                                                     background-position: center;
                                                     background-size: 100% 100%"
@@ -196,7 +196,7 @@
               <!-- <v-btn small class="mx-2" fab dark color="#4f3c2b" @click="cancelCoinSelect"> -->
 
               <v-img
-                src="/icon/萬用選擇UI.png"
+                src="/icon/selectUI.png"
                 class="ma-2"
                 max-width="2.5vw"
                 max-height="2.5vw"
@@ -205,7 +205,7 @@
 
               <!-- </v-btn> -->
               <v-img
-                src="/icon/萬用取消UI.png"
+                src="/icon/cancelUI.png"
                 class="ma-2"
                 max-width="2.5vw"
                 max-height="2.5vw"
@@ -239,7 +239,7 @@
         class="text-center mt-1"
         style="width:2.7vw;
                                                     height:2.6vw;
-                                                      background-image:url('/icon/單人雙倍ui.png');
+                                                      background-image:url('/icon/doubleui.png');
                                                       background-repeat: no-repeat;
                                                       background-position: center;
                                                       background-size: 100% 100%"
@@ -250,7 +250,7 @@
 
 <style scoped>
 .playTable{
-    background-image: url("/icon/荷官暫代圖.png");
+    background-image: url("/icon/table_n.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
@@ -301,10 +301,13 @@ export default {
     return {
       coinMenu: false,
       selectedCoin: [],
-      showingCoin: ['5籌碼.png', '10K籌碼.png', '10籌碼.png', '20K籌碼.png', '50籌碼.png'],
-      coinList: ['5籌碼.png', '10K籌碼.png', '10籌碼.png', '20K籌碼.png', '20籌碼.png', '50籌碼.png', '100籌碼.png',
-        '200籌碼.png', '500籌碼.png', '1000籌碼.png', '2000籌碼.png', '5000籌碼.png'],
-      betCoin: '5籌碼.png',
+      showingCoin: ['coin_5.png', 'coin_10K.png', 'coin_10.png'],
+      coinList: [
+        'coin_5.png', 'coin_10.png', 'coin_20.png', 'coin_50.png',
+        'coin_100.png', 'coin_200.png', 'coin_500.png', 'coin_1000.png',
+        'coin_2000.png', 'coin_5000.png', 'coin_10k.png', 'coin_20k.png'
+      ],
+      betCoin: 'coin_5.png',
       betLimit: '10-1000',
       changenumbers: {
         '10-1000': { bet_limit: '1,000', banker: '1,000', player: '1,000', tie: '125', pair: '90' },

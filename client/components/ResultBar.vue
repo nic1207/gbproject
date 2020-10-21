@@ -154,7 +154,7 @@
 
             max-width="0.6vw"
             max-height="0.6vw"
-            src="/icon/大藍圈.png"
+            src="/icon/bluec.png"
           />
           <v-avatar color="#2d30b1" class="ml-1" size="12" />
           <span class="font-weight-bold blue--text ml-1 mr-4  ">/</span>
@@ -183,7 +183,7 @@
 
             max-width="0.6vw"
             max-height="0.6vw"
-            src="/icon/大紅圈.png"
+            src="/icon/redc.png"
           />
           <v-avatar color="#c70000" class="ml-1" size="12" />
           <span class="font-weight-bold red--text ml-1 mr-4  ">/</span>

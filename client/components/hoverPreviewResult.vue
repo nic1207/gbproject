@@ -35,7 +35,7 @@
           <span>Banker 0</span>
         </div>
         <v-img
-          src="/smallcard/小方塊2.png"
+          src="/smallcard/c2.png"
           style="position:absolute;left:33%;top:20%"
           width="12%"
           height="18%"
@@ -43,35 +43,35 @@
         />
 
         <v-img
-          src="/smallcard/小方塊2.png"
+          src="/smallcard/c2.png"
           style="position:absolute;left:20%;top:20%"
           width="12%"
           height="18%"
           contain
         />
         <v-img
-          src="/smallcard/小方塊2.png"
+          src="/smallcard/c2.png"
           style="position:absolute;left:7%;top:20%"
           width="12%"
           height="18%"
           contain
         />
         <v-img
-          src="/smallcard/小方塊2.png"
+          src="/smallcard/c2.png"
           style="position:absolute;right:33%;top:20%"
           width="12%"
           height="18%"
           contain
         />
         <v-img
-          src="/smallcard/小方塊2.png"
+          src="/smallcard/c2.png"
           style="position:absolute;right:20%;top:20%"
           width="12%"
           height="18%"
           contain
         />
         <v-img
-          src="/smallcard/小方塊2.png"
+          src="/smallcard/c2.png"
           style="position:absolute;right:7%;top:20%"
           width="12%"
           height="18%"

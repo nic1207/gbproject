@@ -18,9 +18,33 @@ export default {
     LOGOUT: '登出'
   },
   TABLE: {
+    SGBACCARAT: '百家樂',
     BACCARAT: '百家樂',
     BACCARAT7: '7座位百家樂',
-    BETLIMIT: '請選擇限紅'
+    BETLIMIT: '請選擇限紅',
+    TABLEINFO: '檯號資料',
+    VIDEO: '視訊',
+    CARDS: '電子牌',
+    TABLE: '檯號',
+    DEALER: '荷官',
+    ROUND: '局號',
+    ID: '編號',
+    TABLELIMIT: '本檯限紅',
+    MAXLIMIT: '上限',
+    MINLIMIT: '下限',
+    BANKER: '庄',
+    PLAYER: '閒',
+    TIE: '和',
+    PAIR: '對子',
+    NATURAL: '例牌',
+    LUCKYSIX: '幸運六',
+    BANKERPAIR: '庄對',
+    PLAYERPAIR: '閒對',
+    BANKERNATURAL: '庄例牌',
+    PLAYERNATURAL: '閒例牌',
+    CHANGE: '變更',
+    TOTALBETAMOUNT: '總投注',
+    STOPBETTING: '停止下注'
   },
   GAMESTATE: {
     READY: '準備中',
@@ -30,7 +54,7 @@ export default {
     SETTLE: '結算'
   },
   GAMEWIN: {
-    UWIN: '開牌錯誤',
+    UWIN: '0',
     PWIN: '閒贏',
     TWIN: '和局',
     BWIN: '莊贏'
@@ -43,6 +67,11 @@ export default {
     MUSIC: '音樂',
     CONFIRM: '確認',
     CANCEL: '取消'
+  },
+  SUBGAMENAMES: {
+    TRADITION: '傳統百家樂',
+    NO_COMMISSION: '免水百家樂',
+    NIU_NIU: '牛牛百家樂'
   },
   LANGUAGE: {
     EN: 'English',

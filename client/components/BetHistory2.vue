@@ -4,7 +4,7 @@
       <HoverPreviewResult v-for="n in 12" :key="n">
         <template v-slot:item="slotProps">
           <v-img
-            src="/icon/圓庄.png"
+            src="/icon/cb.png"
             max-height="1.6vw"
             max-width="1.6vw"
             v-bind="slotProps.activate.attrs"
@@ -24,7 +24,7 @@ export default {
 .table{
     height:100%;
     width:50%;
-    background-image: url('/icon/黑格底板.png');
+    background-image: url('/icon/black_grid.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;

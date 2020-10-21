@@ -3,7 +3,7 @@
   <v-container fluid>
     <div class="logo" style="margin-left:470px;" />
 
-    <v-row align="center" justify="center" class="pa-6">
+    <v-row class="align-center justify-center pa-6">
       <v-img
         src="/banner.jpg"
         aspect-ratio="1.8"
@@ -14,9 +14,8 @@
       >
         <template v-slot:placeholder>
           <v-row
-            class="fill-height ma-0"
+            class="fill-height ma-0 justify-center"
             align="center"
-            justify="center"
           >
             <v-progress-circular indeterminate color="grey lighten-5" />
           </v-row>
@@ -82,7 +81,7 @@ export default {
         const respons = await this.$axios.$post(url, data)
         this.percent = 40
         code = respons.LoginCode
-        console.log('[debug] LoginCode=', code)
+        // console.log('[debug] doGetCode(code=', code)
         // this.image = respons.message
       } catch (err) {
         console.log(err)
@@ -90,17 +89,30 @@ export default {
       return code
     },
     async doLogin () {
-      console.log('[debug] doLogin()')
+      console.log('[debug] index.doLogin()')
       // const url = 'ws://121.40.165.18:8800'
       // const url = 'ws://35.229.140.14:30510'
       // this.$connect(url)
       this.percent = 10
-      // console.log('[debug] this.LoginCode=', this.LoginCode)
+      console.log('[debug] this.LoginCode=', this.LoginCode)
       if (this.LoginCode === undefined) {
         // for local test
         this.percent = 20
-        this.LoginCode = await this.doGetCode()
+        const token = this.$store.state.account && this.$store.state.account.Token
+        console.log('[debug] token=', token)
+        if (token) {
+          this.recheckToken()
+          return
+        } else {
+          // for test
+          // this.LoginCode = await this.doGetCode()
+          // console.log('[debug] new LoginCode=', this.LoginCode)
+          // for stable server
+          this.$store.commit('clear')
+          window.location.href = 'http://35.229.140.14:30601/'
+        }
       }
+      console.log('do_send_login()')
       const code = this.LoginCode
       try {
         const cmd = {
@@ -149,6 +161,45 @@ export default {
         this.percent = 100
         console.log('[debug] get login data fail!')
         // this.$router.push('/roomlist')
+      }
+    },
+    async recheckToken () {
+      // this.logoutDialog = false
+      // this.$nuxt.$loading.start()
+      const token = this.$store.state.account.Token
+      console.log('[debug] recheckToken() token=', token)
+      const cmd = {
+        SN: 3,
+        CID: 102,
+        SC: 1000,
+        B: {
+          Token: token
+        }
+      }
+      // console.log('strcmd=', strcmd)
+      // this.send(strcmd)
+      const cmder = await this.$websocket.sendAsync(cmd)
+      // console.log('Response.data:', response.data)
+      // const cmder = JSON.parse(response)
+      this.process_202(cmder)
+    },
+    // RESPONSE_RECHECK_TOKEN_RESULT
+    process_202 (cmder) {
+      console.log('[debug] 202 重新檢查token回傳 process_202(', cmder, ')')
+      // this.$nuxt.$loading.finish()
+      if (cmder.SC === 1000) { // success
+        if (cmder.B) {
+          const accountinfo = cmder.B
+          console.log('accountinfo=', accountinfo)
+          this.$store.commit('setAccount', accountinfo)
+          this.$router.push('/roomlist')
+        }
+        // console.log('[debug] this.$store.state.account=', this.$store.state.account)
+        // console.log(this.$store.fetchAccount)
+      } else {
+        console.log('[debug] recheck token fail and dologout!')
+        this.$store.commit('clear')
+        window.location.href = 'http://35.229.140.14:30601/'
       }
     }
   }
