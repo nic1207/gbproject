@@ -114,12 +114,12 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col style="width:50%;height:100%; margin:0;padding:0;color:#E7CAA0">
+          <v-col v-if="NowTable" style="width:50%;height:100%; margin:0;padding:0;color:#E7CAA0">
             <v-row style="margin:0;padding:0" dense>
               <v-col cols="4">
                 {{ $t('TABLE.TABLE') }}
               </v-col>
-              <v-col cols="8">
+              <v-col v-if="NowTable" cols="8">
                 {{ NowTable.info.TableName }}
               </v-col>
             </v-row>
@@ -385,8 +385,6 @@ export default {
         //   fullscreenToggle: true // 全螢幕
         // },
       },
-      // activeSrc: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-      // activeSrc: 'http://1.34.133.245:3310/live/test.m3u8',
       videoready: false,
       betLimit: '1',
       // changenumbers: {
@@ -408,23 +406,28 @@ export default {
       return this.videoready
     },
     NowTable () {
-      // console.log('zzzzz nowtableinfo=', this.$store.state.nowtable)
-      const nowtable = Object.assign({}, this.$store.state.nowtable)
-      const gameid = nowtable.GameID
-      const tableid = nowtable.TableID
-      const lobby = this.$store.state.lobby
-      // console.log('lobby=', lobby)
-      const games = lobby.Games
-      // console.log('games=', games)
-      const gameinfo = games.find(e => e.GameID === gameid)
-      // console.log('gameinfo=', gameinfo)
-      const gtables = gameinfo.Tables
-      // console.log('gtables=', gtables)
-      const ti = gtables.find(e => e.TableID === tableid)
-      // console.log('tableinfo=', ti)
-      nowtable.info = ti
-      // console.log('nowtable=', nowtable)
-      return nowtable
+      // console.log('nowtableid', nowtableid)
+      const snowtable = this.$store.state.nowtable
+      if (snowtable) {
+        const nowtable = Object.assign({}, this.$store.state.nowtable)
+        const gameid = nowtable.GameID
+        const tableid = nowtable.TableID
+        const lobby = this.$store.state.lobby
+        // console.log('lobby=', lobby)
+        const games = lobby.Games
+        // console.log('games=', games)
+        const gameinfo = games.find(e => e.GameID === gameid)
+        // console.log('gameinfo=', gameinfo)
+        const gtables = gameinfo.Tables
+        // console.log('gtables=', gtables)
+        const ti = gtables.find(e => e.TableID === tableid)
+        // console.log('tableinfo=', ti)
+        nowtable.info = ti
+        // console.log('nowtable=', nowtable)
+        return nowtable
+      } else {
+        return null
+      }
     },
     Groups () {
       const groups = this.$store.state.groups
@@ -451,8 +454,8 @@ export default {
         const nowgroupid = this.$store.state.nowgroupid
         console.log('nowgroupid=', nowgroupid)
         const bset = bsets.find(x => x.GroupID === nowgroupid)
-        console.log('bset=', bset)
-        return bset
+        console.log('bset.Setting=', bset.Setting)
+        return bset.Setting
       } else {
         return null
       }

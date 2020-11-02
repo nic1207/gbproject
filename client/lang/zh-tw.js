@@ -44,7 +44,8 @@ export default {
     PLAYERNATURAL: '閒例牌',
     CHANGE: '變更',
     TOTALBETAMOUNT: '總投注',
-    STOPBETTING: '停止下注'
+    STOPBETTING: '停止下注',
+    BETSUCCESS: '下注成功'
   },
   GAMESTATE: {
     READY: '準備中',

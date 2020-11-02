@@ -515,7 +515,7 @@ export default {
   },
   loading: false,
   mounted () {
-    console.log('default.mounted()')
+    console.log('zzzzzzzz default.mounted()')
     // this.connect()
     // Always call on message
     // this.doLogin()
@@ -528,7 +528,7 @@ export default {
     })
     // this.$i18n.setLocaleCookie('zh_tw')
     this.$websocket.addEventListener('any', (cmder) => {
-      // console.log('xxxxxxxxxxxxxxxxxx Got a message: ', cmder)
+      // console.log('xxxxxxxxxxxxxxxxxx addEventListener()', cmder)
       // const cmder = JSON.parse(data)
       this.processMsg(cmder)
     })
@@ -621,9 +621,7 @@ export default {
       this.percent = 10
       // console.log('[debug] this.LoginCode=', this.LoginCode)
       if (this.LoginCode === undefined) {
-        // for local test
         this.percent = 20
-        // for local test
         // this.LoginCode = await this.doGetCode()
         this.recheckToken()
         return
@@ -664,7 +662,7 @@ export default {
       // this.logoutDialog = false
       // this.$nuxt.$loading.start()
       const token = this.$store.state.account.Token
-      console.log('[debug] recheckToken() token=', token)
+      console.log('[debug] default.recheckToken() token=', token)
       const cmd = {
         SN: 3,
         CID: 102,
@@ -786,7 +784,7 @@ export default {
         if (cmder.B) {
           const nowtableinfo = cmder.B
           // console.log('zzzzzzzzzzzzz nowtableinfo=', nowtableinfo)
-          this.$store.commit('setNowTable', nowtableinfo)
+          this.$store.commit('setJoinTables', nowtableinfo)
         }
       } else {
         console.log('reflash table status fail!')
@@ -807,7 +805,7 @@ export default {
     },
     // REFLASH_GAME_HISTORY
     process_20004 (cmder) {
-      console.log('[debug] 更新遊戲歷史資訊20004 process_20004(', cmder, ')')
+      // console.log('[debug] 更新遊戲歷史資訊20004 process_20004(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const history = cmder.B

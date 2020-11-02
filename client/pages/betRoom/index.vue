@@ -39,8 +39,6 @@
               picture_in_picture
             </v-icon>
           </v-btn>
-          -->
-          <!--
           <v-btn class="mx-2" dark small color="#4F3C2B" style="position:absolute;bottom:10%;right:0">
             <v-icon dark>
               switch_video
@@ -52,7 +50,7 @@
             </v-icon>
           </v-btn>
           -->
-          <div class="room-title d-flex justify-center align-center white--text">
+          <div v-if="NowGameInfo" class="room-title d-flex justify-center align-center white--text">
             {{ $t('TABLE.'+NowGameInfo.GameCode) }} {{ NowTableInfo.TableName }}
           </div>
           <v-avatar
@@ -76,6 +74,7 @@
         </div>
         <!--beting play section-->
         <v-tabs
+          v-if="NowGameInfo"
           background-color="#404040"
           class="elevation-2"
           centered
@@ -123,6 +122,11 @@
               <div v-show="State!=31" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0.5)">
                 <div v-show="State!=31" class="d-flex justify-center align-center stopBetting">
                   {{ $t('TABLE.STOPBETTING') }}
+                </div>
+              </div>
+              <div v-show="BetSuccess" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0)">
+                <div v-show="BetSuccess" class="d-flex justify-center align-center stopBetting">
+                  {{ $t('TABLE.BETSUCCESS') }}
                 </div>
               </div>
               <div v-if="false" class="d-flex flex-column justify-center align-center bettingSuccess">
@@ -429,8 +433,6 @@ export default {
         // },
       },
       // player: undefined,
-      // activeSrc: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
-      // activeSrc: 'http://1.34.133.245:3310/live/test.m3u8',
       page: { left: 170, top: 0 },
       showCoin: false,
       subgameid: 1, // default 1
@@ -469,6 +471,9 @@ export default {
     vReady () {
       return this.videoready
     },
+    BetSuccess () {
+      return this.betsuccess
+    },
     disableCoinSelect () {
       if (this.selectedCoin.length === 5) {
         return true
@@ -480,48 +485,48 @@ export default {
       const showcoins = this.$store.state.showcoins
       return showcoins
     },
-    nowtable () {
-      const nowtable = this.$store.state.nowtable
-      console.log('!!!!!!!!!!!!!!!!!!nowtable.RoundID=', nowtable.RoundID)
-      return nowtable
-    },
     State () {
+      // console.log('State()')
       const nowtable = this.$store.state.nowtable
+      // console.log('State()!!nowtable=', nowtable)
       if (nowtable && nowtable.State) {
-        const st = this.nowtable.State
-        // console.log('!!!!! st=', st)
+        const st = nowtable.State
+        console.log('!!!!! st=', st)
         return st
       } else {
-        // console.log(this.nowtable)
         return -1
       }
     },
     StateString () {
+      // console.log('111 StateString()')
+      // console.trace()
       const nowtable = this.$store.state.nowtable
-      if (nowtable && nowtable.State) {
-        const st = this.nowtable.State
+      // console.log('StateString()!!nowtable.State=', nowtable.State)
+      if (nowtable) {
+        const st = nowtable.State
         // console.log('!!!!! st=', st)
         if (st === 31) {
           // const cd = Math.ceil(this.nowtable.Desktop.BetTimeCountDown / 1000)
           // console.log('!!!! BetTimeCountDown=', cd)
           return this.StateText[st]
         } else if (st === 51) { // 結算
-          const win = this.nowtable.Desktop.Winlose
+          const win = nowtable.Desktop.Winlose
           return this.WinText[win]
         } else {
           return this.StateText[st]
         }
       } else {
-        // console.log(this.nowtable)
         return ''
       }
     },
     cd () {
+      // console.log('cd()')
       const nowtable = this.$store.state.nowtable
-      if (nowtable && nowtable.State) {
-        const st = this.nowtable.State
+      // console.log('cd()!!nowtable=', nowtable)
+      if (nowtable) {
+        const st = nowtable.State
         if (st === 31) {
-          const cd = Math.ceil(this.nowtable.Desktop.BetTimeCountDown / 1000)
+          const cd = Math.ceil(nowtable.Desktop.BetTimeCountDown / 1000)
           // console.log('!!!! BetTimeCountDown=', cd)
           return cd
         } else {
@@ -532,17 +537,25 @@ export default {
       }
     },
     NowGameInfo () {
+      // console.log('NowGameInfo()')
       const nowtable = this.$store.state.nowtable
-      const gameid = nowtable.GameID
-      const lobby = this.$store.state.lobby
-      // console.log('lobby=', lobby)
-      const games = lobby.Games
-      // console.log('games=', games)
-      const gameinfo = games.find(e => e.GameID === gameid)
-      // console.log('gameinfo=', gameinfo)
-      return gameinfo
+      // console.log('NowGameInfo()!!nowtable=', nowtable)
+      if (nowtable) {
+        // console.log('!!nowtable=', nowtable)
+        const gameid = nowtable.GameID
+        const lobby = this.$store.state.lobby
+        // console.log('lobby=', lobby)
+        const games = lobby.Games
+        // console.log('games=', games)
+        const gameinfo = games.find(e => e.GameID === gameid)
+        // console.log('gameinfo=', gameinfo)
+        return gameinfo
+      } else {
+        return null
+      }
     },
     NowGameID () {
+      // const nowtableid = this.$store.state.nowtableid
       const nowtable = this.$store.state.nowtable
       const gameid = nowtable.GameID
       return gameid
@@ -554,22 +567,25 @@ export default {
       return this.$store.state.NowGroupID
     },
     NowTableInfo () {
-      // console.log('zzzzz nowtableinfo=', this.$store.state.nowtable)
       const nowtable = this.$store.state.nowtable
-      const gameid = nowtable.GameID
-      const tableid = nowtable.TableID
-      // console.log('nowtable=', nowtable)
-      const lobby = this.$store.state.lobby
-      // console.log('lobby=', lobby)
-      const games = lobby.Games
-      // console.log('games=', games)
-      const gameinfo = games.find(e => e.GameID === gameid)
-      // console.log('gameinfo=', gameinfo)
-      const gtables = gameinfo.Tables
-      // console.log('gtables=', gtables)
-      const ti = gtables.find(e => e.TableID === tableid)
-      // console.log('tableinfo=', ti)
-      return ti
+      if (nowtable) {
+        const gameid = nowtable.GameID
+        const tableid = nowtable.TableID
+        // console.log('nowtable=', nowtable)
+        const lobby = this.$store.state.lobby
+        // console.log('lobby=', lobby)
+        const games = lobby.Games
+        // console.log('games=', games)
+        const gameinfo = games.find(e => e.GameID === gameid)
+        // console.log('gameinfo=', gameinfo)
+        const gtables = gameinfo.Tables
+        // console.log('gtables=', gtables)
+        const ti = gtables.find(e => e.TableID === tableid)
+        // console.log('tableinfo=', ti)
+        return ti
+      } else {
+        return null
+      }
     }
   },
   // components:{
@@ -577,6 +593,7 @@ export default {
   //       tableDrawer
   //   },
   mounted () {
+    console.log('zzzzzzzzzzzzz')
     const xx = this.$cookies.get('t_betroom')
     this.tutorial = !xx
     // console.log('xxxx this.tutorial=', this.tutorial)
@@ -736,6 +753,7 @@ export default {
         console.log('acode=', acode)
         const token = this.$store.state.account.Token
         const pgtoken = this.$store.state.pgtoken
+        // const nowtableid = this.$store.state.nowtableid
         const nowtable = this.$store.state.nowtable
         console.log('xzzzz nowtable.RoundID=', nowtable.RoundID)
         const nowgroupid = this.$store.state.nowgroupid
@@ -769,9 +787,13 @@ export default {
     process_20101 (cmder) {
       console.log('[debug] 處理回應投注結果20101 process_20101(', cmder, ')')
       if (cmder.SC === 1000) { // success
-        this.$router.push('/betRoom')
+        // this.$router.push('/betRoom')
         const AccessCode = cmder.B.AccessCode
         console.log('[debug] bet success!! AccessCode=', AccessCode)
+        this.betsuccess = true
+        setTimeout(() => {
+          this.betsuccess = false
+        }, 1000)
         // if (AccessCode) {
         //  this.$store.commit('setPGToken', token)
         // }

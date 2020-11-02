@@ -44,7 +44,8 @@ export default {
     PLAYERNATURAL: 'Player Natural',
     CHANGE: 'Change',
     TOTALBETAMOUNT: 'Total BetAmount',
-    STOPBETTING: 'Stop Betting'
+    STOPBETTING: 'Stop Betting',
+    BETSUCCESS: 'Bet Success'
   },
   GAMESTATE: {
     READY: 'READY',

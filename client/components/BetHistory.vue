@@ -131,16 +131,11 @@ export default {
   },
   computed: {
     nowtableid () {
-      if (this.$store.state.nowtable) {
-        const nowtable = this.$store.state.nowtable
-        return nowtable.TableID
-      } else {
-        return 1
-      }
+      return this.$store.state.nowtableid
     },
     nowgameid () {
-      if (this.$store.state.nowtable) {
-        const nowtable = this.$store.state.nowtable
+      const nowtable = this.$store.state.nowtable
+      if (nowtable) {
         return nowtable.GameID
       } else {
         return 0
@@ -156,10 +151,8 @@ export default {
       }
     },
     Tables () {
-      // console.log('zzzzz nowtableinfo=', this.$store.state.nowtable)
-      if (this.$store.state.nowtable) {
-        const nowtable = this.$store.state.nowtable
-        // console.log('nowtable=', nowtable)
+      const nowtable = this.$store.state.nowtable
+      if (nowtable) {
         const gameid = nowtable.GameID
         // const tableid = nowtable.TableID
         const lobby = this.$store.state.lobby
@@ -216,6 +209,9 @@ export default {
       console.log('[debug] joinGameTable(', this.table, ')')
       console.log('[debug] tihs.token=', this.token)
       try {
+        if (tid) {
+          this.$store.commit('setNowTableID', tid)
+        }
         const cmdBody = {
           Token: this.token,
           GameID: gid,

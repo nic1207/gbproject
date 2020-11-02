@@ -96,7 +96,6 @@ export default {
       this.percent = 10
       console.log('[debug] this.LoginCode=', this.LoginCode)
       if (this.LoginCode === undefined) {
-        // for local test
         this.percent = 20
         const token = this.$store.state.account && this.$store.state.account.Token
         console.log('[debug] token=', token)
@@ -104,12 +103,12 @@ export default {
           this.recheckToken()
           return
         } else {
-          // for test
-          // this.LoginCode = await this.doGetCode()
-          // console.log('[debug] new LoginCode=', this.LoginCode)
+          // for local test
+          this.LoginCode = await this.doGetCode()
+          console.log('[debug] new LoginCode=', this.LoginCode)
           // for stable server
-          this.$store.commit('clear')
-          window.location.href = 'http://35.229.140.14:30601/'
+          // this.$store.commit('clear')
+          // window.location.href = 'http://35.229.140.14:30601/'
         }
       }
       console.log('do_send_login()')
@@ -141,7 +140,7 @@ export default {
         console.log('[debug] accountinfo=', accountinfo)
         this.$store.commit('setAccount', accountinfo)
         this.percent = 100
-        this.$router.push('/roomlist')
+        // this.$router.push('/roomlist')
       }
     },
     process_201 (cmder) {
@@ -155,6 +154,9 @@ export default {
           this.$store.commit('setAccount', accountinfo)
           // this.$i18n.setLocaleCookie(accountinfo.LanguageTypeCode)
           this.$router.push('/roomlist')
+          // setTimeout(() => {
+          //   this.$router.go()
+          // }, 1000)
         }
         // console.log(this.$store.fetchAccount)
       } else {

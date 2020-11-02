@@ -193,7 +193,7 @@
                 depressed
                 color="#5f4d35"
                 link
-                @click="joinGame(Games[0].GameID, table.TableID, bl.GroupID)"
+                @click="joinGameTable(Games[0].GameID, table.TableID, bl.GroupID)"
               >
                 {{ numFormat(bl.BetSettings[0].PBLL) }} - {{ numFormat(bl.BetSettings[0].PBUL) }}
               </v-btn>
@@ -216,7 +216,7 @@
                 depressed
                 color="#5f4d35"
                 link
-                @click="joinGame(Games[0].GameID, table.TableID, bl.GroupID)"
+                @click="joinGameTable(Games[0].GameID, table.TableID, bl.GroupID)"
               >
                 {{ numFormat(bl.PBLL) }} - {{ numFormat(bl.PBUL) }}
               </v-btn>
@@ -400,13 +400,16 @@ export default {
     }
   },
   methods: {
-    async joinGame (gid, tid, groupid) {
-      console.log('[debug] joinGame(', this.table, ')')
+    async joinGameTable (gid, tid, groupid) {
+      console.log('[debug] joinGameTable(', this.table, ')')
       console.log('[debug] tihs.token=', this.token)
       console.log('[debug] groupid=', groupid)
       try {
         if (groupid) {
           this.$store.commit('setNowGroupID', groupid)
+        }
+        if (tid) {
+          this.$store.commit('setNowTableID', tid)
         }
         const cmdBody = {
           Token: this.token,
@@ -437,6 +440,10 @@ export default {
       console.log('[debug] 處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
       if (cmder.SC === 1000) { // success
         this.$router.push('/betRoom')
+        // setTimeout(() => {
+        //   this.$router.go()
+        // }, 500)
+        // window.location.reload()
         const token = cmder.B.PlayerGameToken
         console.log('[debug] join table success!! token=', token)
         if (token) {

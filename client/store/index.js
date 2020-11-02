@@ -93,86 +93,94 @@ export const state = () => ({
     }]
   }
   */
-  // betsetting: undefined,
+  betsetting: undefined,
+  /*
   betsetting: {
     GameID: 1001,
     BetSettings: [{
       GroupID: 1,
       SubgameID: 1,
-      PBLL: 10000,
-      PBUL: 1000000,
-      BABULS: [
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000
-      ],
-      TBU: 10000000,
-      ACs: [
-        10000,
-        50000,
-        100000,
-        500000,
-        1000000
-      ]
+      Setting: {
+        PBLL: 10000,
+        PBUL: 1000000,
+        BABULS: [
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000
+        ],
+        TBU: 10000000,
+        ACs: [
+          10000,
+          50000,
+          100000,
+          500000,
+          1000000
+        ]
+      }
     },
     {
-      GroupID: 2,
+      GroupID: 1,
       SubgameID: 2,
-      PBLL: 10000,
-      PBUL: 1000000,
-      BABULS: [
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000
-      ],
-      TBU: 10000000,
-      ACs: [
-        10000,
-        50000,
-        100000,
-        500000,
-        1000000
-      ]
+      Setting: {
+        PBLL: 10000,
+        PBUL: 1000000,
+        BABULS: [
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000
+        ],
+        TBU: 10000000,
+        ACs: [
+          10000,
+          50000,
+          100000,
+          500000,
+          1000000
+        ]
+      }
     },
     {
       GroupID: 3,
       SubgameID: 3,
-      PBLL: 10000,
-      PBUL: 1000000,
-      BABULS: [
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000,
-        500000
-      ],
-      TBU: 10000000,
-      ACs: [
-        10000,
-        50000,
-        100000,
-        500000,
-        1000000
-      ]
+      Setting: {
+        PBLL: 10000,
+        PBUL: 1000000,
+        BABULS: [
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000,
+          500000
+        ],
+        TBU: 10000000,
+        ACs: [
+          10000,
+          50000,
+          100000,
+          500000,
+          1000000
+        ]
+      }
     }]
   },
+  */
   pgtoken: undefined, // 加入遊戲桌成功的TOKEN
-  nowtable: undefined,
+  jointables: undefined,
   /*
-  nowtable: {
+  jointables: [{
     GameID: 1001, // 遊戲識別號
     TableID: 1, // 桌識別號
     RoundID: 1234567890, // 回合識別號
@@ -188,9 +196,11 @@ export const state = () => ({
       Winlose: 1 // 開牌結果
     },
     State: 11
-  }
+  }]
   */
   nowgroupid: 0,
+  nowtableid: 1,
+  nowtable: undefined,
   history: undefined,
   /*
   history: {
@@ -233,11 +243,36 @@ export const mutations = {
     // console.log('[debug] setTables(', tables, ')')
     state.tables = tables
   },
-  setNowTable (state, table) {
-    state.nowtable = table
+  setJoinTables (state, table) {
+    // console.log('setJoinTables(', table.State, ')')
+    const idx = state.jointables.findIndex(el => el.TableID === table.TableID)
+    // console.log('idx=', idx)
+    if (idx !== -1) {
+      // state.jointables[idx] = table
+      state.jointables.splice(idx, 1, table)
+      // Vue.set(state.jointables, idx, this.table)
+    } else {
+      state.jointables.push(table)
+    }
+    const tid = state.nowtableid
+    const tt = state.jointables.find(el => el.TableID === tid)
+    // console.log('mutations=', mutations)
+    mutations.setNowTable(state, tt)
+    // console.log('state.jointables=', state.jointables)
   },
   setNowGroupID (state, gid) {
     state.nowgroupid = gid
+  },
+  setNowTableID (state, tid) {
+    state.nowtableid = tid
+    const tt = state.jointables.find(el => el.TableID === tid)
+    if (tt) {
+      mutations.setNowTable(state, tt)
+    }
+  },
+  setNowTable (state, table) {
+    state.nowtable = table
+    // console.log('setNowTable(', table.State, ')')
   },
   setGroups (state, groups) {
     // console.log('[debug] setGroups(', groups, ')')
@@ -259,8 +294,11 @@ export const mutations = {
     state.tables = undefined
     state.groups = undefined
     state.pgtoken = undefined
-    state.nowtable = undefined
+    state.jointables = []
     state.nowgroupid = 0
+    state.nowtableid = 1
+    state.nowtable = undefined
+    state.nowtable = undefined
     state.betsetting = undefined
     state.history = undefined
     state.showcoins = undefined
@@ -285,14 +323,19 @@ export const getters = {
   fetchTables (state) {
     return state.tables
   },
-  fetchNowTable () {
-    return state.nowtable
+  fetchJoinTables (state) {
+    return state.jointables
+  },
+  fetchNowTable (state) {
+    const nid = state.nowtableid
+    console.log('state.jointables=', state.jointables)
+    return state.jointables.find(el => el.TableID === nid)
   },
   fetchNowGroupID () {
     return state.nowgroupid
   },
-  fetchnowtable (state) {
-    return state.nowtable
+  fetchNowTableID () {
+    return state.nowtableid
   },
   fetchGroups (state) {
     return state.groups
