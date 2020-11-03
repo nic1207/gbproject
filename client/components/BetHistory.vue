@@ -239,7 +239,7 @@ export default {
     process_20001 (cmder) {
       console.log('[debug] 處理加入遊戲桌回傳20001 process_20001(', cmder, ')')
       if (cmder.SC === 1000) { // success
-        const token = cmder.B
+        const token = cmder.B.PlayerGameToken
         console.log('[debug] join table success!! token=', token)
         if (token) {
           const oldtoken = this.$store.state.pgtoken
@@ -253,7 +253,7 @@ export default {
     },
     // RESPONSE_LEAVE_GAME_RESULT
     process_29999 (cmder) {
-      console.log('[debug] 回傳離開遊戲桌結果20099 process_20099(', cmder, ')')
+      console.log('[debug] 回傳離開遊戲桌結果29999 process_29999(', cmder, ')')
       if (cmder.SC === 1000) { // success
         console.log('leave table success!')
       } else {

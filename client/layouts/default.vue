@@ -923,8 +923,8 @@ export default {
         case 20011:// RESPONSE_BET_RESULT
           this.process_20011(cmder)
           break
-        case 20099:// RESPONSE_LEAVE_GAME_RESULT
-          this.process_20099(cmder)
+        case 29999:// RESPONSE_LEAVE_GAME_RESULT
+          this.process_29999(cmder)
           break
         default:
           console.error('no process cmder=', cmder)
