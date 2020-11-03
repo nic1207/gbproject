@@ -178,7 +178,7 @@ export const state = () => ({
   },
   */
   pgtoken: undefined, // 加入遊戲桌成功的TOKEN
-  jointables: undefined,
+  jointables: [],
   /*
   jointables: [{
     GameID: 1001, // 遊戲識別號
