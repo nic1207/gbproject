@@ -297,8 +297,9 @@
               </v-icon>
             </v-btn>
           </v-btn-toggle>
+          <!--
           <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
-            <v-img src="/icon/高清按鈕.png" />
+            <v-img src="/icon/highlight.png" />
           </v-btn>
           <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
             <v-icon class="pa-2 " color="#B98F38">
@@ -313,6 +314,7 @@
           <v-btn v-if="showViewList" icon class="pa-2 ma-1" link exact>
             <v-img src="/icon/reload_v.png" />
           </v-btn>
+          -->
         </div>
         <v-divider vertical />
         <div class="d-flex justify-center align-center footer-size" style="width:10vw;color:#C4A76E">
@@ -428,15 +430,16 @@ export default {
         {
           title: this.$t('LEFTMENU.BACCARAT'),
           to: '/roomlist'
-        },
-        {
-          title: this.$t('LEFTMENU.MULTIBET'),
-          to: '/multibet'
-        },
-        {
-          title: this.$t('LEFTMENU.MOBILE'),
-          to: '/inspire'
         }
+        // },
+        // {
+        //   title: this.$t('LEFTMENU.MULTIBET'),
+        //   to: '/multibet'
+        // },
+        // {
+        //   title: this.$t('LEFTMENU.MOBILE'),
+        //   to: '/inspire'
+        // }
 
       ],
       MainMenu: [

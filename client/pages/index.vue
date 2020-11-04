@@ -104,11 +104,11 @@ export default {
           return
         } else {
           // for local test
-          // this.LoginCode = await this.doGetCode()
-          // console.log('[debug] new LoginCode=', this.LoginCode)
+          this.LoginCode = await this.doGetCode()
+          console.log('[debug] new LoginCode=', this.LoginCode)
           // for stable server
-          this.$store.commit('clear')
-          window.location.href = 'http://35.229.140.14:30601/'
+          // this.$store.commit('clear')
+          // window.location.href = 'http://35.229.140.14:30601/'
         }
       }
       console.log('do_send_login()')

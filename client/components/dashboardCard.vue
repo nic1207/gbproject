@@ -185,7 +185,7 @@
               style="height: 100%; background:black;"
             >
               <v-btn
-                v-for="(bl, index) in betlimits"
+                v-for="(gp, index) in groups"
                 :key="index"
                 class="white--text  mr-1"
                 :small="PropCardSize=='md3'"
@@ -193,9 +193,9 @@
                 depressed
                 color="#5f4d35"
                 link
-                @click="joinGameTable(Games[0].GameID, table.TableID, bl.GroupID)"
+                @click="joinGameTable(Games[0].GameID, table.TableID, gp.GroupID)"
               >
-                {{ numFormat(bl.BetSettings[0].PBLL) }} - {{ numFormat(bl.BetSettings[0].PBUL) }}
+                {{ numFormat(gp.BetSettings[0].PBLL) }} - {{ numFormat(gp.BetSettings[0].PBUL) }}
               </v-btn>
             </div>
             <!-- end first button- second action-->
@@ -208,7 +208,7 @@
               style="height: 100%; background:black;"
             >
               <v-btn
-                v-for="(bl, index) in betlimits"
+                v-for="(gp, index) in groups"
                 :key="index"
                 class="white--text mr-1"
                 :small="PropCardSize=='md3'"
@@ -216,9 +216,9 @@
                 depressed
                 color="#5f4d35"
                 link
-                @click="joinGameTable(Games[0].GameID, table.TableID, bl.GroupID)"
+                @click="joinGameTable(Games[0].GameID, table.TableID, gp.GroupID)"
               >
-                {{ numFormat(bl.PBLL) }} - {{ numFormat(bl.PBUL) }}
+                {{ numFormat(gp.BetSettings[0].PBLL) }} - {{ numFormat(gp.BetSettings[0].PBUL) }}
               </v-btn>
             </div>
             <!-- end second button- second action-->
@@ -383,7 +383,7 @@ export default {
         return []
       }
     },
-    betlimits () {
+    groups () {
       if (this.$store.state.groups) {
         // console.log('this.$store.state.groups=', this.$store.state.groups)
         return this.$store.state.groups.Groups

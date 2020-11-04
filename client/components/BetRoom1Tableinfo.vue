@@ -15,12 +15,13 @@
     >
       <span style="font-size:0.8vw"> {{ $t('TABLE.TABLEINFO') }}</span>
     </v-tab>
-    <v-tab
+    <!--<v-tab
       :href="`#tab-2`"
       style="color:#BC8F31;"
     >
       <span style="font-size:0.8vw" @onclick="doPlay"> {{ $t('TABLE.VIDEO') }}</span>
     </v-tab>
+    -->
     <v-tab
       :href="`#tab-3`"
       style="color:#BC8F31;"
@@ -223,14 +224,14 @@
                 >
                   <v-radio-group v-model="betLimit" :mandatory="false">
                     <v-radio
-                      v-for="(item, index) in BetSettings"
+                      v-for="(gp, index) in Groups"
                       :key="index+1"
-                      :label="(item.PBLL/10000)+` - `+(item.PBUL/10000)"
-                      :value="item.GroupID"
+                      :label="(gp.BetSettings[NowGroupID].PBLL/10000)+` - `+(gp.BetSettings[NowGroupID].PBUL/10000)"
+                      :value="gp.GroupID"
                       on-icon="done"
                       color="#B48A33"
                       off-icon=""
-                      @change="doChangeGroupID(item.GroupID)"
+                      @change="doChangeGroupID(gp.GroupID)"
                     />
                   </v-radio-group>
                 </v-list>
@@ -257,6 +258,7 @@
       </v-banner>
       -->
     </v-tab-item>
+    <!--
     <v-tab-item
       :value="'tab-' + 2"
     >
@@ -280,6 +282,7 @@
         </div>
       </v-card>
     </v-tab-item>
+    -->
     <v-tab-item
       :value="'tab-' + 3"
     >
@@ -343,57 +346,49 @@
   </v-tabs>
 </template>
 <script>
-import 'video.js/dist/video-js.css'
-import { videoPlayer } from 'vue-video-player'
+// import 'video.js/dist/video-js.css'
+// import { videoPlayer } from 'vue-video-player'
 
 export default {
   components: {
-    videoPlayer
   },
   data () {
     return {
-      playerOptions: {
-        muted: true,
-        language: 'en',
-        autoplay: true, // 是否自動播放
-        controls: false, // 是否擁有控制條
-        loop: true, // 導致視訊一結束就重新開始
-        preload: 'muted', // 建議瀏覽器在<video>載入元素後是否應該開始下載視訊數據。auto瀏覽器選擇最佳行爲,立即開始載入視訊（如果瀏覽器支援）
-        // aspectRatio: '16:9', // 播放器大小比例
-        fluid: true, // 當true時，將按比例縮放以適應其容器
-        techOrder: ['html5'], // 相容順序'flash', 'html5'
-        sourceOrder: true,
-        html5: {
-          hls: {
-            withCredentials: true
-          }
-        },
-        sources: [{
-          withCredentials: false,
-          type: 'video/mp4',
-          src: 'http://1.34.133.245:3310/live/test.m3u8'
-          // src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm'
-          // type: 'application/x-mpegURL', // 型別
-          // src: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8' // 流地址
-        }]
-        // poster: '/vue-videojs-demo/static/images/logo.png'
-        // controlBar: {
-        //   timeDivider: false, // 時間分割線
-        //   durationDisplay: false, // 總時間
-        //   progressControl: true, // 進度條
-        //   customControlSpacer: true, // 未知
-        //   fullscreenToggle: true // 全螢幕
-        // },
-      },
+      // playerOptions: {
+      //   muted: true,
+      //   language: 'en',
+      //   autoplay: true, // 是否自動播放
+      //   controls: false, // 是否擁有控制條
+      //   loop: true, // 導致視訊一結束就重新開始
+      //   preload: 'muted', // 建議瀏覽器在<video>載入元素後是否應該開始下載視訊數據。auto瀏覽器選擇最佳行爲,立即開始載入視訊（如果瀏覽器支援）
+      //   // aspectRatio: '16:9', // 播放器大小比例
+      //   fluid: true, // 當true時，將按比例縮放以適應其容器
+      //   techOrder: ['html5'], // 相容順序'flash', 'html5'
+      //   sourceOrder: true,
+      //   html5: {
+      //     hls: {
+      //       withCredentials: true
+      //     }
+      //   },
+      //   sources: [{
+      //     withCredentials: false,
+      //     type: 'video/mp4',
+      //     src: 'http://1.34.133.245:3310/live/test.m3u8'
+      //     // src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm'
+      //     // type: 'application/x-mpegURL', // 型別
+      //     // src: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8' // 流地址
+      //   }]
+      //   // poster: '/vue-videojs-demo/static/images/logo.png'
+      //   // controlBar: {
+      //   //   timeDivider: false, // 時間分割線
+      //   //   durationDisplay: false, // 總時間
+      //   //   progressControl: true, // 進度條
+      //   //   customControlSpacer: true, // 未知
+      //   //   fullscreenToggle: true // 全螢幕
+      //   // },
+      // },
       videoready: false,
       betLimit: '1',
-      // changenumbers: {
-      //  '10-1000': { bet_limit: '1,000', banker: '1,000', player: '1,000', tie: '125', pair: '90' },
-      //  '50-5000': { bet_limit: '5000', banker: '5,000', player: '5,000', tie: '625', pair: '454' },
-      //  '100-5000': { bet_limit: '600', banker: '5,000', player: '5,000', tie: '625', pair: '454' },
-      //  '100-10k': { bet_limit: '100', banker: '10,000', player: '10,000', tie: '1250', pair: '909' },
-      //  '200-20k': { bet_limit: '200', banker: '20,000', player: '20,000', tie: '2500', pair: '1818' }
-      // },
       progress: 50,
       exten: false
     }
@@ -430,12 +425,19 @@ export default {
       }
     },
     Groups () {
-      const groups = this.$store.state.groups
-      console.log('groups=', groups)
-      return groups
+      if (this.$store.state.groups) {
+        // console.log('this.$store.state.groups=', this.$store.state.groups)
+        return this.$store.state.groups.Groups
+      } else {
+        return []
+      }
     },
     NowGroupID () {
-      return this.$store.state.NowGroupID
+      if (this.$store.state.NowGroupID) {
+        return this.$store.state.NowGroupID
+      } else {
+        return 0
+      }
     },
     BetSettings () {
       if (this.$store.state.betsetting && this.$store.state.betsetting.BetSettings) {
@@ -461,6 +463,7 @@ export default {
       }
     },
     changenumbers () {
+      console.log('this.BetSet=', this.BetSet)
       if (this.BetSet && this.BetSet.BABULS) {
         return this.BetSet.BABULS
       } else {
@@ -493,37 +496,37 @@ export default {
     */
   },
   methods: {
-    doPlay () {
-      console.log('doPlay()')
-    },
+    // doPlay () {
+    //   console.log('doPlay()')
+    // },
     doChangeGroupID (gid) {
       console.log('doChangeGroupID(', gid, ')')
       if (gid) {
         this.$store.commit('setNowGroupID', gid)
       }
-    },
-    // listen event
-    onPlayerPlay (player) {
-      console.log('player play!', player)
-      // this.videoready = true
-    },
-    onPlayerCanplay (player) {
-      console.log('onPlayerCanplay()', player)
-      // this.videoready = true
-    },
-    onPlayerPause (player) {
-      console.log('player pause!', player)
-    },
-    onPlayerLoadeddata (player) {
-      console.log('onPlayerLoadeddata!', player)
-      this.videoready = true
-    },
-    // player is ready
-    playerReadied (player) {
-      console.log('the player is readied', player)
-      // you can use it to do something...
-      // player.[methods]
     }
+    // listen event
+    // onPlayerPlay (player) {
+    //   console.log('player play!', player)
+    //   // this.videoready = true
+    // },
+    // onPlayerCanplay (player) {
+    //   console.log('onPlayerCanplay()', player)
+    //   // this.videoready = true
+    // },
+    // onPlayerPause (player) {
+    //   console.log('player pause!', player)
+    // },
+    // onPlayerLoadeddata (player) {
+    //   console.log('onPlayerLoadeddata!', player)
+    //   this.videoready = true
+    // },
+    // // player is ready
+    // playerReadied (player) {
+    //   console.log('the player is readied', player)
+    //   // you can use it to do something...
+    //   // player.[methods]
+    // }
   }
 }
 </script>

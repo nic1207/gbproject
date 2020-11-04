@@ -212,15 +212,14 @@ export const state = () => ({
     }]
   }
   */
-  showcoins: []
-  /*
+  // showcoins: []
   showcoins: [
     'coin_5.png',
     'coin_10.png',
     'coin_20.png',
-    'coin_50.png'
+    'coin_50.png',
+    'coin_100.png'
   ]
-  */
 })
 export const mutations = {
   setUser (state, user) {
@@ -279,7 +278,7 @@ export const mutations = {
     state.groups = groups
   },
   setHistory (state, history) {
-    // console.log('[debug] setHistory(', history, ')')
+    console.log('[debug] setHistory(', history, ')')
     state.history = history
   },
   setShowCoins (state, coins) {
