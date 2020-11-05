@@ -278,7 +278,7 @@ export const mutations = {
     state.groups = groups
   },
   setHistory (state, history) {
-    console.log('[debug] setHistory(', history, ')')
+    // console.log('[debug] setHistory(', history, ')')
     state.history = history
   },
   setShowCoins (state, coins) {

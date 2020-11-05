@@ -491,7 +491,10 @@ export default {
       // console.log('State()!!nowtable=', nowtable)
       if (nowtable && nowtable.State) {
         const st = nowtable.State
-        console.log('!!!!! st=', st)
+        console.log('!!!!! nowtable.st=', st)
+        if (st === 51) {
+          console.log('nowtable=', nowtable)
+        }
         return st
       } else {
         return -1
@@ -593,7 +596,7 @@ export default {
   //       tableDrawer
   //   },
   mounted () {
-    console.log('zzzzzzzzzzzzz')
+    // console.log('zzzzzzzzzzzzz')
     const xx = this.$cookies.get('t_betroom')
     this.tutorial = !xx
     // console.log('xxxx this.tutorial=', this.tutorial)
@@ -641,7 +644,7 @@ export default {
 
     // player is ready
     playerReadied (player) {
-      console.log('the player is readied', player)
+      // console.log('the player is readied', player)
       // you can use it to do something...
       // player.[methods]
     },
@@ -755,7 +758,7 @@ export default {
         const pgtoken = this.$store.state.pgtoken
         // const nowtableid = this.$store.state.nowtableid
         const nowtable = this.$store.state.nowtable
-        console.log('xzzzz nowtable.RoundID=', nowtable.RoundID)
+        // console.log('xzzzz nowtable.RoundID=', nowtable.RoundID)
         const nowgroupid = this.$store.state.nowgroupid
         const cmdBody = {
           Token: token, // 在線憑證

@@ -518,7 +518,7 @@ export default {
   },
   loading: false,
   mounted () {
-    console.log('zzzzzzzz default.mounted()')
+    // console.log('zzzzzzzz default.mounted()')
     // this.connect()
     // Always call on message
     // this.doLogin()
@@ -812,8 +812,14 @@ export default {
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
           const history = cmder.B
-          // console.log('history=', history)
-          this.$store.commit('setHistory', history)
+          // console.log('!!!!! history=', history)
+          const nowtableid = this.$store.state.nowtableid
+          // console.log('!!!!! nowtableid=', nowtableid)
+          // const nowtable = this.$store.state.nowtable
+          // console.log('!!!!! nowtable=', nowtable)
+          if (history.TableID === nowtableid) {
+            this.$store.commit('setHistory', history)
+          }
         }
       } else {
         console.log('refresh game history fail!')

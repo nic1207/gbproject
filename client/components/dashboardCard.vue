@@ -13,15 +13,27 @@
           <span class="black--text textSize">{{ playerCount }} </span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/cb.png" max-height="1vw" max-width="1vw" />
+          <v-img
+            src="/icon/cb.png"
+            max-height="20.5"
+            max-width="20.5"
+          />
           <span class="black--text textSize">{{ table && table.bb }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/cp.png" max-height="1vw" max-width="1vw" />
+          <v-img
+            src="/icon/cp.png"
+            max-height="20.5"
+            max-width="20.5"
+          />
           <span class="black--text textSize">{{ table && table.pp }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/ct.png" max-height="1vw" max-width="1vw" />
+          <v-img
+            src="/icon/ct.png"
+            max-height="20.5"
+            max-width="20.5"
+          />
           <span class="black--text textSize"> {{ table && table.tt }}</span>
         </v-flex>
         <v-flex style="flex: 0 1 auto;flex-basis: 100px;height:30px">
@@ -42,18 +54,30 @@
           <span class="black--text textSize">{{ playerCount }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/cb.png" max-height="1vw" max-width="1vw" />
+          <v-img
+            src="/icon/cb.png"
+            max-height="20.5"
+            max-width="20.5"
+          />
           <span class="black--text textSize">{{ table && table.bb }}</span>
         </v-flex>
       </v-row>
       <!-- card bar for other column views -->
       <v-row v-if="PropCardSize!='md6'" no-gutters class="dashboard-bar">
         <v-flex row class="align-center ml-1">
-          <v-img src="/icon/cp.png" max-height="1vw" max-width="1vw" />
+          <v-img
+            src="/icon/cp.png"
+            max-height="20.5"
+            max-width="20.5"
+          />
           <span class="black--text textSize">{{ table && table.pp }}</span>
         </v-flex>
         <v-flex row class="align-center">
-          <v-img src="/icon/ct.png" max-height="1vw" max-width="1vw" />
+          <v-img
+            src="/icon/ct.png"
+            max-height="20.5"
+            max-width="20.5"
+          />
           <span class="black--text textSize"> {{ table && table.tt }}</span>
         </v-flex>
         <v-flex>
@@ -90,7 +114,7 @@
             <div
               :style="{width:'100%', height:'100%',
                        'background-image': 'url(\'/icon/'+
-                         `${PropCardSize=='md6'?'road_big.png':PropCardSize=='md4'?'chess.png':'road_small.png'}`
+                         `${PropCardSize=='md6'?'road_big.png':PropCardSize=='md4'?'road_middle.png':'road_small.png'}`
                          //chaing background image based on card size and column views
                          + '\')',
                        'background-repeat': 'no-repeat',
@@ -99,7 +123,7 @@
             >
               <v-row no-gutters style="height:100%;width:100%">
                 <div
-                  v-if="PropCardSize=='md6'||PropCardSize=='md3'"
+                  v-if="PropCardSize=='md6'||PropCardSize=='md3'||PropCardSize=='md4'"
                   :style="{height:'100%', width:PropCardSize=='md3'?'100%':'39%',}"
                   class="d-flex align-content-start flex-wrap flex-column"
                 >
@@ -107,9 +131,9 @@
                     v-for="(hi, index) in histroy"
                     :key="index"
                     class="mt-1"
-                    :src="images[hi]"
-                    max-height="calc((100%)/6)"
-                    max-width="calc(100%/11)"
+                    :src="WinImages[hi]"
+                    :max-height="max_height"
+                    :max-width="max_width"
                   />
                 </div>
                 <div
@@ -243,7 +267,7 @@ export default {
     return {
       show: false,
       secondshow: false,
-      images: [
+      WinImages: [
         { src: '/icon/0.png' },
         { src: '/icon/cp.png' },
         { src: '/icon/ct.png' },
@@ -280,6 +304,30 @@ export default {
         return this.$store.state.account.Token
       } else {
         return []
+      }
+    },
+    max_height () {
+      console.log('this.PropCardSize=', this.PropCardSize)
+      if (this.PropCardSize === 'md6') {
+        return 20.5
+      } else if (this.PropCardSize === 'md4') {
+        return 9.9
+      } else if (this.PropCardSize === 'md3') {
+        return 10
+      } else {
+        return 20
+      }
+    },
+    max_width () {
+      console.log('this.PropCardSize=', this.PropCardSize)
+      if (this.PropCardSize === 'md6') {
+        return 20.5
+      } else if (this.PropCardSize === 'md4') {
+        return 7
+      } else if (this.PropCardSize === 'md3') {
+        return 11
+      } else {
+        return 20
       }
     },
     nameavatar () {
@@ -410,6 +458,7 @@ export default {
         }
         if (tid) {
           this.$store.commit('setNowTableID', tid)
+          this.$store.commit('setHistory', [])
         }
         const cmdBody = {
           Token: this.token,

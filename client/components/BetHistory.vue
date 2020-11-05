@@ -36,39 +36,51 @@
             </v-row>
 
             <div style="width:100%; height:50%;" class="d-flex align-content-start flex-wrap flex-column">
+              <!--
               <HoverPreviewResult v-for="n in 12" :key="n">
                 <template v-slot:item="slotProps">
                   <v-img
                     src="/icon/cb.png"
-                    max-height="1.6vw"
-                    max-width="1.6vw"
+                    max-height="20"
+                    max-width="20"
                     v-bind="slotProps.activate.attrs"
                     v-on="slotProps.activate.on"
                   />
                 </template>
               </HoverPreviewResult>
+              -->
+              <v-img
+                v-for="(hi, index) in histroy"
+                :key="index"
+                :src="WinImages[hi.Winlose]"
+                height="24px"
+                width="33px"
+                max-height="24px"
+                max-width="33px"
+              />
             </div>
           </div>
           <v-row no-gutters style="width:100%; height:10%">
             <div class="d-flex align-center justify-left room-list" style="width:50%; height:100%; background-color:black">
               <span class="font-weight-bold red--text ml-1">庄</span>
-              <span class="font-weight-bold white--text ml-1">13</span>
-              <span class="font-weight-bold blue--text ml-1">圓</span>
-              <span class="font-weight-bold white--text ml-1">123</span>
+              <span class="font-weight-bold white--text ml-1">{{ bb }}</span>
+              <span class="font-weight-bold blue--text ml-1">閒</span>
+              <span class="font-weight-bold white--text ml-1">{{ pp }}</span>
               <span class="font-weight-bold green--text ml-1">和</span>
-              <span class="font-weight-bold white--text ml-1">13</span>
-              <span class="font-weight-bold red--text ml-1">庄庄</span>
+              <span class="font-weight-bold white--text ml-1">{{ tt }}</span>
+              <!--<span class="font-weight-bold red--text ml-1">庄庄</span>
               <span class="font-weight-bold white--text ml-1">13</span>
               <span class="font-weight-bold blue--text ml-1">和和</span>
               <span class="font-weight-bold white--text ml-1">133</span>
+              -->
             </div>
             <div class="d-flex align-center justify-left room-list" style="width:50%; height:100%; background-color:black">
               <v-btn small color="#c70000" class="ml-1">
                 <span class="white--text">庄問路</span>
               </v-btn>
               <v-img
-                max-width="1vw"
-                max-height="1vw"
+                max-width="20"
+                max-height="20"
                 src="/icon/redc.png"
               />
               <v-avatar color="#c70000" class="ml-1" size="15" />
@@ -77,8 +89,8 @@
                 <span class="white--text"> 閒問路</span>
               </v-btn>
               <v-img
-                max-width="1vw"
-                max-height="1vw"
+                max-width="20"
+                max-height="20"
                 src="/icon/bluec.png"
               />
               <v-avatar color="#2d30b1" class="ml-1" size="15" />
@@ -126,7 +138,13 @@
 export default {
   data () {
     return {
-      window: 1
+      window: 1,
+      WinImages: [
+        { src: '/icon/0.png' },
+        { src: '/icon/cp.png' },
+        { src: '/icon/ct.png' },
+        { src: '/icon/cb.png' }
+      ]
     }
   },
   computed: {
@@ -137,6 +155,42 @@ export default {
       const nowtable = this.$store.state.nowtable
       if (nowtable) {
         return nowtable.GameID
+      } else {
+        return 0
+      }
+    },
+    histroy () {
+      if (this.$store.state.history) {
+        // console.log('this.$store.state.history=', this.$store.state.history)
+        return this.$store.state.history.History
+      } else {
+        return []
+      }
+    },
+    bb () {
+      if (this.$store.state.history && this.$store.state.history.History) {
+        const rs = this.$store.state.history.History
+        const bb = rs.filter(x => x.Winlose === 3).length
+        return bb
+      } else {
+        return 0
+      }
+    },
+    pp () {
+      if (this.$store.state.history && this.$store.state.history.History) {
+        const rs = this.$store.state.history.History
+        const pp = rs.filter(x => x.Winlose === 1).length
+        return pp
+      } else {
+        return 0
+      }
+    },
+
+    tt () {
+      if (this.$store.state.history && this.$store.state.history.History) {
+        const rs = this.$store.state.history.History
+        const tt = rs.filter(x => x.Winlose === 2).length
+        return tt
       } else {
         return 0
       }
@@ -211,6 +265,7 @@ export default {
       try {
         if (tid) {
           this.$store.commit('setNowTableID', tid)
+          this.$store.commit('setHistory', [])
         }
         const cmdBody = {
           Token: this.token,
