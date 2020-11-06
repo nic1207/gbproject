@@ -294,53 +294,55 @@
         <div class="result-cards">
           <v-img
             v-if="cards.length>0"
-            :src="'/card/'+cardImages[cards[0]]"
+            :src="'/card/'+cardImages[cards[0]]+'.png'"
             height="14vh"
             contain
             style="position:absolute;left:15%;top:1%; transform: rotate(-90deg);"
           />
           <v-img
-            v-if="cards.length>1"
-            :src="'/card/'+cardImages[cards[1]]"
+            v-if="cards.length>2"
+            :src="'/card/'+cardImages[cards[2]]+'.png'"
             height="14vh"
             contain
             style=" position:absolute;left:5%;bottom:18%"
           />
           <v-img
-            v-if="cards.length>2"
-            :src="'/card/'+cardImages[cards[2]]"
+            v-if="cards.length>4"
+            :src="'/card/'+cardImages[cards[4]]+'.png'"
             height="14vh"
             contain
             style=" position:absolute;left:27%;bottom:18%"
           />
           <div
+            v-if="pp"
             class=" d-flex justify-center align-center"
             style="width:42%; height:10%; position:absolute; top:85%; left:5%; background-color:blue"
           >
             <span>Player {{ pp }}</span>
           </div>
           <v-img
-            v-if="cards.length>3"
-            :src="'/card/'+cardImages[cards[3]]"
+            v-if="cards.length>1"
+            :src="'/card/'+cardImages[cards[1]]+'.png'"
             contain
             height="14vh"
             style="position:absolute;right:18%;top:2%; transform: rotate(-90deg);"
           />
           <v-img
-            v-if="cards.length>4"
-            :src="'/card/'+cardImages[cards[4]]"
+            v-if="cards.length>5"
+            :src="'/card/'+cardImages[cards[5]]+'.png'"
             contain
             height="14vh"
             style=" position:absolute;right:5%;bottom:18%"
           />
           <v-img
-            v-if="cards.length>5"
-            :src="'/card/'+cardImages[cards[5]]"
+            v-if="cards.length>3"
+            :src="'/card/'+cardImages[cards[3]]+'.png'"
             contain
             height="14vh"
             style="position:absolute;right:27%;bottom:18%"
           />
           <div
+            v-if="bp"
             class=" d-flex justify-center align-center"
             style="width:42%; height:10%; position:absolute; top:85%; right:5%; background-color:red"
           >
@@ -408,11 +410,11 @@ export default {
       // console.log('State()!!nowtable=', nowtable)
       if (nowtable && nowtable.Desktop && nowtable.Desktop.ShowCards) {
         const st = nowtable.State
-        console.log('!!!!! nowtable.st=', st)
-        if (st === 41) { // 開牌階段才有
+        // console.log('!!!!! nowtable.st=', st)
+        if (st >= 41) { // 開牌階段才有
           console.log('nowtable=', nowtable)
           const cards = nowtable.Desktop.ShowCards
-          console.log('cards=', cards)
+          console.log('!!!!! cards=', cards)
           return cards
         } else {
           return []
@@ -426,7 +428,7 @@ export default {
       // console.log('State()!!nowtable=', nowtable)
       if (nowtable && nowtable.Desktop) {
         const st = nowtable.State
-        if (st === 51) { // 結算階段才有
+        if (st >= 41) { // 結算階段才有
           return nowtable.Desktop.PlayerPoint
         } else {
           return null
@@ -440,7 +442,7 @@ export default {
       // console.log('State()!!nowtable=', nowtable)
       if (nowtable && nowtable.Desktop) {
         const st = nowtable.State
-        if (st === 51) { // 結算階段才有
+        if (st >= 41) { // 結算階段才有
           return nowtable.Desktop.BankPoint
         } else {
           return null
