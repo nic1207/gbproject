@@ -71,6 +71,9 @@
           <div v-if="false" class="d-flex flex-column justify-center align-center betResult">
             {{ StateString }}
           </div>
+          <div v-if="GameResult" :style="'background-color: '+GameResultColor" class="d-flex justify-center align-center GameResultAnnounce">
+            {{ GameResult }}
+          </div>
         </div>
         <!--beting play section-->
         <v-tabs
@@ -93,20 +96,6 @@
           >
             <span style="font-size:0.8vw"> {{ $t('SUBGAMENAMES.'+item.SubgameCode) }}</span>
           </v-tab>
-          <!--
-          <v-tab
-            :href="`#tab-2`"
-            style="color:#F7D9AB;"
-          >
-            <span style="font-size:0.8vw">  No Commission</span>
-          </v-tab>
-          <v-tab
-            :href="`#tab-3`"
-            style="color:#F7D9AB;"
-          >
-            <span style="font-size:0.8vw">  Cow Cow</span>
-          </v-tab>
-          -->
           <v-tab-item
             :value="'tab-' + 1"
           >
@@ -119,51 +108,95 @@
               @mousemove="onMouseMove"
               @mouseleave="showCoin = false"
             >
-              <div v-show="State!=31" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0.5)">
-                <div v-show="State!=31" class="d-flex justify-center align-center stopBetting">
-                  {{ $t('TABLE.STOPBETTING') }}
+              <div v-show="ShowAnnounce" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0.5)">
+                <div v-show="ShowAnnounce" class="d-flex justify-center align-center AnnounceMessage">
+                  {{ ShowAnnounce }}
                 </div>
               </div>
-              <div v-show="BetSuccess" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0)">
-                <div v-show="BetSuccess" class="d-flex justify-center align-center stopBetting">
-                  {{ $t('TABLE.BETSUCCESS') }}
-                </div>
-              </div>
-              <div v-if="false" class="d-flex flex-column justify-center align-center bettingSuccess">
+              <div v-if="BetSuccess" class="d-flex flex-column justify-center align-center bettingSuccess">
+                {{ $t('TABLE.BETSUCCESS') }}<br>
                 <v-icon color="green" size="60">
                   done
                 </v-icon>
-                Betting Success
               </div>
+              <div v-if="BetFail" class="d-flex flex-column justify-center align-center bettingSuccess">
+                {{ $t('TABLE.BETFAIL') }}<br>
+                <v-icon color="red" size="60">
+                  mdi-close
+                </v-icon>
+              </div>
+              <div v-if="ConfirmDialog" class="d-flex flex-column justify-center align-center bettingSuccess">
+                <v-card color="rgba(0, 0, 0, 0.7)" elevation="20">
+                  <!--<v-card-title>
+                    <v-row no-gutters justify="center">
+                      Are You Sure Bet Coin?
+                    </v-row>
+                  </v-card-title>
+                  -->
+                  <v-row no-gutters align="center" justify="center">
+                    <div
+                      v-if="betCoin"
+                      class="text-center "
+                      justify="center"
+                    >
+                      <v-img
+                        :src="'/coin/'+betCoin"
+                        :title="get_coin_value_m(betCoin)"
+                        max-width="52"
+                        max-height="36"
+                      />
+                    </div>
+                  </v-row>
+                  <v-card-actions>
+                    <v-row justify="center">
+                      <v-img
+                        src="/icon/selectUI.png"
+                        class="ma-2"
+                        max-width="2.5vw"
+                        max-height="2.5vw"
+                        @click="cancelCoinBet"
+                      />
 
+                      <!-- </v-btn> -->
+                      <v-img
+                        src="/icon/cancelUI.png"
+                        class="ma-2"
+                        max-width="2.5vw"
+                        max-height="2.5vw"
+                        @click="confirmCoinBet"
+                      />
+                    </v-row>
+                  </v-card-actions>
+                </v-card>
+              </div>
               <v-row style="height:55%;width:100%; margin:0">
-                <v-col tile cols="4" class="playArea-tile" align="center" @click="dobet('P')">
+                <v-col tile cols="4" class="playArea-tile" align="center" @click="openConfirmDialog('P')">
                   <h1>{{ $t('TABLE.PLAYER') }}</h1>
                   <h2>1:1</h2>
                 </v-col>
-                <v-col tile class="tie playArea-tile" align="center" @click="dobet('T')">
+                <v-col tile class="tie playArea-tile" align="center" @click="openConfirmDialog('T')">
                   <h1>{{ $t('TABLE.TIE') }}</h1>
                   <h2>8:1</h2>
                 </v-col>
-                <v-col tile cols="4" class="playArea-tile banker" align="center" @click="dobet('B')">
+                <v-col tile cols="4" class="playArea-tile banker" align="center" @click="openConfirmDialog('B')">
                   <h1> {{ $t('TABLE.BANKER') }} </h1>
                   <h2>0.95:1</h2>
                 </v-col>
               </v-row>
               <v-row style="height:45%;width:100%; margin:0">
-                <v-col tile cols="3" class="playArea-tile1" align="center" @click="dobet('PP')">
+                <v-col tile cols="3" class="playArea-tile1" align="center" @click="openConfirmDialog('PP')">
                   <h1>{{ $t('TABLE.PLAYERPAIR') }}</h1>
                   <h2>11:1</h2>
                 </v-col>
-                <v-col tile cols="3" class="playArea-tile1" align="center" @click="dobet('PN')">
+                <v-col tile cols="3" class="playArea-tile1" align="center" @click="openConfirmDialog('PN')">
                   <h1>{{ $t('TABLE.PLAYERNATURAL') }}</h1>
                   <h2>7:2</h2>
                 </v-col>
-                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="dobet('BN')">
+                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="openConfirmDialog('BN')">
                   <h1>{{ $t('TABLE.BANKERNATURAL') }}</h1>
                   <h2>7:2</h2>
                 </v-col>
-                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="dobet('BP')">
+                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="openConfirmDialog('BP')">
                   <h1>{{ $t('TABLE.BANKERPAIR') }}</h1>
                   <h2>11:1</h2>
                 </v-col>
@@ -179,39 +212,39 @@
               height="30vh"
               class="playArea"
             >
-              <div v-show="State!=31" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0.5)">
-                <div v-show="State!=31" class="d-flex justify-center align-center stopBetting">
-                  {{ $t('TABLE.STOPBETTING') }}
+              <div v-show="true" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0.5)">
+                <div v-show="true" class="d-flex justify-center align-center AnnounceMessage">
+                  {{ $t('TABLE.COMINGSOON') }}
                 </div>
               </div>
               <v-row style="height:55%;width:100%; margin:0">
-                <v-col tile cols="4" class="playArea-tile" align="center" @click="dobet('P')">
+                <v-col tile cols="4" class="playArea-tile" align="center" @click="openConfirmDialog('P')">
                   <h1>{{ $t('TABLE.PLAYER') }}</h1>
                   <h2>1:1</h2>
                 </v-col>
-                <v-col tile cols="4" class="tie playArea-tile" align="center" @click="dobet('T')">
+                <v-col tile cols="4" class="tie playArea-tile" align="center" @click="openConfirmDialog('T')">
                   <h1>{{ $t('TABLE.TIE') }}</h1>
                   <h2>8:1</h2>
                 </v-col>
-                <v-col tile cols="4" class="playArea-tile banker" align="center" @click="dobet('B')">
+                <v-col tile cols="4" class="playArea-tile banker" align="center" @click="openConfirmDialog('B')">
                   <h1>{{ $t('TABLE.BANKER') }}</h1>
                   <h2>1:1</h2>
                 </v-col>
               </v-row>
               <v-row style="height:45%;width:100%; margin:0">
-                <v-col tile cols="3" class="playArea-tile1" align="center" @click="dobet('PN')">
+                <v-col tile cols="3" class="playArea-tile1" align="center" @click="openConfirmDialog('PN')">
                   <h1>{{ $t('TABLE.PLAYERNATURAL') }}</h1>
                   <h2>11:1</h2>
                 </v-col>
-                <v-col tile cols="3" class="playArea-tile1" align="center" @click="dobet('PP')">
+                <v-col tile cols="3" class="playArea-tile1" align="center" @click="openConfirmDialog('PP')">
                   <h1>{{ $t('TABLE.PLAYERPAIR') }}</h1>
                   <h2>7:2</h2>
                 </v-col>
-                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="dobet('BN')">
+                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="openConfirmDialog('BN')">
                   <h1>{{ $t('TABLE.BANKERNATURAL') }}</h1>
                   <h2>7:2</h2>
                 </v-col>
-                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="dobet('BP')">
+                <v-col tile cols="3" class="playArea-tile1 banker" align="center" @click="openConfirmDialog('BP')">
                   <h1>{{ $t('TABLE.BANKERPAIR') }}</h1>
                   <h2>11:1</h2>
                 </v-col>
@@ -227,21 +260,21 @@
               height="30vh"
               class="playArea"
             >
-              <div v-show="State!=31" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0.5)">
-                <div v-show="State!=31" class="d-flex justify-center align-center stopBetting">
-                  {{ $t('TABLE.STOPBETTING') }}
+              <div v-show="true" style="position:absolute;height:100%;width:100%; margin:0;background-color: rgba(0,0,0,0.5)">
+                <div v-show="true" class="d-flex justify-center align-center AnnounceMessage">
+                  {{ $t('TABLE.COMINGSOON') }}
                 </div>
               </div>
               <v-row style="height:100%;width:100%; margin:0">
-                <v-col tile cols="4" class="playArea-tile" align="center" @click="dobet('P')">
+                <v-col tile cols="4" class="playArea-tile" align="center" @click="openConfirmDialog('P')">
                   <h1>{{ $t('TABLE.PLAYER') }}</h1>
                   <h2>1:1</h2>
                 </v-col>
-                <v-col tile cols="4" class="tie playArea-tile" align="center" @click="dobet('T')">
+                <v-col tile cols="4" class="tie playArea-tile" align="center" @click="openConfirmDialog('T')">
                   <h1>{{ $t('TABLE.TIE') }}</h1>
                   <h2>8:1</h2>
                 </v-col>
-                <v-col tile cols="4" class="playArea-tile banker" align="center" @click="dobet('B')">
+                <v-col tile cols="4" class="playArea-tile banker" align="center" @click="openConfirmDialog('B')">
                   <h1>{{ $t('TABLE.BANKER') }}</h1>
                   <h2>1:1</h2>
                 </v-col>
@@ -270,8 +303,8 @@
             <template v-slot:activator="{ on, attrs }">
               <div
                 class="text-center mt-1 mx-2"
-                style="width:2.7vw;
-                  height:2.6vw;
+                style="width:44px;
+                  height:44px;
                   background-image:url('/icon/7customUI.png');
                   background-repeat: no-repeat;
                   background-position: center;
@@ -284,25 +317,31 @@
             <v-card color="rgba(0, 0, 0, 0.7)" elevation="20">
               <v-card-title>
                 <v-row no-gutters justify="center">
-                  Please Select
+                  {{ $t('TABLE.PSELECT') }}
                 </v-row>
               </v-card-title>
-              <v-row no-gutters justify="center">
-                <v-img
+              <v-row no-gutters align="center" justify="center">
+                <div
                   v-for="(coin,n) in coinList"
                   :key="n"
-                  class="text-center ma-2"
-                  max-width="3.7vw"
-                  max-height="2.6vw"
-                  :src="'/coin/'+coin"
+                  class="text-center "
+                  justify="center"
                 >
+                  <v-img
+                    :src="'/coin/'+coin"
+                    :title="get_coin_value_m(coin)"
+                    max-width="52"
+                    max-height="36"
+                  />
                   <v-checkbox
                     v-model="selectedCoin"
+                    background-color="black"
+                    :label="`${get_coin_value_m(coin).toString()}`"
                     :value="coin"
                     color="#009167"
                     :disabled="disableCoinSelect?selectedCoin.includes(coin)?false:true:false"
                   />
-                </v-img>
+                </div>
               </v-row>
               <v-card-actions>
                 <v-row justify="center">
@@ -332,21 +371,26 @@
             v-for="(coin,n) in showingCoin"
             :key="n"
             :src="betCoin==coin?'/coin/coin_selecting.png':''"
-            max-width="4.9vw"
-            height="3.9vw"
+            max-width="60px"
+            max-height="46px"
+            class="white--text align-center"
             @click="betCoin=coin"
           >
-            <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
+            <v-card>
+              <!-- max-width="3.7vw" max-height="2.6vw"-->
               <v-img
-                max-width="3.7vw"
-                max-height="2.6vw"
+                :aspect-ratio="16/9"
+                max-width="54px"
+                max-height="36px"
+                class="white--text text-center align-center"
                 :src="'/coin/'+coin"
-              />
-            </v-row>
+                :title="get_coin_value_m(coin)"
+              >
+                <v-card-title>
+                  <div style="font-size: 6px" v-text="get_coin_value_m(coin)" />
+                </v-card-title>
+              </v-img>
+            </v-card>
           </v-img>
           <div
             class="text-center mt-1 ml-2"
@@ -440,7 +484,10 @@ export default {
       tutorial: false,
       drawer: false,
       betsuccess: false,
+      betfail: false,
       coinMenu: false,
+      selectedType: undefined,
+      confirmDialog: false,
       selectedCoin: [],
       // showingCoin: [],
       coinList: [
@@ -455,12 +502,27 @@ export default {
         2: this.$t('GAMEWIN.TWIN'),
         3: this.$t('GAMEWIN.BWIN')
       },
+      WinTextColor: {
+        0: 'rgba(0, 0, 0, 0.7)',
+        1: 'rgba(0, 0, 224, 0.7)',
+        2: 'rgba(0, 224, 0, 0.7)',
+        3: 'rgba(224, 0, 0, 0.7)'
+      },
       StateText: {
         11: this.$t('GAMESTATE.READY'), // 準備
         21: this.$t('GAMESTATE.SUFFLE'), // 洗牌
         31: this.$t('GAMESTATE.BET'), // 押注
         41: this.$t('GAMESTATE.DRAW_CARDS'), // 開牌
         51: this.$t('GAMESTATE.SETTLE') // 結算
+      },
+      AnnounceText: {
+        31: this.$t('TABLE.STARTBETTING'), // 開始投注
+        41: this.$t('TABLE.STOPBETTING'), // 停止投注
+        betsuccess: this.$t('TABLE.BETSUCCESS'), // 下注成功
+        betfail: this.$t('TABLE.BETFAIL'), // 下注失敗
+        pwin: this.$t('GAMEWIN.PWIN'),
+        bwin: this.$t('GAMEWIN.BWIN'),
+        twin: this.$t('GAMEWIN.TWIN')
       }
     }
   },
@@ -471,8 +533,76 @@ export default {
     vReady () {
       return this.videoready
     },
+    HideAnn () {
+      return this.hideann
+    },
+    ConfirmDialog () {
+      return this.confirmDialog
+    },
+    GameResultColor () {
+      const nowtable = this.$store.state.nowtable
+      if (nowtable) {
+        const st = nowtable.State
+        if (st === 51) { // 結算
+          const win = nowtable.Desktop.Winlose
+          console.log('zzzzz win=', win)
+          return this.WinTextColor[win]
+        } else {
+          return this.WinTextColor[0]
+        }
+      } else {
+        return this.WinTextColor[0]
+      }
+    },
+    GameResult () {
+      const nowtable = this.$store.state.nowtable
+      // console.log('StateString()!!nowtable.State=', nowtable.State)
+      if (nowtable) {
+        const st = nowtable.State
+        if (st === 51) { // 開始下注
+          const win = nowtable.Desktop.Winlose
+          console.log('wwwwwwwwwwwwwwwwwwin=', win)
+          return this.WinText[win]
+        } else {
+          return false
+        }
+      } else {
+        return false
+      }
+    },
+    ShowAnnounce () {
+      const nowtable = this.$store.state.nowtable
+      // console.log('StateString()!!nowtable.State=', nowtable.State)
+      if (nowtable) {
+        const st = nowtable.State
+        // console.log('!!!!! st=', st)
+        if (st === 31) { // 開始下注
+          const cd = Math.ceil(nowtable.Desktop.BetTimeCountDown / 1000)
+          if (cd > 9) {
+            const aa = this.AnnounceText[st]
+            return aa
+          } else {
+            // const aa = this.AnnounceText[st]
+            console.log('!!!! cd=', cd)
+            return ''
+          }
+        } else { // 結算
+          const aa = this.AnnounceText[41]
+          console.log('aa=', aa)
+          return aa
+        }
+      } else {
+        const aa = this.AnnounceText[41]
+        console.log('aa=', aa)
+        return aa
+      }
+    },
     BetSuccess () {
       return this.betsuccess
+    },
+    BetFail () {
+      console.log('this.betfail=', this.betfail)
+      return this.betfail
     },
     disableCoinSelect () {
       if (this.selectedCoin.length === 5) {
@@ -672,18 +802,25 @@ export default {
       this.selectedCoin = []
       this.coinMenu = false
     },
+    openConfirmDialog (type) {
+      this.selectedType = type
+      this.confirmDialog = true
+    },
+    cancelCoinBet () {
+      this.confirmDialog = false
+    },
+    confirmCoinBet () {
+      this.doBet()
+      this.confirmDialog = false
+    },
     do_tutorial () {
       console.log('do_tutorial()')
       this.tutorial = false
       this.$cookies.set('t_betroom', 1)
     },
-    async dobet (btype) {
-      console.log('要求壓注 bet()')
-      let betpoint = 50000
-      // 'coin_5.png', 'coin_10.png', 'coin_20.png', 'coin_50.png',
-      //  'coin_100.png', 'coin_200.png', 'coin_500.png', 'coin_1000.png',
-      //  'coin_2000.png', 'coin_5000.png', 'coin_10k.png'
-      switch (this.betCoin) {
+    get_coin_value (c) {
+      let betpoint = 0
+      switch (c) {
         case 'coin_5.png':
           betpoint = 50000
           break
@@ -724,6 +861,62 @@ export default {
           betpoint = 50000
           break
       }
+      return betpoint
+    },
+    get_coin_value_m (c) {
+      // console.log('get_coin_value_m(c=', c, ')')
+      let betpoint = 0
+      switch (c) {
+        case 'coin_5.png':
+          betpoint = 50000
+          break
+        case 'coin_10.png':
+          betpoint = 100000
+          break
+        case 'coin_20.png':
+          betpoint = 200000
+          break
+        case 'coin_50.png':
+          betpoint = 500000
+          break
+        case 'coin_100.png':
+          betpoint = 1000000
+          break
+        case 'coin_200.png':
+          betpoint = 2000000
+          break
+        case 'coin_500.png':
+          betpoint = 5000000
+          break
+        case 'coin_1000.png':
+          betpoint = 10000000
+          break
+        case 'coin_2000.png':
+          betpoint = 20000000
+          break
+        case 'coin_5000.png':
+          betpoint = 50000000
+          break
+        case 'coin_10k.png':
+          betpoint = 100000000
+          break
+        case 'coin_20k.png':
+          betpoint = 200000000
+          break
+        default:
+          betpoint = 50000
+          break
+      }
+      if (betpoint >= 10000000) {
+        return (betpoint / 10000000) + 'K'
+      } else {
+        return (betpoint / 10000)
+      }
+    },
+    async doBet () {
+      const btype = this.selectedType
+      console.log('要求壓注 doBet(type=', btype)
+      const betpoint = this.get_coin_value(this.betCoin)
       let bets = [0, 0, 0, 0, 0, 0, 0] // [PLAYER, TIE, BANKER, P_PAIR, P_NATUAL, B_PAIR, B_NATUAL]
       try {
         switch (btype) {
@@ -802,6 +995,10 @@ export default {
         // }
       } else {
         console.log('[debug] bet fail!', cmder)
+        this.betfail = true
+        setTimeout(() => {
+          this.betfail = false
+        }, 1000)
         // this.$router.push('/betRoom')
       }
     }
@@ -809,11 +1006,29 @@ export default {
 }
 </script>
 <style scoped>
-.stopBetting{
-  font-size:0.8vw;
-  width:20%;
-  height:30%;
-  background-color:rgba(0,0,0,0.5);
+.GameResultAnnounce{
+  font-size: xx-large;
+  font-weight: bold;
+  width:50%;
+  height:40%;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
+  position:absolute;
+  color:white;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.AnnounceMessage{
+  font-size: xx-large;
+  font-weight: bold;
+  width:40%;
+  height:70%;
+  background-color:rgba(0,0,0,0.6);
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
   position:absolute;
   color:white;
   top:50%;
@@ -821,12 +1036,23 @@ export default {
   transform: translate(-50%, -50%);
 }
 .bettingSuccess{
-  font-size:0.9vw;
-  width:25%;
-  height:35%;
-  background-color:rgba(0,0,0,0.5);
+  font-size: large;
+  width:30%;
+  height:70%;
+  background-color:rgba(0,0,0,0.8);
   position:absolute;
-  color:green;
+  color: white;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.bettingFail{
+  font-size: large;
+  width:30%;
+  height:70%;
+  background-color:rgba(0,0,0,0.8);
+  position:absolute;
+  color: white;
   top:50%;
   left: 50%;
   transform: translate(-50%, -50%);

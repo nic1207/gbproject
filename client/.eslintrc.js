@@ -15,9 +15,11 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'no-alert': 0,
     'no-console': 'off',
     'object-shorthand': 0,
     'no-extra-semi': 'off',
-    'vue/no-use-v-if-with-v-for': 'off'
+    'vue/no-use-v-if-with-v-for': 'off',
+    'vue/no-async-in-computed-properties': 'off'
   }
 }

@@ -44,8 +44,12 @@ export default {
     PLAYERNATURAL: '閒例牌',
     CHANGE: '變更',
     TOTALBETAMOUNT: '總投注',
+    STARTBETTING: '開始下注',
     STOPBETTING: '停止下注',
-    BETSUCCESS: '下注成功'
+    BETSUCCESS: '下注成功',
+    BETFAIL: '下注失敗',
+    COMINGSOON: '敬請期待',
+    PSELECT: '請選擇'
   },
   GAMESTATE: {
     READY: '準備中',
@@ -55,7 +59,7 @@ export default {
     SETTLE: '結算'
   },
   GAMEWIN: {
-    UWIN: '0',
+    UWIN: '0:錯誤',
     PWIN: '閒贏',
     TWIN: '和局',
     BWIN: '莊贏'

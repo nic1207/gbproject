@@ -44,8 +44,12 @@ export default {
     PLAYERNATURAL: 'Player Natural',
     CHANGE: 'Change',
     TOTALBETAMOUNT: 'Total BetAmount',
+    STARTBETTING: 'Start Betting',
     STOPBETTING: 'Stop Betting',
-    BETSUCCESS: 'Bet Success'
+    BETSUCCESS: 'Bet Success',
+    BETFAIL: 'Bet Fail',
+    COMINGSOON: 'Coming Soon',
+    PSELECT: 'Please Select'
   },
   GAMESTATE: {
     READY: 'READY',
@@ -55,7 +59,7 @@ export default {
     SETTLE: 'SETTLE'
   },
   GAMEWIN: {
-    UWIN: 'Error',
+    UWIN: '0:Error',
     PWIN: 'PlayerWin',
     TWIN: 'Tie',
     BWIN: 'BankWin'
