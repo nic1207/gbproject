@@ -127,24 +127,24 @@
               </div>
               <div v-if="ConfirmDialog" class="d-flex flex-column justify-center align-center bettingSuccess">
                 <v-card color="rgba(0, 0, 0, 0.7)" elevation="20">
-                  <!--<v-card-title>
-                    <v-row no-gutters justify="center">
-                      Are You Sure Bet Coin?
-                    </v-row>
-                  </v-card-title>
-                  -->
                   <v-row no-gutters align="center" justify="center">
                     <div
-                      v-if="betCoin"
-                      class="text-center "
+                      v-if="BetPoint>0"
+                      class="text-center"
                       justify="center"
                     >
                       <v-img
                         :src="'/coin/'+betCoin"
                         :title="get_coin_value_m(betCoin)"
-                        max-width="52"
-                        max-height="36"
-                      />
+                        max-width="90px"
+                        max-height="64px"
+                      >
+                        <v-card-title>
+                          <v-row style="background-color: rgba(0,0,0,0.7);font-size: 6px" no-gutters justify="center">
+                            {{ BetPoint }}
+                          </v-row>
+                        </v-card-title>
+                      </v-img>
                     </div>
                   </v-row>
                   <v-card-actions>
@@ -287,7 +287,7 @@
           style="height:4vh ;background-color:#023016;"
           class="d-flex justify-center align-center white--text"
         >
-          {{ $t('TABLE.TOTALBETAMOUNT') }} : 0.0
+          {{ $t('TABLE.TOTALBETAMOUNT') }} : {{ TotalBetAmount }}
         </div>
         <!--betcoin selection-->
         <div class="selectCoin d-flex align-center white--text pa-2">
@@ -400,6 +400,7 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: 100% 100%"
+            @click="doDoubleBet"
           />
         </div>
       </v-col>
@@ -462,7 +463,8 @@ export default {
         sources: [{
           withCredentials: false,
           type: 'video/mp4',
-          src: 'http://1.34.133.245:3310/live/test.m3u8'
+          src: ''
+          // src: 'http://1.34.133.245:3310/live/test.m3u8'
           // src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm'
           // type: 'application/x-mpegURL', // 型別
           // src: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8' // 流地址
@@ -488,6 +490,7 @@ export default {
       coinMenu: false,
       selectedType: undefined,
       confirmDialog: false,
+      streamurl: undefined,
       selectedCoin: [],
       // showingCoin: [],
       coinList: [
@@ -496,6 +499,10 @@ export default {
         'coin_2000.png', 'coin_5000.png', 'coin_10k.png', 'coin_20k.png'
       ],
       betCoin: 'coin_5.png',
+      betpoint: 0, // 押注點數
+      maxbet: 1000000,
+      remaincoin: 0,
+      totalbetamount: 0,
       WinText: {
         0: this.$t('GAMEWIN.UWIN'),
         1: this.$t('GAMEWIN.PWIN'),
@@ -532,6 +539,9 @@ export default {
     },
     vReady () {
       return this.videoready
+    },
+    BetPoint () {
+      return this.betpoint / 10000
     },
     HideAnn () {
       return this.hideann
@@ -615,25 +625,64 @@ export default {
       const showcoins = this.$store.state.showcoins
       return showcoins
     },
-    State () {
-      // console.log('State()')
-      const nowtable = this.$store.state.nowtable
-      // console.log('State()!!nowtable=', nowtable)
-      if (nowtable && nowtable.State) {
-        const st = nowtable.State
-        console.log('!!!!! nowtable.st=', st)
-        if (st === 51) {
-          console.log('nowtable=', nowtable)
-        }
-        return st
+    MaxBet () {
+      if (this.$store.state.betsetting && this.$store.state.betsetting.BetSettings) {
+        const bsets = this.$store.state.betsetting.BetSettings
+        // console.log('bsets=', bsets)
+        const nowgroupid = this.$store.state.nowgroupid
+        console.log('nowgroupid=', nowgroupid)
+        const bset = bsets.find(x => x.GroupID === nowgroupid)
+        console.log('bset.Setting=', bset.Setting)
+        const pbul = bset.Setting.PBUL
+        console.log('pbul=', pbul)
+        this.maxbet = pbul
+        return pbul
       } else {
-        return -1
+        return this.maxbet
       }
     },
+    RemainCoin () {
+      if (this.$store.state.user && this.$store.state.user.Point) {
+        const p = this.$store.state.user.Point
+        this.remaincoin = p
+        return p
+      } else {
+        return this.remaincoin
+      }
+    },
+    // State () {
+    //   console.log('qqqqqqqqqqqqqqqqqqq State()')
+    //   const nowtable = this.$store.state.nowtable
+    //   // if (nowtable && nowtable.StreamURI) {
+    //   //   const url = nowtable.StreamURI
+    //   //   console.log('zzzzzzzzzzzzzzzzz url=', url)
+    //   //   this.streamurl = url
+    //   // }
+    //   // console.log('State()!!nowtable=', nowtable)
+    //   if (nowtable && nowtable.State) {
+    //     const st = nowtable.State
+    //     console.log('!!!!! nowtable.st=', st)
+    //     if (st === 51) {
+    //       console.log('nowtable=', nowtable)
+    //     }
+    //     return st
+    //   } else {
+    //     return -1
+    //   }
+    // },
     StateString () {
-      // console.log('111 StateString()')
+      console.log('111111 StateString()')
       // console.trace()
       const nowtable = this.$store.state.nowtable
+      console.log('zzzzzzzzzzzzzzzzz nowtable=', nowtable)
+      if (nowtable && nowtable.StreamURI) {
+        const url = nowtable.StreamURI
+        console.log('zzzzzzzzzzzzzzzzz url=', url)
+        this.streamurl = url
+      }
+      // } else {
+      //   this.streamurl = 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm'
+      // }
       // console.log('StateString()!!nowtable.State=', nowtable.State)
       if (nowtable) {
         const st = nowtable.State
@@ -719,12 +768,51 @@ export default {
       } else {
         return null
       }
+    },
+    SelfBetTables () {
+      const bettables = this.$store.state.bettables
+      if (bettables) {
+        const sbt = bettables.BetTable[0].Self
+        console.log('sbt=', sbt)
+        return sbt
+      } else {
+        return undefined
+      }
+    },
+    OtherBetTables () {
+      const bettables = this.$store.state.bettables
+      if (bettables) {
+        const obt = bettables.BetTable[0].Other
+        console.log('obt=', obt)
+        return obt
+      } else {
+        return undefined
+      }
+    },
+    TotalBetAmount () {
+      if (this.SelfBetTables) {
+        const sum = this.SelfBetTables.reduce(function (a, b) {
+          return a + b
+        }, 0)
+        console.log('sum=', sum)
+        this.totalbetamount = sum
+        return this.totalbetamount / 10000
+      }
+      return this.totalbetamount / 10000
     }
   },
   // components:{
   //       previewTable,
   //       tableDrawer
   //   },
+  watch: {
+    streamurl (val) {
+      console.log('watch streamurl(', val, ')')
+      if (val !== '') {
+        this.player.src(val)
+      }
+    }
+  },
   mounted () {
     // console.log('zzzzzzzzzzzzz')
     const xx = this.$cookies.get('t_betroom')
@@ -803,8 +891,10 @@ export default {
       this.coinMenu = false
     },
     openConfirmDialog (type) {
+      this.betpoint = this.get_coin_value(this.betCoin)
       this.selectedType = type
       this.confirmDialog = true
+      this.showCoin = false
     },
     cancelCoinBet () {
       this.confirmDialog = false
@@ -913,10 +1003,19 @@ export default {
         return (betpoint / 10000)
       }
     },
+    doDoubleBet () {
+      console.log('doDoubleBet()')
+      const aa = this.betpoint
+      console.log('this.MaxBet=', this.MaxBet)
+      console.log('this.RemainCoin=', this.RemainCoin)
+      if (aa * 2 <= this.MaxBet && aa * 2 <= this.RemainCoin) {
+        this.betpoint = aa * 2
+      }
+    },
     async doBet () {
       const btype = this.selectedType
       console.log('要求壓注 doBet(type=', btype)
-      const betpoint = this.get_coin_value(this.betCoin)
+      const betpoint = this.betpoint
       let bets = [0, 0, 0, 0, 0, 0, 0] // [PLAYER, TIE, BANKER, P_PAIR, P_NATUAL, B_PAIR, B_NATUAL]
       try {
         switch (btype) {

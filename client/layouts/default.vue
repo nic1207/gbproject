@@ -795,12 +795,12 @@ export default {
     },
     // REFLASH_BET_INFOS
     process_20003 (cmder) {
-      // console.log('[debug] 更新下注資訊20003 process_20003(', cmder, ')')
+      console.log('[debug] 更新下注資訊20003 process_20003(', cmder, ')')
       if (cmder.SC === 1000) { // success
         if (cmder.B) {
-          // const betinfo = cmder.B
-          // console.log('betinfo=', betinfo)
-          // this.$store.commit('setTables', gametableinfo)
+          const BetTables = cmder.B
+          console.log('BetTables=', BetTables)
+          this.$store.commit('setBetTables', BetTables)
         }
       } else {
         console.log('reflash bet info fail!')

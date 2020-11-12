@@ -219,7 +219,9 @@ export const state = () => ({
     'coin_20.png',
     'coin_50.png',
     'coin_100.png'
-  ]
+  ],
+
+  bettables: undefined
 })
 export const mutations = {
   setUser (state, user) {
@@ -285,6 +287,10 @@ export const mutations = {
     // console.log('[debug] setShowCoins(', coins, ')')
     state.showcoins = coins
   },
+  setBetTables (state, bets) {
+    console.log('[debug] setBetTables(', bets, ')')
+    state.bettables = bets
+  },
 
   clear (state) {
     state.user = undefined
@@ -301,6 +307,7 @@ export const mutations = {
     state.betsetting = undefined
     state.history = undefined
     state.showcoins = undefined
+    state.bettables = undefined
   }
 }
 export const getters = {
@@ -344,5 +351,8 @@ export const getters = {
   },
   fetchShowCoins (state) {
     return state.showcoins
+  },
+  fetchBetTables (state) {
+    return state.bettables
   }
 }
